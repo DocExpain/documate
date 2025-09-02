@@ -1,22 +1,17 @@
 <!doctype html>
-<html lang="ar" dir="rtl">
+<html lang="es">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="robots" content="index,follow" />
 
-  <!-- Google Search Console (token fourni) -->
   <meta name="google-site-verification" content="yHzn771ZljIbFj8wJJlnJ2FVIw9YjW1w0EJlZImH0QA" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9411950027978678" crossorigin="anonymous"></script>
 
-  <!-- AdSense global (chargé directement) -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9411950027978678"
-          crossorigin="anonymous"></script>
+  <title>DocuMate — Entiende tus documentos fácilmente</title>
+  <meta name="description" content="DocuMate explica contratos, facturas y documentos oficiales en lenguaje simple. Gratis, privado, multilingüe.">
+  <link rel="canonical" href="https://documate-pi.vercel.app/es/" />
 
-  <title>DocuMate — افهم مستنداتك بسهولة</title>
-  <meta name="description" content="يشرح DocuMate العقود والفواتير والمستندات الرسمية بلغة مبسطة. مجاني، خاص، متعدد اللغات.">
-  <link rel="canonical" href="https://documate-pi.vercel.app/ar/" />
-
-  <!-- Hreflang vers toutes les versions -->
   <link rel="alternate" hreflang="x-default" href="https://documate-pi.vercel.app/">
   <link rel="alternate" hreflang="en" href="https://documate-pi.vercel.app/">
   <link rel="alternate" hreflang="fr" href="https://documate-pi.vercel.app/fr/">
@@ -30,67 +25,58 @@
   <link rel="alternate" hreflang="ru" href="https://documate-pi.vercel.app/ru/">
   <link rel="alternate" hreflang="bn" href="https://documate-pi.vercel.app/bn/">
 
-  <!-- Open Graph / Twitter -->
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://documate-pi.vercel.app/ar/">
-  <meta property="og:title" content="DocuMate — افهم مستنداتك بسهولة">
-  <meta property="og:description" content="اشرح العقود والفواتير والمستندات الرسمية بلغة مبسطة. مجاني، خاص، متعدد اللغات.">
+  <meta property="og:url" content="https://documate-pi.vercel.app/es/">
+  <meta property="og:title" content="DocuMate — Entiende tus documentos fácilmente">
+  <meta property="og:description" content="Explica contratos, facturas y documentos oficiales en lenguaje simple. Gratis, privado, multilingüe.">
   <meta property="og:image" content="https://documate-pi.vercel.app/og.jpg">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="DocuMate — افهم مستنداتك بسهولة">
-  <meta name="twitter:description" content="اشرح العقود والفواتير والمستندات الرسمية بلغة مبسطة. مجاني، خاص، متعدد اللغات.">
+  <meta name="twitter:title" content="DocuMate — Entiende tus documentos fácilmente">
+  <meta name="twitter:description" content="Explica contratos, facturas y documentos oficiales en lenguaje simple. Gratis, privado, multilingüe.">
   <meta name="twitter:image" content="https://documate-pi.vercel.app/og.jpg">
 
-  <!-- Favicon -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📄</text></svg>">
 
-  <!-- JSON-LD -->
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"Organization","name":"DocuMate","url":"https://documate-pi.vercel.app/","logo":"https://documate-pi.vercel.app/og.jpg"}
   </script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"WebSite","name":"DocuMate","url":"https://documate-pi.vercel.app/","inLanguage":"ar","description":"شرح مبسط للمستندات الرسمية."}
+  {"@context":"https://schema.org","@type":"WebSite","name":"DocuMate","url":"https://documate-pi.vercel.app/","inLanguage":"es","description":"Explicaciones en lenguaje simple para tus documentos."}
   </script>
 
-  <!-- PDF.js -->
   <script src="https://unpkg.com/pdfjs-dist@4.7.76/build/pdf.min.js"></script>
 
   <style>
     :root { --bg:#f7f9fc; --card:#fff; --ink:#0f172a; --muted:#475569; --accent:#2563eb; --ok:#16a34a; --warn:#b45309; --br:14px; --shadow:0 10px 30px rgba(2,6,23,.08); }
-    *{box-sizing:border-box}
-    body{margin:0;font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg)}
+    *{box-sizing:border-box} body{margin:0;font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg)}
     header{padding:22px 16px;background:#fff;box-shadow:var(--shadow);position:sticky;top:0;z-index:5}
     .wrap{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:16px}
     .brand{display:flex;gap:12px;align-items:center;text-decoration:none;color:inherit}
     .brand-logo{font-size:28px}
-    .brand h1{font-size:20px;margin:0}
-    .brand p{margin:0;color:var(--muted);font-size:13px}
-    .lang{margin-inline-start:auto;display:flex;gap:8px;align-items:center}
+    .brand h1{font-size:20px;margin:0} .brand p{margin:0;color:var(--muted);font-size:13px}
+    .lang{margin-left:auto;display:flex;gap:8px;align-items:center}
     .lang select{padding:8px 10px;border:1px solid #e5e7eb;border-radius:10px;background:#fff}
     main{max-width:1100px;margin:28px auto;padding:0 16px;display:grid;grid-template-columns:1.2fr .8fr;gap:18px}
     @media (max-width:980px){main{grid-template-columns:1fr}}
     .card{background:var(--card);border-radius:var(--br);box-shadow:var(--shadow);padding:18px}
-    .hero h2{margin:0 0 6px;font-size:24px}
-    .hero p{margin:0;color:var(--muted)}
-    label{font-weight:600;display:block;margin:14px 0 6px}
-    .hint{color:var(--muted);font-size:13px;margin-top:4px}
+    .hero h2{margin:0 0 6px;font-size:24px} .hero p{margin:0;color:var(--muted)}
+    label{font-weight:600;display:block;margin:14px 0 6px} .hint{color:var(--muted);font-size:13px;margin-top:4px}
     textarea,input[type="text"]{width:100%;padding:12px;border:1px solid #e5e7eb;border-radius:12px;outline:none}
     textarea{min-height:190px;resize:vertical}
     .row{display:flex;gap:10px;flex-wrap:wrap}
     .btn{background:var(--accent);color:#fff;border:0;padding:11px 14px;border-radius:12px;cursor:pointer;font-weight:600}
-    .btn.secondary{background:#e2e8f0;color:#0f172a}
-    .btn:disabled{opacity:.6;cursor:not-allowed}
+    .btn.secondary{background:#e2e8f0;color:#0f172a} .btn:disabled{opacity:.6;cursor:not-allowed}
     .results{white-space:pre-wrap;background:#f8fafc;border:1px solid #e5e7eb;border-radius:12px;padding:14px;min-height:140px}
     .badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
     .badge{background:#eef2ff;color:#1e40af;padding:6px 10px;border-radius:999px;font-size:12px}
-    .legal{font-size:13px;color:var(--muted)}
-    .ok{color:var(--ok)} .warn{color:var(--warn)}
+    .legal{font-size:13px;color:var(--muted)} .ok{color:var(--ok)} .warn{color:var(--warn)}
     footer{max-width:1100px;margin:24px auto 40px;padding:0 16px}
     .ads{margin-top:16px;padding:10px;border:1px dashed #e2e8f0;border-radius:10px;background:#fafafa}
     .consent{position:fixed;bottom:12px;left:12px;right:12px;background:#111827;color:#fff;padding:14px;border-radius:12px;display:none;z-index:50}
     .consent .row{justify-content:flex-end}
   </style>
 </head>
+
 <body>
   <header>
     <div class="wrap">
