@@ -5,13 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="robots" content="index,follow" />
 
+  <!-- Google Search Console -->
   <meta name="google-site-verification" content="yHzn771ZljIbFj8wJJlnJ2FVIw9YjW1w0EJlZImH0QA" />
+
+  <!-- AdSense global -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9411950027978678" crossorigin="anonymous"></script>
 
   <title>DocuMate — Dokumente einfach verstehen</title>
   <meta name="description" content="DocuMate erklärt Verträge, Rechnungen und amtliche Schreiben in einfacher Sprache. Kostenlos, privat, mehrsprachig.">
   <link rel="canonical" href="https://documate-pi.vercel.app/de/" />
 
+  <!-- Hreflang -->
   <link rel="alternate" hreflang="x-default" href="https://documate-pi.vercel.app/">
   <link rel="alternate" hreflang="en" href="https://documate-pi.vercel.app/">
   <link rel="alternate" hreflang="fr" href="https://documate-pi.vercel.app/fr/">
@@ -25,6 +29,7 @@
   <link rel="alternate" hreflang="ru" href="https://documate-pi.vercel.app/ru/">
   <link rel="alternate" hreflang="bn" href="https://documate-pi.vercel.app/bn/">
 
+  <!-- Open Graph / Twitter -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://documate-pi.vercel.app/de/">
   <meta property="og:title" content="DocuMate — Dokumente einfach verstehen">
@@ -35,8 +40,10 @@
   <meta name="twitter:description" content="Verträge, Rechnungen & amtliche Schreiben in einfacher Sprache. Kostenlos, privat, mehrsprachig.">
   <meta name="twitter:image" content="https://documate-pi.vercel.app/og.jpg">
 
+  <!-- Favicon -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📄</text></svg>">
 
+  <!-- JSON-LD -->
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"Organization","name":"DocuMate","url":"https://documate-pi.vercel.app/","logo":"https://documate-pi.vercel.app/og.jpg"}
   </script>
@@ -44,21 +51,26 @@
   {"@context":"https://schema.org","@type":"WebSite","name":"DocuMate","url":"https://documate-pi.vercel.app/","inLanguage":"de","description":"Dokumente in einfacher Sprache erklären."}
   </script>
 
+  <!-- PDF.js -->
   <script src="https://unpkg.com/pdfjs-dist@4.7.76/build/pdf.min.js"></script>
 
   <style>
     :root { --bg:#f7f9fc; --card:#fff; --ink:#0f172a; --muted:#475569; --accent:#2563eb; --ok:#16a34a; --warn:#b45309; --br:14px; --shadow:0 10px 30px rgba(2,6,23,.08); }
-    *{box-sizing:border-box} body{margin:0;font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg)}
+    *{box-sizing:border-box}
+    body{margin:0;font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg)}
     header{padding:22px 16px;background:#fff;box-shadow:var(--shadow);position:sticky;top:0;z-index:5}
     .wrap{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:16px}
     .brand{display:flex;gap:12px;align-items:center;text-decoration:none;color:inherit}
-    .brand-logo{font-size:28px} .brand h1{font-size:20px;margin:0} .brand p{margin:0;color:var(--muted);font-size:13px}
+    .brand-logo{font-size:28px}
+    .brand h1{font-size:20px;margin:0}
+    .brand p{margin:0;color:var(--muted);font-size:13px}
     .lang{margin-left:auto;display:flex;gap:8px;align-items:center}
     .lang select{padding:8px 10px;border:1px solid #e5e7eb;border-radius:10px;background:#fff}
     main{max-width:1100px;margin:28px auto;padding:0 16px;display:grid;grid-template-columns:1.2fr .8fr;gap:18px}
     @media (max-width:980px){main{grid-template-columns:1fr}}
     .card{background:var(--card);border-radius:var(--br);box-shadow:var(--shadow);padding:18px}
-    .hero h2{margin:0 0 6px;font-size:24px} .hero p{margin:0;color:var(--muted)}
+    .hero h2{margin:0 0 6px;font-size:24px}
+    .hero p{margin:0;color:var(--muted)}
     label{font-weight:600;display:block;margin:14px 0 6px}
     .hint{color:var(--muted);font-size:13px;margin-top:4px}
     textarea,input[type="text"]{width:100%;padding:12px;border:1px solid #e5e7eb;border-radius:12px;outline:none}
@@ -70,14 +82,14 @@
     .results{white-space:pre-wrap;background:#f8fafc;border:1px solid #e5e7eb;border-radius:12px;padding:14px;min-height:140px}
     .badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
     .badge{background:#eef2ff;color:#1e40af;padding:6px 10px;border-radius:999px;font-size:12px}
-    .legal{font-size:13px;color:var(--muted)} .ok{color:var(--ok)} .warn{color:var(--warn)}
+    .legal{font-size:13px;color:var(--muted)}
+    .ok{color:var(--ok)} .warn{color:var(--warn)}
     footer{max-width:1100px;margin:24px auto 40px;padding:0 16px}
     .ads{margin-top:16px;padding:10px;border:1px dashed #e2e8f0;border-radius:10px;background:#fafafa}
     .consent{position:fixed;bottom:12px;left:12px;right:12px;background:#111827;color:#fff;padding:14px;border-radius:12px;display:none;z-index:50}
     .consent .row{justify-content:flex-end}
   </style>
 </head>
-
 <body>
   <header>
     <div class="wrap">
@@ -85,15 +97,15 @@
         <div class="brand-logo">📄</div>
         <div>
           <h1>DocuMate</h1>
-          <p data-i18n="tagline">افهم مستنداتك بسهولة</p>
+          <p>Dokumente einfach verstehen</p>
         </div>
       </a>
       <div class="lang">
-        <label for="langSel" style="margin:0;font-weight:600;" data-i18n="language">اللغة</label>
+        <label for="langSel" style="margin:0;font-weight:600;">Sprache</label>
         <select id="langSel" aria-label="Language">
-          <option value="en">English</option><option value="fr">Français</option><option value="de">Deutsch</option>
+          <option value="en">English</option><option value="fr">Français</option><option value="de" selected>Deutsch</option>
           <option value="es">Español</option><option value="it">Italiano</option><option value="zh">中文 (简体)</option>
-          <option value="hi">हिंदी</option><option value="ar" selected>العربية</option><option value="pt">Português</option>
+          <option value="hi">हिंदी</option><option value="ar">العربية</option><option value="pt">Português</option>
           <option value="ru">Русский</option><option value="bn">বাংলা</option>
         </select>
       </div>
@@ -103,46 +115,46 @@
   <main>
     <section class="card">
       <div class="hero">
-        <h2 data-i18n="heroTitle">اشرح العقود والفواتير والمستندات الرسمية بلغة مبسطة</h2>
-        <p data-i18n="heroSub">مجاني، خاص، متعدد اللغات. ليست نصيحة قانونية.</p>
+        <h2>Verträge, Rechnungen & amtliche Schreiben in einfacher Sprache erklären</h2>
+        <p>Kostenlos, privat, mehrsprachig. Keine Rechtsberatung.</p>
       </div>
 
-      <label for="file" data-i18n="uploadLabel">ارفع مستند (PDF/TXT)</label>
+      <label for="file">Dokument hochladen (PDF/TXT)</label>
       <input type="file" id="file" accept=".pdf,.txt" />
 
-      <label for="docText" data-i18n="pasteLabel">أو الصق النص هنا</label>
-      <textarea id="docText" placeholder="ألصق محتوى مستندك هنا…"></textarea>
-      <div class="hint" data-i18n="pasteHint">يبقى المستند على جهازك حتى تنقر إجراءً أدناه.</div>
+      <label for="docText">…oder Text hier einfügen</label>
+      <textarea id="docText" placeholder="Inhalt Ihres Dokuments einfügen…"></textarea>
+      <div class="hint">Ihr Dokument bleibt auf Ihrem Gerät, bis Sie unten eine Aktion ausführen.</div>
 
       <!-- Region / Country -->
-      <label for="region" style="margin-top:12px;" data-i18n="regionLabel">المنطقة/الدولة (اختياري، للقواعد المحلية)</label>
-      <input type="text" id="region" placeholder="مثال: Switzerland / Canton Fribourg" />
+      <label for="region" style="margin-top:12px;">Region / Land (optional, für lokale Regeln)</label>
+      <input type="text" id="region" placeholder="z. B. Schweiz / Kanton Freiburg" />
 
       <div class="row" style="margin-top:10px;">
-        <button id="btnExplainAll" class="btn" data-i18n="btnExplainAll">اشرح المستند كله</button>
-        <button id="btnExplainSel" class="btn secondary" data-i18n="btnExplainSel">اشرح الجزء المحدد فقط</button>
-        <button id="btnSave" class="btn secondary" data-i18n="btnSave">حفظ محلي</button>
-        <button id="btnLoad" class="btn secondary" data-i18n="btnLoad">تحميل الأخير</button>
+        <button id="btnExplainAll" class="btn">Ganzes Dokument erklären</button>
+        <button id="btnExplainSel" class="btn secondary">Nur Auswahl erklären</button>
+        <button id="btnSave" class="btn secondary">Lokal speichern</button>
+        <button id="btnLoad" class="btn secondary">Letztes laden</button>
       </div>
 
-      <label for="question" style="margin-top:16px;" data-i18n="askLabel">سؤال محدد حول فقرة (اختياري)</label>
-      <input type="text" id="question" placeholder="مثال: ماذا تعني هذه الفقرة؟"/>
+      <label for="question" style="margin-top:16px;">Spezifische Frage zu einer Passage (optional)</label>
+      <input type="text" id="question" placeholder="z. B. Was bedeutet diese Klausel?"/>
       <div class="row" style="margin-top:10px;">
-        <button id="btnAskSel" class="btn" data-i18n="btnAskSel">اسأل عن الجزء المحدد</button>
-        <button id="btnAskAll" class="btn secondary" data-i18n="btnAskAll">اسأل عن المستند كله</button>
+        <button id="btnAskSel" class="btn">Zur Auswahl fragen</button>
+        <button id="btnAskAll" class="btn secondary">Zum ganzen Dokument fragen</button>
       </div>
 
       <div class="badges">
-        <div class="badge" data-i18n="badgeNoStore">لا تخزين</div>
-        <div class="badge" data-i18n="badgeTLS">مشفّر</div>
-        <div class="badge" data-i18n="badgeMulti">متعدد اللغات</div>
+        <div class="badge">Keine Speicherung</div>
+        <div class="badge">Verschlüsselt</div>
+        <div class="badge">Mehrsprachig</div>
       </div>
 
-      <h3 style="margin-top:18px;" data-i18n="resultTitle">الشرح / الجواب</h3>
+      <h3 style="margin-top:18px;">Erklärung / Antwort</h3>
       <div id="result" class="results" aria-live="polite"></div>
 
       <div class="ads">
-        <!-- Bloc pub (affiché seulement après consentement via push) -->
+        <!-- Werbefläche (wird erst nach Einwilligung + push gerendert) -->
         <ins class="adsbygoogle"
              style="display:block"
              data-ad-client="ca-pub-9411950027978678"
@@ -153,179 +165,59 @@
     </section>
 
     <aside class="card">
-      <h3 data-i18n="trustTitle">الخصوصية والثقة</h3>
-      <p class="legal" data-i18n="trust1">يُرسل نصك فقط إلى مزود الذكاء الاصطناعي لإنتاج الشرح. لا نحفظ مستنداتك ولا نقرأها. النقل عبر HTTPS.</p>
-      <p class="legal" data-i18n="trust2">لا ينشئ DocuMate حسابات ولا يحفظ محتواك على خوادمنا. الحفظ المحلي على جهازك فقط.</p>
-      <p class="legal" data-i18n="trust3">يُذكر أن البيانات عبر API لا تُستخدم للتدريب افتراضياً. راجع سياسة الخصوصية.</p>
-      <p class="legal" data-i18n="trust4">هذه معلومات توضيحية، وليست استشارة قانونية.</p>
-      <p class="legal warn" data-i18n="trust5">مهم: قد يخطئ الذكاء الاصطناعي؛ تحقق من التفاصيل الأساسية لدى مصادر رسمية أو مختص.</p>
+      <h3>Datenschutz & Vertrauen</h3>
+      <p class="legal">Ihr Text wird nur an unseren KI-Anbieter gesendet, um die Erklärung zu erzeugen. Wir speichern Ihre Dokumente nicht. Übertragung per HTTPS.</p>
+      <p class="legal">DocuMate erstellt keine Konten und speichert keine Inhalte auf unseren Servern. Wenn Sie auf „Lokal speichern“ klicken, wird nur auf Ihrem Gerät (localStorage) gespeichert.</p>
+      <p class="legal">Unser KI-Anbieter gibt an, dass über die API gesendete Daten standardmäßig nicht zum Trainieren der Modelle verwendet werden. Mehr dazu in unserer Datenschutzerklärung.</p>
+      <p class="legal">Dieser Dienst bietet Erklärungen in einfacher Sprache für besseres Verständnis. Er ist keine Rechtsberatung.</p>
+      <p class="legal warn">Wichtig: KI kann Fehler machen; prüfen Sie wichtige Punkte bei offiziellen Stellen oder einer qualifizierten Fachperson.</p>
 
       <details>
-        <summary><strong data-i18n="privacySummary">سياسة الخصوصية (موجز)</strong></summary>
+        <summary><strong>Datenschutz (Kurzfassung)</strong></summary>
         <ul class="legal">
-          <li data-i18n="pp1"><span class="ok">✔</span> لا تخزين على الخادم؛ حذف بعد الرد.</li>
-          <li data-i18n="pp2"><span class="ok">✔</span> HTTPS فقط؛ لا تحليلات افتراضياً؛ إعلانات بموافقتك.</li>
-          <li data-i18n="pp3"><span class="ok">✔</span> الحفظ المحلي في المتصفح فقط.</li>
-          <li data-i18n="pp4"><span class="warn">⚠</span> لا تشارك بيانات شديدة الحساسية.</li>
-          <li data-i18n="pp5"><span class="warn">⚠</span> ليست نصيحة قانونية.</li>
+          <li><span class="ok">✔</span> Keine Serverspeicherung; Verarbeitung im Speicher und danach verworfen.</li>
+          <li><span class="ok">✔</span> Nur HTTPS; standardmäßig keine Analytics; Werbung nur mit Einwilligung.</li>
+          <li><span class="ok">✔</span> „Lokal speichern“ bewahrt Text nur in Ihrem Browser (löschbar).</li>
+          <li><span class="warn">⚠</span> Senden Sie keine hochsensiblen personenbezogenen Daten.</li>
+          <li><span class="warn">⚠</span> Erklärungen sind informativer Natur, keine Rechtsberatung.</li>
         </ul>
       </details>
 
-      <h3 style="margin-top:18px;" data-i18n="seoTitle">مستندات يمكننا المساعدة فيها</h3>
-      <p class="legal" data-i18n="seoText">العقود، عقود الإيجار، فواتير الخدمات، رسائل البنوك، شروط التأمين، الشروط العامة، وغيرها.</p>
+      <h3 style="margin-top:18px;">Dokumentarten, bei denen wir helfen</h3>
+      <p class="legal">Verträge, Mietverträge, Nebenkostenabrechnungen, Bankschreiben, Versicherungsbedingungen und mehr.</p>
     </aside>
   </main>
 
   <footer>
     <p class="legal">
-      <strong>DocuMate</strong> — <span data-i18n="footer1">شروح مجانية للمستندات تعمل بالذكاء الاصطناعي</span> ·
-      <a href="#" id="openConsent" data-i18n="footerConsent">موافقة الإعلانات</a> ·
-      <a href="#" id="clearLocal" data-i18n="footerClear">مسح البيانات المحلية</a> ·
+      <strong>DocuMate</strong> — <span>Kostenlose Dokumenterklärungen mit KI</span> · 
+      <a href="#" id="openConsent">Werbeeinwilligung</a> ·
+      <a href="#" id="clearLocal">Lokale Daten löschen</a> ·
       <a href="/privacy.html">Privacy / Confidentialité</a>
     </p>
   </footer>
 
-  <!-- شريط موافقة الإعلانات -->
+  <!-- Einwilligungsbanner für Werbung -->
   <div class="consent" id="consentBox">
-    <div style="margin-bottom:6px;" data-i18n="consentText">قد يعرض هذا الموقع إعلانات غير مزعجة للبقاء مجانياً. هل تقبل ملفات تعريف الارتباط/البرامج النصية للإعلانات؟</div>
+    <div style="margin-bottom:6px;">Diese Seite zeigt evtl. unaufdringliche Werbung, um kostenlos zu bleiben. Akzeptieren Sie Werbe-Cookies/Skripte?</div>
     <div class="row">
-      <button class="btn secondary" id="denyAds" data-i18n="deny">رفض</button>
-      <button class="btn" id="allowAds" data-i18n="allow">سماح</button>
+      <button class="btn secondary" id="denyAds">Ablehnen</button>
+      <button class="btn" id="allowAds">Zustimmen</button>
     </div>
   </div>
 
   <script>
-    /* ---------------- I18N STRINGS (AR + EN + autres langues pour le sélecteur) ---------------- */
-    const I18N = {
-      en: {
-        tagline:"Understand your documents easily", language:"Language",
-        heroTitle:"Explain contracts, bills & official documents in plain language",
-        heroSub:"Free, private, multilingual. Not legal advice.",
-        uploadLabel:"Upload a document (PDF/TXT)", pasteLabel:"…or paste your text here",
-        pasteHint:"Your document stays on your device until you click an action below.",
-        regionLabel:"Region / Country (optional, for local rules)",
-        btnExplainAll:"Explain the whole document", btnExplainSel:"Explain selection only",
-        btnSave:"Save locally", btnLoad:"Load last",
-        askLabel:"Ask a specific question about a passage (optional)",
-        btnAskSel:"Ask about selection", btnAskAll:"Ask about whole document",
-        badgeNoStore:"No storage", badgeTLS:"Encrypted", badgeMulti:"Multilingual",
-        resultTitle:"Explanation / Answer", trustTitle:"Privacy & Trust",
-        trust1:"Your text is only sent to our AI provider to generate the explanation. We do not keep your documents. We do not read them. Transmission uses HTTPS.",
-        trust2:"By design, DocuMate does not create accounts and does not save your content on our servers. If you click “Save locally”, it stores only on your device (localStorage).",
-        trust3:"Our AI provider states that data sent via API is not used to train models by default. Learn more in our Privacy Policy.",
-        trust4:"This service offers explanations in plain language for better understanding. It is not legal advice.",
-        trust5:"Important: AI can make mistakes; verify key details with official sources or a qualified professional.",
-        privacySummary:"Privacy Policy (short)",
-        pp1:"✔ No server-side storage of your documents; processed in-memory and discarded after response.",
-        pp2:"✔ HTTPS-only; no analytics by default; ads only if you consent.",
-        pp3:"✔ Local “Save” stores the text in your browser only (you can clear it).",
-        pp4:"⚠ Do not share highly sensitive personal data.",
-        pp5:"⚠ Explanations are informational, not legal advice.",
-        seoTitle:"Documents we can help with",
-        seoText:"Contracts, rental agreements, utility bills, bank letters, insurance terms, general conditions, and more.",
-        footer1:"Free document explanations powered by AI",
-        footerConsent:"Ad consent", footerClear:"Clear local data",
-        consentText:"This site may show non-intrusive ads to stay free. Do you accept advertising cookies/scripts?",
-        deny:"Deny", allow:"Allow",
-        loading:"Working…", nothingSel:"No selection: select text in the box first.",
-        noText:"No text to process yet.", saved:"Saved locally.", loaded:"Loaded last document.",
-        cleared:"Local data cleared."
-      },
-      fr: {
-        tagline:"Comprenez enfin vos documents", language:"Langue",
-        heroTitle:"Expliquez contrats, factures et documents officiels en langage simple",
-        heroSub:"Gratuit, respectueux de la vie privée, multilingue. Pas un conseil juridique.",
-        uploadLabel:"Importer un document (PDF/TXT)", pasteLabel:"…ou collez votre texte ici",
-        pasteHint:"Votre document reste sur votre appareil tant que vous n’actionnez pas un bouton ci-dessous.",
-        regionLabel:"Région / Pays (facultatif, règles locales)",
-        btnExplainAll:"Expliquer tout le document", btnExplainSel:"Expliquer la sélection seulement",
-        btnSave:"Sauvegarder localement", btnLoad:"Recharger le dernier",
-        askLabel:"Poser une question sur un passage (facultatif)",
-        btnAskSel:"Question sur la sélection", btnAskAll:"Question sur tout le document",
-        badgeNoStore:"Sans stockage", badgeTLS:"Chiffré", badgeMulti:"Multilingue",
-        resultTitle:"Explication / Réponse", trustTitle:"Confidentialité & Confiance",
-        trust1:"Votre texte n’est envoyé qu’à notre fournisseur d’IA pour générer l’explication. Nous ne conservons pas vos documents. Transmission via HTTPS.",
-        trust2:"DocuMate ne crée pas de compte et ne sauvegarde pas votre contenu sur nos serveurs.",
-        trust3:"Les données via l’API ne sont pas utilisées pour l’entraînement par défaut.",
-        trust4:"Service d’explication en langage simple, pas un avis juridique.",
-        trust5:"Important : l’IA peut se tromper ; vérifiez les points clés.",
-        privacySummary:"Politique de confidentialité (résumé)",
-        pp1:"✔ Pas de stockage serveur ; traitement en mémoire et suppression après réponse.",
-        pp2:"✔ HTTPS ; pas d’analytics par défaut ; pubs seulement avec consentement.",
-        pp3:"✔ “Sauvegarder localement” garde le texte dans votre navigateur.",
-        pp4:"⚠ N’envoyez pas de données très sensibles.",
-        pp5:"⚠ Informations générales, pas un avis juridique.",
-        seoTitle:"Documents pris en charge",
-        seoText:"Contrats, baux, factures, courriers bancaires, conditions d’assurance, CGV, etc.",
-        footer1:"Explications gratuites de documents par IA",
-        footerConsent:"Consentement pubs", footerClear:"Effacer les données locales",
-        consentText:"Ce site peut afficher des publicités discrètes…",
-        deny:"Refuser", allow:"Accepter",
-        loading:"Traitement…", nothingSel:"Aucune sélection…",
-        noText:"Aucun texte à traiter.", saved:"Sauvegardé localement.",
-        loaded:"Dernier document rechargé.", cleared:"Données locales effacées."
-      },
-      de:{ /* idem versions précédentes */ },
-      es:{}, it:{}, zh:{}, hi:{}, pt:{}, ru:{}, bn:{},
-      ar: {
-        tagline:"افهم مستنداتك بسهولة", language:"اللغة",
-        heroTitle:"اشرح العقود والفواتير والمستندات الرسمية بلغة مبسطة",
-        heroSub:"مجاني، خاص، متعدد اللغات. ليست نصيحة قانونية.",
-        uploadLabel:"ارفع مستند (PDF/TXT)", pasteLabel:"أو الصق النص هنا",
-        pasteHint:"يبقى المستند على جهازك حتى تنقر إجراءً أدناه.",
-        regionLabel:"المنطقة/الدولة (اختياري، للقواعد المحلية)",
-        btnExplainAll:"اشرح المستند كله", btnExplainSel:"اشرح الجزء المحدد فقط",
-        btnSave:"حفظ محلي", btnLoad:"تحميل الأخير",
-        askLabel:"سؤال محدد حول فقرة (اختياري)",
-        btnAskSel:"اسأل عن الجزء المحدد", btnAskAll:"اسأل عن المستند كله",
-        badgeNoStore:"لا تخزين", badgeTLS:"مشفّر", badgeMulti:"متعدد اللغات",
-        resultTitle:"الشرح / الجواب", trustTitle:"الخصوصية والثقة",
-        trust1:"يُرسل نصك فقط إلى مزود الذكاء الاصطناعي لإنتاج الشرح. لا نحفظ مستنداتك ولا نقرأها. النقل عبر HTTPS.",
-        trust2:"لا ينشئ DocuMate حسابات ولا يحفظ محتواك على خوادمنا. الحفظ المحلي على جهازك فقط.",
-        trust3:"يُذكر أن البيانات عبر API لا تُستخدم للتدريب افتراضياً.",
-        trust4:"هذه معلومات توضيحية، وليست استشارة قانونية.",
-        trust5:"مهم: قد يخطئ الذكاء الاصطناعي؛ تحقق من التفاصيل الأساسية.",
-        privacySummary:"سياسة الخصوصية (موجز)",
-        pp1:"✔ لا تخزين على الخادم؛ حذف بعد الرد.",
-        pp2:"✔ HTTPS فقط؛ لا تحليلات افتراضياً؛ إعلانات بموافقتك.",
-        pp3:"✔ الحفظ المحلي في المتصفح فقط.",
-        pp4:"⚠ لا تشارك بيانات شديدة الحساسية.",
-        pp5:"⚠ ليست نصيحة قانونية.",
-        seoTitle:"مستندات يمكننا المساعدة فيها",
-        seoText:"العقود، عقود الإيجار، فواتير الخدمات، رسائل البنوك، شروط التأمين، الشروط العامة، وغيرها.",
-        footer1:"شروح مجانية للمستندات تعمل بالذكاء الاصطناعي",
-        footerConsent:"موافقة الإعلانات", footerClear:"مسح البيانات المحلية",
-        consentText:"قد يعرض هذا الموقع إعلانات غير مزعجة للبقاء مجانياً.",
-        deny:"رفض", allow:"سماح",
-        loading:"جارٍ العمل…", nothingSel:"لا يوجد تحديد.",
-        noText:"لا يوجد نص.", saved:"تم الحفظ محلياً.", loaded:"تم التحميل.",
-        cleared:"تم مسح البيانات المحلية."
-      }
-    };
+    // ---------- Sprachwahl (Weiterleitung) ----------
+    const LANG_PATH = { en:'/', fr:'/fr/', de:'/de/', es:'/es/', it:'/it/', zh:'/zh/', hi:'/hi/', ar:'/ar/', pt:'/pt/', ru:'/ru/', bn:'/bn/' };
+    const pathNow = (location.pathname.replace(/\/+$/, '') || '/de/');
+    let currentLang = 'de';
+    for (const [lg,p] of Object.entries(LANG_PATH)) { if ((p.replace(/\/+$/, '')||'/') === pathNow) { currentLang = lg; break; } }
+    const langSel = document.getElementById('langSel');
+    if (langSel) langSel.value = currentLang;
+    langSel && langSel.addEventListener('change', e => { const lg = e.target.value; if (LANG_PATH[lg]) location.href = LANG_PATH[lg]; });
 
-    /* --------------- Détection de langue / RTL ---------------- */
-    const path = location.pathname.replace(/\/+$/, '');
-    const pathLang = (/^\/(fr|de|es|it|zh|hi|ar|pt|ru|bn)(?:\/|$)/i.exec(path)||[])[1] || 'ar';
-    let currentLang = pathLang || 'ar';
-    document.documentElement.lang = currentLang;
-    document.documentElement.dir = (currentLang === 'ar' ? 'rtl' : 'ltr');
+    // ---------- PDF/TXT → textarea ----------
     const $ = sel => document.querySelector(sel);
-
-    function applyI18n(lang){
-      currentLang = lang;
-      document.documentElement.lang = lang;
-      document.documentElement.dir = (lang === 'ar' ? 'rtl' : 'ltr');
-      for (const el of document.querySelectorAll('[data-i18n]')){
-        const key = el.getAttribute('data-i18n');
-        const str = (I18N[lang] && I18N[lang][key]) || (I18N.en && I18N.en[key]) || '';
-        el.textContent = str;
-      }
-      $('#langSel').value = lang;
-    }
-    $('#langSel').addEventListener('change', e => applyI18n(e.target.value));
-    applyI18n(currentLang);
-
-    /* --------------- PDF/TXT → textarea ---------------- */
     const fileInput = $('#file'), docText = $('#docText'), result = $('#result'), region = $('#region');
     fileInput.addEventListener('change', async () => {
       result.textContent = '';
@@ -345,11 +237,11 @@
         }
         docText.value = out.trim();
       } else {
-        alert('Please upload PDF or TXT only.');
+        alert('Bitte nur PDF oder TXT hochladen.');
       }
     });
 
-    /* --------------- Helpers + API call ---------------- */
+    // ---------- Helpers + API call ----------
     function getSelectionTextFromTextarea(txtEl){
       const start = txtEl.selectionStart, end = txtEl.selectionEnd;
       if (start === end) return '';
@@ -359,74 +251,72 @@
       ['#btnExplainAll','#btnExplainSel','#btnAskSel','#btnAskAll'].forEach(id=>{
         const b = $(id); if(b) b.disabled = on;
       });
-      result.textContent = on ? ((I18N[currentLang]&&I18N[currentLang].loading)||'Working…') : result.textContent;
+      result.textContent = on ? 'Wird verarbeitet…' : result.textContent;
     }
     async function callExplain({ text, question=null }){
       const payload = { text, question, lang: currentLang, region: region.value.trim() || null };
       const res = await fetch('/api/explain', {
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify(payload)
+        method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)
       });
       if(!res.ok){ throw new Error('Server error');}
       const data = await res.json();
-      return data.answer || '(no answer)';
+      return data.answer || '(keine Antwort)';
     }
 
-    /* --------------- Buttons ---------------- */
+    // ---------- Buttons ----------
     $('#btnExplainAll').addEventListener('click', async () => {
       const all = docText.value.trim();
-      if (!all){ alert((I18N[currentLang]&&I18N[currentLang].noText)||'No text to process yet.'); return; }
+      if (!all){ alert('Kein Text vorhanden.'); return; }
       setLoading(true);
       try { result.textContent = await callExplain({ text: all }); }
-      catch(e){ result.textContent = 'Error: '+e.message; }
+      catch(e){ result.textContent = 'Fehler: '+e.message; }
       finally { setLoading(false); }
     });
     $('#btnExplainSel').addEventListener('click', async () => {
       const sel = getSelectionTextFromTextarea(docText);
-      if (!sel){ alert((I18N[currentLang]&&I18N[currentLang].nothingSel)||'No selection.'); return; }
+      if (!sel){ alert('Keine Auswahl: Markieren Sie zuerst Text.'); return; }
       setLoading(true);
       try { result.textContent = await callExplain({ text: sel }); }
-      catch(e){ result.textContent = 'Error: '+e.message; }
+      catch(e){ result.textContent = 'Fehler: '+e.message; }
       finally { setLoading(false); }
     });
     $('#btnAskSel').addEventListener('click', async () => {
       const sel = getSelectionTextFromTextarea(docText);
-      if (!sel){ alert((I18N[currentLang]&&I18N[currentLang].nothingSel)||'No selection.'); return; }
+      if (!sel){ alert('Keine Auswahl: Markieren Sie zuerst Text.'); return; }
       const q = $('#question').value.trim() || null;
       setLoading(true);
       try { result.textContent = await callExplain({ text: sel, question: q }); }
-      catch(e){ result.textContent = 'Error: '+e.message; }
+      catch(e){ result.textContent = 'Fehler: '+e.message; }
       finally { setLoading(false); }
     });
     $('#btnAskAll').addEventListener('click', async () => {
       const all = docText.value.trim();
-      if (!all){ alert((I18N[currentLang]&&I18N[currentLang].noText)||'No text to process yet.'); return; }
+      if (!all){ alert('Kein Text vorhanden.'); return; }
       const q = $('#question').value.trim() || null;
       setLoading(true);
       try { result.textContent = await callExplain({ text: all, question: q }); }
-      catch(e){ result.textContent = 'Error: '+e.message; }
+      catch(e){ result.textContent = 'Fehler: '+e.message; }
       finally { setLoading(false); }
     });
     $('#btnSave').addEventListener('click', () => {
       localStorage.setItem('documate_last_doc', docText.value || '');
       localStorage.setItem('documate_last_region', region.value || '');
-      alert((I18N[currentLang]&&I18N[currentLang].saved)||'Saved locally.');
+      alert('Lokal gespeichert.');
     });
     $('#btnLoad').addEventListener('click', () => {
       const v = localStorage.getItem('documate_last_doc') || '';
       const r = localStorage.getItem('documate_last_region') || '';
       docText.value = v; region.value = r;
-      alert((I18N[currentLang]&&I18N[currentLang].loaded)||'Loaded last document.');
+      alert('Letztes Dokument geladen.');
     });
     $('#clearLocal').addEventListener('click', e => {
       e.preventDefault();
       localStorage.removeItem('documate_last_doc');
       localStorage.removeItem('documate_last_region');
-      alert((I18N[currentLang]&&I18N[currentLang].cleared)||'Local data cleared.');
+      alert('Lokale Daten gelöscht.');
     });
 
-    /* --------------- Consent + Ad render ---------------- */
+    // ---------- Consent + Ad render ----------
     function getConsent(){ return localStorage.getItem('documate_ads_consent'); }
     function setConsent(v){ localStorage.setItem('documate_ads_consent', v); }
     function renderAdsIfAllowed(){
@@ -439,8 +329,7 @@
     document.getElementById('allowAds').addEventListener('click', ()=>{ setConsent('allow'); consentBox.style.display='none'; renderAdsIfAllowed(); });
     document.getElementById('denyAds').addEventListener('click', ()=>{ setConsent('deny'); consentBox.style.display='none'; });
     document.getElementById('openConsent').addEventListener('click', e=>{ e.preventDefault(); consentBox.style.display='block'; });
-
-    // Si l’utilisateur avait déjà consenti :
+    // Bereits früher zugestimmt?
     renderAdsIfAllowed();
   </script>
 </body>
