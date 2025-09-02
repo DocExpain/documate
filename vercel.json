@@ -1,0 +1,24 @@
+{
+  "rewrites": [
+    { "source": "/fr", "destination": "/" },
+    { "source": "/fr/(.*)", "destination": "/" },
+    { "source": "/de", "destination": "/" },
+    { "source": "/de/(.*)", "destination": "/" },
+    { "source": "/es", "destination": "/" },
+    { "source": "/es/(.*)", "destination": "/" },
+    { "source": "/it", "destination": "/" },
+    { "source": "/it/(.*)", "destination": "/" },
+    { "source": "/zh", "destination": "/" },
+    { "source": "/zh/(.*)", "destination": "/" },
+    { "source": "/hi", "destination": "/" },
+    { "source": "/hi/(.*)", "destination": "/" },
+    { "source": "/ar", "destination": "/" },
+    { "source": "/ar/(.*)", "destination": "/" },
+    { "source": "/pt", "destination": "/" },
+    { "source": "/pt/(.*)", "destination": "/" },
+    { "source": "/ru", "destination": "/" },
+    { "source": "/ru/(.*)", "destination": "/" },
+    { "source": "/bn", "destination": "/" },
+    { "source": "/bn/(.*)", "destination": "/" }
+  ]
+}
