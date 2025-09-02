@@ -54,123 +54,27 @@
     .brand{display:flex;gap:12px;align-items:center;text-decoration:none;color:inherit}
     .brand-logo{font-size:28px} .brand h1{font-size:20px;margin:0} .brand p{margin:0;color:var(--muted);font-size:13px}
     .lang{margin-left:auto;display:flex;gap:8px;align-items:center}
-    .lang
-
-<body>
-  <header>
-    <div class="wrap">
-      <a class="brand" href="#">
-        <div class="brand-logo">📄</div>
-        <div>
-          <h1>DocuMate</h1>
-          <p data-i18n="tagline">افهم مستنداتك بسهولة</p>
-        </div>
-      </a>
-      <div class="lang">
-        <label for="langSel" style="margin:0;font-weight:600;" data-i18n="language">اللغة</label>
-        <select id="langSel" aria-label="Language">
-          <option value="en">English</option><option value="fr">Français</option><option value="de">Deutsch</option>
-          <option value="es">Español</option><option value="it">Italiano</option><option value="zh">中文 (简体)</option>
-          <option value="hi">हिंदी</option><option value="ar" selected>العربية</option><option value="pt">Português</option>
-          <option value="ru">Русский</option><option value="bn">বাংলা</option>
-        </select>
-      </div>
-    </div>
-  </header>
-
-  <main>
-    <section class="card">
-      <div class="hero">
-        <h2 data-i18n="heroTitle">اشرح العقود والفواتير والمستندات الرسمية بلغة مبسطة</h2>
-        <p data-i18n="heroSub">مجاني، خاص، متعدد اللغات. ليست نصيحة قانونية.</p>
-      </div>
-
-      <label for="file" data-i18n="uploadLabel">ارفع مستند (PDF/TXT)</label>
-      <input type="file" id="file" accept=".pdf,.txt" />
-
-      <label for="docText" data-i18n="pasteLabel">أو الصق النص هنا</label>
-      <textarea id="docText" placeholder="ألصق محتوى مستندك هنا…"></textarea>
-      <div class="hint" data-i18n="pasteHint">يبقى المستند على جهازك حتى تنقر إجراءً أدناه.</div>
-
-      <!-- Region / Country -->
-      <label for="region" style="margin-top:12px;" data-i18n="regionLabel">المنطقة/الدولة (اختياري، للقواعد المحلية)</label>
-      <input type="text" id="region" placeholder="مثال: Switzerland / Canton Fribourg" />
-
-      <div class="row" style="margin-top:10px;">
-        <button id="btnExplainAll" class="btn" data-i18n="btnExplainAll">اشرح المستند كله</button>
-        <button id="btnExplainSel" class="btn secondary" data-i18n="btnExplainSel">اشرح الجزء المحدد فقط</button>
-        <button id="btnSave" class="btn secondary" data-i18n="btnSave">حفظ محلي</button>
-        <button id="btnLoad" class="btn secondary" data-i18n="btnLoad">تحميل الأخير</button>
-      </div>
-
-      <label for="question" style="margin-top:16px;" data-i18n="askLabel">سؤال محدد حول فقرة (اختياري)</label>
-      <input type="text" id="question" placeholder="مثال: ماذا تعني هذه الفقرة؟"/>
-      <div class="row" style="margin-top:10px;">
-        <button id="btnAskSel" class="btn" data-i18n="btnAskSel">اسأل عن الجزء المحدد</button>
-        <button id="btnAskAll" class="btn secondary" data-i18n="btnAskAll">اسأل عن المستند كله</button>
-      </div>
-
-      <div class="badges">
-        <div class="badge" data-i18n="badgeNoStore">لا تخزين</div>
-        <div class="badge" data-i18n="badgeTLS">مشفّر</div>
-        <div class="badge" data-i18n="badgeMulti">متعدد اللغات</div>
-      </div>
-
-      <h3 style="margin-top:18px;" data-i18n="resultTitle">الشرح / الجواب</h3>
-      <div id="result" class="results" aria-live="polite"></div>
-
-      <div class="ads">
-        <!-- Bloc pub (affiché seulement après consentement via push) -->
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-9411950027978678"
-             data-ad-slot="YOUR_SLOT_ID"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-      </div>
-    </section>
-
-    <aside class="card">
-      <h3 data-i18n="trustTitle">الخصوصية والثقة</h3>
-      <p class="legal" data-i18n="trust1">يُرسل نصك فقط إلى مزود الذكاء الاصطناعي لإنتاج الشرح. لا نحفظ مستنداتك ولا نقرأها. النقل عبر HTTPS.</p>
-      <p class="legal" data-i18n="trust2">لا ينشئ DocuMate حسابات ولا يحفظ محتواك على خوادمنا. الحفظ المحلي على جهازك فقط.</p>
-      <p class="legal" data-i18n="trust3">يُذكر أن البيانات عبر API لا تُستخدم للتدريب افتراضياً. راجع سياسة الخصوصية.</p>
-      <p class="legal" data-i18n="trust4">هذه معلومات توضيحية، وليست استشارة قانونية.</p>
-      <p class="legal warn" data-i18n="trust5">مهم: قد يخطئ الذكاء الاصطناعي؛ تحقق من التفاصيل الأساسية لدى مصادر رسمية أو مختص.</p>
-
-      <details>
-        <summary><strong data-i18n="privacySummary">سياسة الخصوصية (موجز)</strong></summary>
-        <ul class="legal">
-          <li data-i18n="pp1"><span class="ok">✔</span> لا تخزين على الخادم؛ حذف بعد الرد.</li>
-          <li data-i18n="pp2"><span class="ok">✔</span> HTTPS فقط؛ لا تحليلات افتراضياً؛ إعلانات بموافقتك.</li>
-          <li data-i18n="pp3"><span class="ok">✔</span> الحفظ المحلي في المتصفح فقط.</li>
-          <li data-i18n="pp4"><span class="warn">⚠</span> لا تشارك بيانات شديدة الحساسية.</li>
-          <li data-i18n="pp5"><span class="warn">⚠</span> ليست نصيحة قانونية.</li>
-        </ul>
-      </details>
-
-      <h3 style="margin-top:18px;" data-i18n="seoTitle">مستندات يمكننا المساعدة فيها</h3>
-      <p class="legal" data-i18n="seoText">العقود، عقود الإيجار، فواتير الخدمات، رسائل البنوك، شروط التأمين، الشروط العامة، وغيرها.</p>
-    </aside>
-  </main>
-
-  <footer>
-    <p class="legal">
-      <strong>DocuMate</strong> — <span data-i18n="footer1">شروح مجانية للمستندات تعمل بالذكاء الاصطناعي</span> ·
-      <a href="#" id="openConsent" data-i18n="footerConsent">موافقة الإعلانات</a> ·
-      <a href="#" id="clearLocal" data-i18n="footerClear">مسح البيانات المحلية</a> ·
-      <a href="/privacy.html">Privacy / Confidentialité</a>
-    </p>
-  </footer>
-
-  <!-- شريط موافقة الإعلانات -->
-  <div class="consent" id="consentBox">
-    <div style="margin-bottom:6px;" data-i18n="consentText">قد يعرض هذا الموقع إعلانات غير مزعجة للبقاء مجانياً. هل تقبل ملفات تعريف الارتباط/البرامج النصية للإعلانات؟</div>
-    <div class="row">
-      <button class="btn secondary" id="denyAds" data-i18n="deny">رفض</button>
-      <button class="btn" id="allowAds" data-i18n="allow">سماح</button>
-    </div>
-  </div>
+    .lang select{padding:8px 10px;border:1px solid #e5e7eb;border-radius:10px;background:#fff}
+    main{max-width:1100px;margin:28px auto;padding:0 16px;display:grid;grid-template-columns:1.2fr .8fr;gap:18px}
+    @media (max-width:980px){main{grid-template-columns:1fr}}
+    .card{background:var(--card);border-radius:var(--br);box-shadow:var(--shadow);padding:18px}
+    .hero h2{margin:0 0 6px;font-size:24px} .hero p{margin:0;color:var(--muted)}
+    label{font-weight:600;display:block;margin:14px 0 6px} .hint{color:var(--muted);font-size:13px;margin-top:4px}
+    textarea,input[type="text"]{width:100%;padding:12px;border:1px solid #e5e7eb;border-radius:12px;outline:none}
+    textarea{min-height:190px;resize:vertical}
+    .row{display:flex;gap:10px;flex-wrap:wrap}
+    .btn{background:var(--accent);color:#fff;border:0;padding:11px 14px;border-radius:12px;cursor:pointer;font-weight:600}
+    .btn.secondary{background:#e2e8f0;color:#0f172a} .btn:disabled{opacity:.6;cursor:not-allowed}
+    .results{white-space:pre-wrap;background:#f8fafc;border:1px solid #e5e7eb;border-radius:12px;padding:14px;min-height:140px}
+    .badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .badge{background:#eef2ff;color:#1e40af;padding:6px 10px;border-radius:999px;font-size:12px}
+    .legal{font-size:13px;color:var(--muted)} .ok{color:var(--ok)} .warn{color:var(--warn)}
+    footer{max-width:1100px;margin:24px auto 40px;padding:0 16px}
+    .ads{margin-top:16px;padding:10px;border:1px dashed #e2e8f0;border-radius:10px;background:#fafafa}
+    .consent{position:fixed;bottom:12px;left:12px;right:12px;background:#111827;color:#fff;padding:14px;border-radius:12px;display:none;z-index:50}
+    .consent .row{justify-content:flex-end}
+  </style>
+</head>
 
   <script>
     /* ---------------- I18N STRINGS (AR + EN + autres langues pour le sélecteur) ---------------- */
