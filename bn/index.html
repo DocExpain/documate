@@ -197,7 +197,7 @@ body.sidebar-collapsed .show-sidebar-btn{ display:inline-block; }
         <ins class="adsbygoogle"
              style="display:block"
              data-ad-client="ca-pub-9411950027978678"
-             data-ad-slot="YOUR_SLOT_ID"
+             data-ad-slot="PASTE_YOUR_AD_SLOT_ID"
              data-ad-format="auto"
              data-full-width-responsive="true"></ins>
         <script>
@@ -600,6 +600,7 @@ body.sidebar-collapsed .show-sidebar-btn{ display:inline-block; }
 
   async function processFile(file){
     if (!file || !docText) return;
+    setStatus(window.STR?.loading || "Working…");
     try{
       const name = (file.name||'').toLowerCase();
       const buf  = await file.arrayBuffer();
