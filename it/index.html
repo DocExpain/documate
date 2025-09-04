@@ -652,11 +652,13 @@ body.sidebar-collapsed .show-sidebar-btn{ display:inline-block; }
   function apply(collapsed){
     if(collapsed){
       body.classList.add('sidebar-collapsed');
-      showBtn.hidden = false;
+      showBtn.removeAttribute('hidden');
+      showBtn.setAttribute('aria-expanded','false');
       hideBtn.setAttribute('aria-expanded','false');
     }else{
       body.classList.remove('sidebar-collapsed');
-      showBtn.hidden = true;
+      showBtn.setAttribute('hidden','');
+      showBtn.setAttribute('aria-expanded','true');
       hideBtn.setAttribute('aria-expanded','true');
     }
     try{ localStorage.setItem(KEY, collapsed ? '1' : '0'); }catch(e){}
