@@ -55,7 +55,11 @@
   <script type="application/ld+json" id="jsonld-website">{"@context":"https://schema.org","@type":"WebSite","name":"DocuMate","url":"https://documate.work/","inLanguage":"en","description":"Explain contracts, bills & official documents in plain language."}</script>
 
   <!-- PDF.js & Mammoth.js (DOCX) -->
-  <script src="https://unpkg.com/pdfjs-dist@4.7.76/build/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+</script>
   <script src="https://unpkg.com/mammoth@1.6.0/mammoth.browser.min.js"></script>
 
   <style>
@@ -340,42 +344,10 @@
       if (LANG_PATH[lg]) window.history.replaceState({}, '', LANG_PATH[lg]);
     });
 
-    // ----------------- File loaders (PDF/TXT/DOCX) -----------------
-    const fileInput = document.getElementById('file');
+    // ----------------- Elements -----------------
     const docText = document.getElementById('docText');
     const result = document.getElementById('result');
     const region = document.getElementById('region');
-
-    fileInput.addEventListener('change', async () => {
-      result.textContent = '';
-      const f = fileInput.files[0];
-      if(!f) return;
-      const name = f.name.toLowerCase();
-      try{
-        if (f.type === 'text/plain' || name.endsWith('.txt')){
-          const text = await f.text();
-          docText.value = text;
-        } else if (f.type === 'application/pdf' || name.endsWith('.pdf')){
-          const arr = new Uint8Array(await f.arrayBuffer());
-          const pdf = await pdfjsLib.getDocument({data: arr}).promise;
-          let out = '';
-          for (let i=1;i<=pdf.numPages;i++){
-            const page = await pdf.getPage(i);
-            const content = await page.getTextContent();
-            out += content.items.map(it => it.str).join(' ') + '\n';
-          }
-          docText.value = out.trim();
-        } else if (name.endsWith('.docx') || f.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'){
-          const arrayBuffer = await f.arrayBuffer();
-          const res = await mammoth.extractRawText({ arrayBuffer });
-          docText.value = (res && res.value) ? res.value.trim() : '';
-        } else {
-          alert('Please upload PDF, TXT or DOCX.');
-        }
-      }catch(err){
-        alert('Could not read file: '+err.message);
-      }
-    });
 
     // ----------------- Helpers + API call -----------------
     function getSelectionTextFromTextarea(txtEl){
@@ -524,5 +496,72 @@
   updateFileUI();
 })();
 </script>
+<script>
+(async function() {
+  if (window.__documateFileReaderApplied) return;
+  window.__documateFileReaderApplied = true;
+
+  const fileInput = document.getElementById('file');
+  const textArea  = document.getElementById('docText');
+  if (!fileInput || !textArea) return;
+
+  fileInput.addEventListener('change', async (e) => {
+    const f = e.target.files && e.target.files[0];
+    if (!f) return;
+
+    try {
+      const name = (f.name || '').toLowerCase();
+      const buf  = await f.arrayBuffer();
+
+      if (name.endsWith('.pdf')) {
+        // --- PDF: extraction de texte via PDF.js v3 (UMD) ---
+        const pdf = await pdfjsLib.getDocument({ data: new Uint8Array(buf) }).promise;
+        let out = '';
+        for (let p = 1; p <= pdf.numPages; p++) {
+          const page = await pdf.getPage(p);
+          const tc   = await page.getTextContent();
+          out += tc.items.map(i => i.str).join(' ') + '\n\n';
+        }
+        out = postProcess(out);
+        if (isLikelyXML(out)) out = stripXML(out); // si le contenu ressemble à de l’XML, on nettoie
+        textArea.value = out.trim() || '[No selectable text found in this PDF]';
+        return;
+      }
+
+      if (name.endsWith('.docx')) {
+        // --- DOCX: Mammoth ---
+        const res = await window.mammoth.extractRawText({ arrayBuffer: buf });
+        textArea.value = (res.value || '').trim();
+        return;
+      }
+
+      // --- TXT / inconnu: tentative texte brut ---
+      const txt = await (new Response(new Blob([buf]))).text();
+      textArea.value = txt;
+
+    } catch (err) {
+      console.error('Read error:', err);
+      textArea.value = 'Could not read file. Try exporting as PDF (text) or DOCX.';
+    }
+  });
+
+  // Helpers
+  function postProcess(s) {
+    return s.replace(/\u00AD/g,'')          // soft hyphen
+            .replace(/[ \t]{2,}/g,' ')      // espaces multiples
+            .replace(/\n{3,}/g,'\n\n');     // sauts de ligne
+  }
+  function isLikelyXML(s) {
+    const tagsLen = (s.match(/<[^>]+>/g) || []).join('').length;
+    return s.length > 0 && (tagsLen / s.length) > 0.15;
+  }
+  function stripXML(s) {
+    return s.replace(/<[^>]+>/g,' ')
+            .replace(/\s{2,}/g,' ')
+            .trim();
+  }
+})();
+</script>
+
 </body>
 </html>
