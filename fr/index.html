@@ -55,7 +55,12 @@
   <script type="application/ld+json" id="jsonld-website">{"@context":"https://schema.org","@type":"WebSite","name":"DocuMate","url":"https://documate.work/","inLanguage":"en","description":"Explain contracts, bills & official documents in plain language."}</script>
 
   <!-- PDF.js & Mammoth.js (DOCX) -->
-  <script src="https://unpkg.com/pdfjs-dist@4.7.76/build/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>
+    // IMPORTANT : pointer le worker sur la même version
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+  </script>
   <script src="https://unpkg.com/mammoth@1.6.0/mammoth.browser.min.js"></script>
 
   <style>
@@ -176,6 +181,14 @@
              data-ad-slot="YOUR_SLOT_ID"
              data-ad-format="auto"
              data-full-width-responsive="true"></ins>
+        <script>
+          if (location.search.includes("adtest=1")) {
+            document.querySelectorAll("ins.adsbygoogle").forEach(i => i.setAttribute("data-adtest","on"));
+          }
+          if (localStorage.getItem("documate_ads_consent") === "allow") {
+            (adsbygoogle = window.adsbygoogle || []).push({});
+          }
+        </script>
       </div>
     </section>
 
@@ -455,17 +468,20 @@
     // ----------------- Consent + Ad render -----------------
     function getConsent(){ return localStorage.getItem('documate_ads_consent'); }
     function setConsent(v){ localStorage.setItem('documate_ads_consent', v); }
-    function renderAdsIfAllowed(){
-      if (getConsent()==='allow') {
+        function renderAdsIfAllowed(){
+      if (getConsent()==="allow") {
+        if (location.search.includes("adtest=1")) {
+          document.querySelectorAll("ins.adsbygoogle").forEach(i => i.setAttribute("data-adtest","on"));
+        }
         try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
       }
     }
+
     const consentBox = document.getElementById('consentBox');
     if(!getConsent()) consentBox.style.display='block';
     document.getElementById('allowAds').addEventListener('click', ()=>{ setConsent('allow'); consentBox.style.display='none'; renderAdsIfAllowed(); });
     document.getElementById('denyAds').addEventListener('click', ()=>{ setConsent('deny'); consentBox.style.display='none'; });
     document.getElementById('openConsent').addEventListener('click', e=>{ e.preventDefault(); consentBox.style.display='block'; });
-    renderAdsIfAllowed();
   </script>
 <script>
 (function(){
