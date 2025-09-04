@@ -1,3 +1,7 @@
+/*!
+ * Copyright (c) 2025 [TON ORGANISATION]
+ * SPDX-License-Identifier: LicenseRef-SA-NC-1.0
+ */
 // api/explain.js
 import OpenAI from "openai";
 
