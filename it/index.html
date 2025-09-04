@@ -56,6 +56,7 @@
 
   <!-- PDF.js & Mammoth.js (DOCX) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
   <script>
     // IMPORTANT : pointer le worker sur la même version
     pdfjsLib.GlobalWorkerOptions.workerSrc =
@@ -535,7 +536,18 @@
           out += tc.items.map(i => i.str).join(' ') + '\n\n';
         }
         out = postProcess(out);
-        if (isLikelyXML(out)) out = stripXML(out); // si le contenu ressemble à de l’XML, on nettoie
+        if (isLikelyXML(out)) out = stripXML(out);
+
+        // --- FALLBACK OCR si quasi-vide (scan) ---
+        if (!out || out.trim().length < 20) {
+          const langForOcr = tessLangFor((document.documentElement.lang || 'en').toLowerCase());
+          const ocrText = await ocrPdfWithTesseract(pdf, langForOcr, (done,total)=>{
+            // feedback léger dans l'UI pendant l’OCR
+            try { result.textContent = `OCR ${done}/${total}…`; } catch(e){}
+          });
+          out = (ocrText && ocrText.trim()) ? ocrText : out;
+        }
+
         textArea.value = out.trim() || '[No selectable text found in this PDF]';
         return;
       }
@@ -558,6 +570,38 @@
   });
 
   // Helpers
+  const TESS_LANG_MAP = {
+    en: 'eng', fr: 'fra', de: 'deu', es: 'spa', it: 'ita',
+    pt: 'por', ru: 'rus', bn: 'ben', hi: 'hin', ar: 'ara',
+    zh: 'chi_sim'
+  };
+  function tessLangFor(lg){ return TESS_LANG_MAP[lg] || 'eng'; }
+
+  // OCR PDF : rend chaque page sur un canvas puis reconnaît le texte
+  async function ocrPdfWithTesseract(pdf, lang, onProgress){
+    let all = '';
+    const total = pdf.numPages;
+    const scale = 2; // qualité correcte sans exploser la RAM
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+
+    for (let p=1; p<=total; p++){
+      const page = await pdf.getPage(p);
+      const viewport = page.getViewport({ scale });
+      canvas.width = Math.ceil(viewport.width);
+      canvas.height = Math.ceil(viewport.height);
+      await page.render({ canvasContext: ctx, viewport }).promise;
+
+      const { data:{ text } } = await Tesseract.recognize(canvas, lang);
+      all += (text || '') + '\n\n';
+
+      if (typeof onProgress === 'function') onProgress(p, total);
+      // Laisse souffler le thread UI
+      await new Promise(r => setTimeout(r, 0));
+    }
+    return all.replace(/[ \t]{2,}/g,' ').replace(/\n{3,}/g,'\n\n');
+  }
+
   function postProcess(s) {
     return s.replace(/\u00AD/g,'')          // soft hyphen
             .replace(/[ \t]{2,}/g,' ')      // espaces multiples
