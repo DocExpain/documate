@@ -47,7 +47,7 @@
   <!-- Favicon & app icons -->
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
-  <link rel="icon" href="/favicon.ico">
+  <link rel="shortcut icon" href="/favicon.ico">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 
   <!-- PWA manifest -->
@@ -64,12 +64,11 @@
 
   <!-- PDF.js & Mammoth.js (DOCX) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-  <script>
-    // IMPORTANT : pointer le worker sur la même version
-    pdfjsLib.GlobalWorkerOptions.workerSrc =
-      "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
-  </script>
+<script>
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+</script>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
   <script src="https://unpkg.com/mammoth@1.6.0/mammoth.browser.min.js"></script>
 
   <style>
@@ -153,10 +152,7 @@ body.sidebar-collapsed .show-sidebar-btn{ display:inline-block; }
       <div class="hero">
         <h2 id="hero-title">Explain contracts, bills & official documents in plain language</h2>
         <p id="hero-sub">Free, private, multilingual. Not legal advice.</p>
-      </div>
-
-      <label for="file" id="label-upload">Upload a document (PDF/TXT/DOCX/PNG/JPG/WEBP)</label>
-      <!-- File input (customized & translatable) -->
+      </div>      <!-- File input (customized & translatable) -->
 <div class="file-row">
   <input type="file" id="file" accept=".pdf,.txt,.docx,.png,.jpg,.jpeg,.webp" class="file-native" />
   <label for="file" class="btn" id="btn-choose">Choose a file</label>
@@ -167,11 +163,7 @@ body.sidebar-collapsed .show-sidebar-btn{ display:inline-block; }
 
       <label for="docText" id="label-paste">…or paste your text here</label>
       <textarea id="docText" placeholder="Paste the content of your document…"></textarea>
-      <div class="hint" id="paste-hint">Your document stays on your device until you click an action below.</div>
-
-      <div id="dropZone" class="results" style="margin-top:8px; text-align:center; padding:18px; border-style:dashed;">
-        <div id="dropHint">Drop an image here, or press Ctrl/Cmd+V to paste a screenshot.</div>
-      </div>
+      <div class="hint" id="paste-hint">Your document stays on your device until you click an action below.</div>      </div>
 
       <!-- Region / Country -->
       <label for="region" style="margin-top:12px;" id="label-region">Region / Country (optional, for local rules)</label>
@@ -313,11 +305,9 @@ body.sidebar-collapsed .show-sidebar-btn{ display:inline-block; }
       $('#label-language').textContent = (lang==='ar'?'اللغة':lang==='hi'?'भाषा':lang==='zh'?'语言':lang==='de'?'Sprache':lang==='fr'?'Langue':lang==='es'?'Idioma':lang==='it'?'Lingua':lang==='pt'?'Idioma':'Language');
       $('#hero-title').textContent = L.heroTitle;
       $('#hero-sub').textContent = L.heroSub;
-      $('#label-upload').textContent = L.uploadLabel;
       $('#label-paste').textContent = L.pasteLabel;
       $('#paste-hint').textContent = L.pasteHint;
       $('#btn-camera').textContent = L.btnCamera;
-      $('#dropHint').textContent = L.dropHint;
       $('#label-region').textContent = L.regionLabel;
       $('#docText').placeholder = L.phDocText;
       $('#region').placeholder = L.phRegion;
@@ -488,200 +478,77 @@ body.sidebar-collapsed .show-sidebar-btn{ display:inline-block; }
     document.getElementById('denyAds').addEventListener('click', ()=>{ setConsent('deny'); consentBox.style.display='none'; });
     document.getElementById('openConsent').addEventListener('click', e=>{ e.preventDefault(); consentBox.style.display='block'; });
   </script>
-<script>
-(function(){
-  if (window.__documateFileUIApplied) return;
-  window.__documateFileUIApplied = true;
-
-  // i18n additionnel pour le bouton fichier
-  const i18nExtra = {
-    en: { chooseFile: "Choose a file",          noFile: "No file chosen" },
-    fr: { chooseFile: "Choisir un fichier",     noFile: "Aucun fichier choisi" },
-    de: { chooseFile: "Datei auswählen",        noFile: "Keine Datei ausgewählt" },
-    es: { chooseFile: "Seleccionar un archivo", noFile: "Ningún archivo seleccionado" },
-    it: { chooseFile: "Scegli un file",         noFile: "Nessun file selezionato" },
-    pt: { chooseFile: "Escolher um arquivo",    noFile: "Nenhum arquivo selecionado" },
-    zh: { chooseFile: "选择文件",                 noFile: "未选择文件" },
-    hi: { chooseFile: "फ़ाइल चुनें",             noFile: "कोई फ़ाइल चयनित नहीं" },
-    ar: { chooseFile: "اختر ملفًا",              noFile: "لم يتم اختيار ملف" },
-    ru: { chooseFile: "Выберите файл",          noFile: "Файл не выбран" },
-    bn: { chooseFile: "ফাইল নির্বাচন করুন",       noFile: "কোনো ফাইল নির্বাচিত হয়নি" }
-  };
-
-  // éléments
-  const fileInput = document.getElementById("file");
-  const btnChoose = document.getElementById("btn-choose");
-  const fileName  = document.getElementById("file-name");
-  if (!fileInput || !btnChoose || !fileName) return; // page atypique → on sort proprement
-
-  // langue courante = <html lang="…"> par défaut
-  function currentLang(){
-    return (document.documentElement.lang || "en").toLowerCase();
-  }
-
-  function t(lang){ return i18nExtra[lang] || i18nExtra.en; }
-
-  function updateFileUI(){
-    const lang = currentLang();
-    const tr = t(lang);
-    btnChoose.textContent = tr.chooseFile;
-    if (!fileName.dataset.hasFile) fileName.textContent = tr.noFile;
-  }
-
-  // Quand un fichier est choisi → afficher son nom
-  fileInput.addEventListener("change", (e) => {
-    const name = e.target.files && e.target.files[0] ? e.target.files[0].name : "";
-    if (name) { fileName.textContent = name; fileName.dataset.hasFile = "1"; }
-    else { fileName.textContent = t(currentLang()).noFile; fileName.dataset.hasFile = ""; }
-  });
-
-  // Support du sélecteur de langue (#langSel) s’il existe
-  const langSel = document.getElementById("langSel");
-  if (langSel) {
-    langSel.addEventListener("change", updateFileUI);
-  }
-
-  // init
-  updateFileUI();
-})();
-</script>
 
 <script>
 (function(){
-  const body = document.body;
-  const sidebar = document.getElementById('sidebar');
-  const hideBtn = document.getElementById('hideSidebar');
-  const showBtn = document.getElementById('showSidebar');
-  const KEY = 'sidebar-collapsed-v1';
-
-  if (!sidebar || !hideBtn || !showBtn) return;
-
-  function apply(collapsed){
-    if(collapsed){
-      body.classList.add('sidebar-collapsed');
-      showBtn.removeAttribute('hidden');
-      showBtn.setAttribute('aria-expanded','false');
-      hideBtn.setAttribute('aria-expanded','false');
-    }else{
-      body.classList.remove('sidebar-collapsed');
-      showBtn.setAttribute('hidden','');
-      showBtn.setAttribute('aria-expanded','true');
-      hideBtn.setAttribute('aria-expanded','true');
-    }
-    try{ localStorage.setItem(KEY, collapsed ? '1' : '0'); }catch(e){}
-  }
-
-  hideBtn.addEventListener('click', ()=>apply(true));
-  showBtn.addEventListener('click', ()=>apply(false));
-
-  // restaurer préférence utilisateur
-  const saved = (typeof localStorage!=='undefined') && localStorage.getItem(KEY)==='1';
-  if(saved) apply(true);
-})();
-</script>
-<script>
-(function(){
-  // --- NE RIEN MODIFIER À CES DRAPEAUX ---
-  if (window.__documateImagePipelineApplied) return;
-  window.__documateImagePipelineApplied = true;
+  if (window.__documateImagePipelineV2) return;
+  window.__documateImagePipelineV2 = true;
 
   const fileInput = document.getElementById('file');
   const camInput  = document.getElementById('camera');
-  const textArea  = document.getElementById('docText');
+  const docText   = document.getElementById('docText');
   const resultBox = document.getElementById('result');
-  const dropZone  = document.getElementById('dropZone');
 
-  if (!textArea) return;
-
-  // ====== Helpers / i18n léger ======
+  // Langue → Tesseract
   const TESS_LANG_MAP = { en:'eng', fr:'fra', de:'deu', es:'spa', it:'ita', pt:'por', ru:'rus', bn:'ben', hi:'hin', ar:'ara', zh:'chi_sim' };
   const currentLang = ()=> (document.documentElement.lang || 'en').toLowerCase();
-  const tessLangFor = (lg)=> TESS_LANG_MAP[lg] || 'eng';
+  const tessLangFor = lg => TESS_LANG_MAP[lg] || 'eng';
 
-  function setStatus(msg){ if(resultBox) resultBox.textContent = msg; }
+  const setStatus = msg => { if (resultBox) resultBox.textContent = msg; };
 
-  // Nettoyage de texte fiable (corrige ton ancienne regex cassée)
+  // Nettoyage texte (fix regex)
   function postProcess(s){
-    return s.replace(/­/g,'')        // soft hyphen
-            .replace(/[ 	]{2,}/g,' ')
-            .replace(/
-{3,}/g,'
-
-');
+    return s.replace(/\u00AD/g,'').replace(/[ \t]{2,}/g,' ').replace(/\n{3,}/g,'\n\n');
   }
   function isLikelyXML(s){
     const tagsLen = (s.match(/<[^>]+>/g) || []).join('').length;
     return s.length>0 && (tagsLen/s.length) > 0.15;
   }
-  function stripXML(s){
-    return s.replace(/<[^>]+>/g,' ')
-            .replace(/\s{2,}/g,' ')
-            .trim();
-  }
+  function stripXML(s){ return s.replace(/<[^>]+>/g,' ').replace(/\s{2,}/g,' ').trim(); }
 
-  // ====== Prétraitement Canvas (contraste / N&B / orientation) ======
+  // Prétraitement image (contraste + N&B)
   function enhanceOnCanvas(canvas){
     const ctx = canvas.getContext('2d', { willReadFrequently:true });
     const img = ctx.getImageData(0,0,canvas.width,canvas.height);
     const d = img.data;
-    // 1) Niveaux de gris + contraste léger
-    // grayscale = 0.299R + 0.587G + 0.114B; contraste facteur ~1.2
     const contrast = 1.2, mid = 128;
     for (let i=0;i<d.length;i+=4){
       const g = 0.299*d[i] + 0.587*d[i+1] + 0.114*d[i+2];
-      // contraste
-      let v = (g - mid)*contrast + mid;
-      // clamp
-      if (v<0) v=0; if (v>255) v=255;
+      let v = (g - mid)*contrast + mid; if (v<0) v=0; if (v>255) v=255;
       d[i]=d[i+1]=d[i+2]=v;
     }
-    // 2) Binarisation simple (seuil auto ~ médiane grossière)
-    // échantillonnage rapide pour estimer un seuil
-    let sum=0, cnt=0;
-    for (let i=0;i<d.length;i+=32){ sum += d[i]; cnt++; }
-    const avg = sum/Math.max(1,cnt);
-    const th = Math.max(100, Math.min(170, avg)); // borne prudente
-    for (let i=0;i<d.length;i+=4){
-      const v = d[i] >= th ? 255 : 0;
-      d[i]=d[i+1]=d[i+2]=v;
-    }
-    ctx.putImageData(img, 0, 0);
+    let sum=0,cnt=0; for (let i=0;i<d.length;i+=32){ sum+=d[i]; cnt++; }
+    const th = Math.max(100, Math.min(170, sum/Math.max(1,cnt)));
+    for (let i=0;i<d.length;i+=4){ const v = d[i] >= th ? 255 : 0; d[i]=d[i+1]=d[i+2]=v; }
+    ctx.putImageData(img,0,0);
     return canvas;
   }
 
   async function detectOrientationAndFix(canvas){
-    // Tesseract.detect est dispo dans tesseract.js v5
     try{
       const det = await Tesseract.detect(canvas);
-      const angle = Math.round(det && det.data && det.data.angle ? det.data.angle : 0);
-      if (angle && angle % 360 !== 0){
-        const tmp = document.createElement('canvas');
-        const rad = angle * Math.PI/180;
-        // dimensions après rotation (simple: carré englobant)
-        const w = canvas.width, h = canvas.height;
+      const angle = Math.round(det?.data?.angle || 0);
+      if (angle % 360 !== 0){
+        const src = canvas, rad = angle*Math.PI/180;
+        const w = src.width, h = src.height;
         const sin = Math.abs(Math.sin(rad)), cos = Math.abs(Math.cos(rad));
-        tmp.width  = Math.round(w*cos + h*sin);
-        tmp.height = Math.round(w*sin + h*cos);
-        const tctx = tmp.getContext('2d', { willReadFrequently:true });
-        tctx.translate(tmp.width/2, tmp.height/2);
-        tctx.rotate(rad);
-        tctx.drawImage(canvas, -w/2, -h/2);
-        return tmp;
+        const out = document.createElement('canvas');
+        out.width  = Math.round(w*cos + h*sin);
+        out.height = Math.round(w*sin + h*cos);
+        const ctx = out.getContext('2d', { willReadFrequently:true });
+        ctx.translate(out.width/2, out.height/2); ctx.rotate(rad);
+        ctx.drawImage(src, -w/2, -h/2);
+        return out;
       }
     }catch(e){}
     return canvas;
   }
 
-  // ====== OCR Image ======
   async function ocrImageFile(file, lang, onProgress){
     let bitmap;
-    try{
-      bitmap = await createImageBitmap(file, { imageOrientation:'from-image' });
-    }catch{
-      const img = await blobToImage(file);
-      bitmap = await createImageBitmap(img);
-    }
-    // mise à l’échelle prudente
+    try{ bitmap = await createImageBitmap(file, { imageOrientation:'from-image' }); }
+    catch{ const img = await blobToImage(file); bitmap = await createImageBitmap(img); }
+
     const maxDim = 2500;
     const scale = Math.min(1, maxDim / Math.max(bitmap.width, bitmap.height));
     const w = Math.max(1, Math.round(bitmap.width*scale));
@@ -692,7 +559,6 @@ body.sidebar-collapsed .show-sidebar-btn{ display:inline-block; }
     let ctx = canvas.getContext('2d', { willReadFrequently:true });
     ctx.drawImage(bitmap, 0, 0, w, h);
 
-    // orientation + renforcement
     canvas = await detectOrientationAndFix(canvas);
     enhanceOnCanvas(canvas);
 
@@ -712,11 +578,28 @@ body.sidebar-collapsed .show-sidebar-btn{ display:inline-block; }
     });
   }
 
-  // ====== Pipeline d’entrée unifiée ======
-  function looksLikeImageName(name){ return /\.(png|jpe?g|webp)$/i.test(name||''); }
+  async function ocrPdfWithTesseract(pdf, lang, onProgress){
+    let all=''; const total=pdf.numPages; const scale=2;
+    const canvas=document.createElement('canvas');
+    const ctx=canvas.getContext('2d',{ willReadFrequently:true });
+    for(let p=1;p<=total;p++){
+      onProgress && onProgress(p,total);
+      const page=await pdf.getPage(p);
+      const vp=page.getViewport({ scale });
+      canvas.width=Math.ceil(vp.width); canvas.height=Math.ceil(vp.height);
+      await page.render({ canvasContext:ctx, viewport:vp }).promise;
+      enhanceOnCanvas(canvas);
+      const { data:{ text } } = await Tesseract.recognize(canvas, lang);
+      all += (text||'') + '\n\n';
+      await new Promise(r=>setTimeout(r,0));
+    }
+    return postProcess(all || '');
+  }
+
+  const isImgName = name => /\.(png|jpe?g|webp)$/i.test(name||'');
 
   async function processFile(file){
-    if (!file) return;
+    if (!file || !docText) return;
     try{
       const name = (file.name||'').toLowerCase();
       const buf  = await file.arrayBuffer();
@@ -725,46 +608,29 @@ body.sidebar-collapsed .show-sidebar-btn{ display:inline-block; }
       if (name.endsWith('.pdf')){
         const pdf = await pdfjsLib.getDocument({ data:new Uint8Array(buf) }).promise;
         let out = '';
-        for (let p=1; p<=pdf.numPages; p++){
-          const page = await pdf.getPage(p);
-          const tc = await page.getTextContent();
-          out += tc.items.map(i=>i.str).join(' ') + '
-
-';
+        for (let p=1;p<=pdf.numPages;p++){
+          const page=await pdf.getPage(p);
+          const tc=await page.getTextContent();
+          out += tc.items.map(i=>i.str).join(' ') + '\n\n';
         }
         out = postProcess(out);
-        if (!out || out.trim().length<20){ // fallback OCR PDF
+        if (isLikelyXML(out)) out = stripXML(out);
+        if (!out || out.trim().length<20){
           const lang = tessLangFor(currentLang());
-          let all=''; const total=pdf.numPages, scale=2;
-          const canvas=document.createElement('canvas');
-          const ctx=canvas.getContext('2d',{ willReadFrequently:true });
-          for (let p=1;p<=total;p++){
-            setStatus(`OCR ${p}/${total}…`);
-            const page=await pdf.getPage(p);
-            const vp=page.getViewport({ scale });
-            canvas.width=Math.ceil(vp.width); canvas.height=Math.ceil(vp.height);
-            await page.render({ canvasContext:ctx, viewport:vp }).promise;
-            enhanceOnCanvas(canvas);
-            const { data:{ text } } = await Tesseract.recognize(canvas, lang);
-            all += (text||'') + '
-
-';
-            await new Promise(r=>setTimeout(r,0));
-          }
-          out = postProcess(all || '');
+          out = await ocrPdfWithTesseract(pdf, lang, (d,t)=>setStatus(`OCR ${d}/${t}…`));
         }
-        textArea.value = out.trim() || '[No selectable text found in this PDF]';
+        docText.value = out.trim() || '[No selectable text found in this PDF]';
         setStatus('✓ PDF processed');
         return;
       }
 
-      // Images (même si file.type est vide → check extension aussi)
-      if (looksLikeImageName(name) || (file.type && file.type.startsWith('image/'))){
+      // IMAGE
+      if (isImgName(name) || (file.type && file.type.startsWith('image/'))){
         setStatus('Reading image…');
-        const lang = tessLangFor(currentLang());
-        const multi = (lang==='eng') ? 'eng' : `eng+${lang}`;
-        const txt = await ocrImageFile(file, multi, p=>setStatus(`OCR ${p}%…`));
-        textArea.value = txt || '[No text recognized in this image]';
+        const langLocal = tessLangFor(currentLang());
+        const lang = (langLocal==='eng') ? 'eng' : `eng+${langLocal}`; // mix utile
+        const txt = await ocrImageFile(file, lang, p=>setStatus(`OCR ${p}%…`));
+        docText.value = txt || '[No text recognized in this image]';
         setStatus('✓ Image OCR done');
         return;
       }
@@ -772,50 +638,49 @@ body.sidebar-collapsed .show-sidebar-btn{ display:inline-block; }
       // DOCX
       if (name.endsWith('.docx')){
         const res = await window.mammoth.extractRawText({ arrayBuffer: buf });
-        textArea.value = (res.value||'').trim();
+        docText.value = (res.value||'').trim();
         setStatus('✓ DOCX loaded');
         return;
       }
 
       // TXT / inconnu
       const txt = await (new Response(new Blob([buf]))).text();
-      textArea.value = txt;
+      docText.value = txt;
       setStatus('✓ Text loaded');
 
     }catch(err){
       console.error(err);
       setStatus('⚠️ Read error');
-      textArea.value = 'Could not read file. Try a clearer image (good light, flat), or export to PDF/DOCX.';
+      docText.value = 'Could not read file. Try a clearer image (good light, flat), or export to PDF/DOCX.';
     }
   }
 
-  // ====== Brancher toutes les entrées ======
-  fileInput && fileInput.addEventListener('change', e => processFile(e.target.files && e.target.files[0]));
-  camInput  && camInput.addEventListener('change',  e => processFile(e.target.files && e.target.files[0]));
+  // Upload fichier + caméra
+  fileInput && fileInput.addEventListener('change', e => processFile(e.target.files?.[0]));
+  camInput  && camInput.addEventListener('change',  e => processFile(e.target.files?.[0]));
 
-  // Coller une capture (Ctrl/Cmd+V)
-  window.addEventListener('paste', (e)=>{
-    const items = (e.clipboardData && e.clipboardData.items) || [];
-    for (const it of items){
-      if (it.type && it.type.startsWith('image/')){
-        e.preventDefault();
-        const file = it.getAsFile();
-        return processFile(file);
+  // Coller une capture DANS le textarea
+  if (docText){
+    docText.addEventListener('paste', (e)=>{
+      const items = (e.clipboardData && e.clipboardData.items) || [];
+      for (const it of items){
+        if (it.type && it.type.startsWith('image/')){
+          e.preventDefault();
+          return processFile(it.getAsFile());
+        }
       }
-    }
-    // si pas d'image, on laisse le collage normal agir (ex: texte dans textarea)
-  });
-
-  // Drag & drop sur la zone dédiée
-  if (dropZone){
-    ['dragenter','dragover'].forEach(ev => dropZone.addEventListener(ev, e=>{ e.preventDefault(); dropZone.style.background='#eef2ff'; }));
-    ['dragleave','drop'].forEach(ev => dropZone.addEventListener(ev, e=>{ e.preventDefault(); dropZone.style.background=''; }));
-    dropZone.addEventListener('drop', e=>{
-      const files = e.dataTransfer && e.dataTransfer.files;
-      if (files && files[0]) processFile(files[0]);
+      // sinon collage texte normal
+    });
+    // Drag&drop DANS le textarea
+    ['dragenter','dragover'].forEach(ev => docText.addEventListener(ev, e=>{ e.preventDefault(); }));
+    docText.addEventListener('drop', e=>{
+      e.preventDefault();
+      const f = e.dataTransfer?.files?.[0];
+      if (f) processFile(f);
     });
   }
 })();
+
 </script>
 </body>
 </html>
