@@ -92,7 +92,13 @@
     .ads{margin-top:16px;padding:10px;border:1px dashed #e2e8f0;border-radius:10px;background:#fafafa}
     .consent{position:fixed;bottom:12px;left:12px;right:12px;background:#111827;color:#fff;padding:14px;border-radius:12px;display:none;z-index:50}
     .consent .row{justify-content:flex-end}
-  </style>
+  /* File input custom */
+.file-row{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-top:6px }
+.file-native{
+  position:absolute !important; left:-9999px; width:1px; height:1px; overflow:hidden;
+  /* accessible via <label for="file">, mais invisible */
+}
+</style>
 </head>
 <body>
   <header>
@@ -124,7 +130,12 @@
       </div>
 
       <label for="file" id="label-upload">Upload a document (PDF/TXT/DOCX)</label>
-      <input type="file" id="file" accept=".pdf,.txt,.docx" />
+      <!-- File input (customized & translatable) -->
+<div class="file-row">
+  <input type="file" id="file" accept=".pdf,.txt,.docx" class="file-native" />
+  <label for="file" class="btn" id="btn-choose">Choose a file</label>
+  <span id="file-name" class="hint" aria-live="polite">No file chosen</span>
+</div>
 
       <label for="docText" id="label-paste">…or paste your text here</label>
       <textarea id="docText" placeholder="Paste the content of your document…"></textarea>
@@ -456,5 +467,62 @@
     document.getElementById('openConsent').addEventListener('click', e=>{ e.preventDefault(); consentBox.style.display='block'; });
     renderAdsIfAllowed();
   </script>
+<script>
+(function(){
+  if (window.__documateFileUIApplied) return;
+  window.__documateFileUIApplied = true;
+
+  // i18n additionnel pour le bouton fichier
+  const i18nExtra = {
+    en: { chooseFile: "Choose a file",          noFile: "No file chosen" },
+    fr: { chooseFile: "Choisir un fichier",     noFile: "Aucun fichier choisi" },
+    de: { chooseFile: "Datei auswählen",        noFile: "Keine Datei ausgewählt" },
+    es: { chooseFile: "Seleccionar un archivo", noFile: "Ningún archivo seleccionado" },
+    it: { chooseFile: "Scegli un file",         noFile: "Nessun file selezionato" },
+    pt: { chooseFile: "Escolher um arquivo",    noFile: "Nenhum arquivo selecionado" },
+    zh: { chooseFile: "选择文件",                 noFile: "未选择文件" },
+    hi: { chooseFile: "फ़ाइल चुनें",             noFile: "कोई फ़ाइल चयनित नहीं" },
+    ar: { chooseFile: "اختر ملفًا",              noFile: "لم يتم اختيار ملف" },
+    ru: { chooseFile: "Выберите файл",          noFile: "Файл не выбран" },
+    bn: { chooseFile: "ফাইল নির্বাচন করুন",       noFile: "কোনো ফাইল নির্বাচিত হয়নি" }
+  };
+
+  // éléments
+  const fileInput = document.getElementById("file");
+  const btnChoose = document.getElementById("btn-choose");
+  const fileName  = document.getElementById("file-name");
+  if (!fileInput || !btnChoose || !fileName) return; // page atypique → on sort proprement
+
+  // langue courante = <html lang="…"> par défaut
+  function currentLang(){
+    return (document.documentElement.lang || "en").toLowerCase();
+  }
+
+  function t(lang){ return i18nExtra[lang] || i18nExtra.en; }
+
+  function updateFileUI(){
+    const lang = currentLang();
+    const tr = t(lang);
+    btnChoose.textContent = tr.chooseFile;
+    if (!fileName.dataset.hasFile) fileName.textContent = tr.noFile;
+  }
+
+  // Quand un fichier est choisi → afficher son nom
+  fileInput.addEventListener("change", (e) => {
+    const name = e.target.files && e.target.files[0] ? e.target.files[0].name : "";
+    if (name) { fileName.textContent = name; fileName.dataset.hasFile = "1"; }
+    else { fileName.textContent = t(currentLang()).noFile; fileName.dataset.hasFile = ""; }
+  });
+
+  // Support du sélecteur de langue (#langSel) s’il existe
+  const langSel = document.getElementById("langSel");
+  if (langSel) {
+    langSel.addEventListener("change", updateFileUI);
+  }
+
+  // init
+  updateFileUI();
+})();
+</script>
 </body>
 </html>
