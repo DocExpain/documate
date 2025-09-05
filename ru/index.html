@@ -318,8 +318,8 @@ body.sidebar-collapsed .show-sidebar-btn{ display:inline-block; }
       $('#btnExplainSel').textContent = L.btnExplainSel;
       $('#btnSave').textContent = L.btnSave;
       $('#btnLoad').textContent = L.btnLoad;
-      byId('btnChooseFile')?.textContent = T.chooseFile;
-      byId('btnUseCamera')?.textContent = T.useCamera;
+      var elCF = document.getElementById('btnChooseFile'); if (elCF) elCF.textContent = T.chooseFile;
+      var elUC = document.getElementById('btnUseCamera'); if (elUC) elUC.textContent = T.useCamera;
       $('#label-ask').textContent = L.askLabel;
       $('#question').placeholder = L.phQuestion;
       $('#btnAskSel').textContent = L.btnAskSel;
