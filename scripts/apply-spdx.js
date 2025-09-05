@@ -1,57 +1,43 @@
-// scripts/apply-spdx.js
-// Usage: node scripts/apply-spdx.js "[TON ORGANISATION]"
+/* SPDX-FileCopyrightText: 2025 DocExpain
+ * SPDX-License-Identifier: LicenseRef-SA-NC-1.0
+ */
+(function () {
+  var sel = document.getElementById('langSel');
+  if (!sel) return;
 
-const fs = require('fs');
-const path = require('path');
-const ORG = process.argv[2] || '[TON ORGANISATION]';
-const YEAR = '2025';
-const IGNORE_DIRS = new Set(['node_modules','vendor','dist','build','.git']);
-const HTML_HEADER =
-  `<!--\n  Copyright (c) ${YEAR} ${ORG}\n  SPDX-License-Identifier: LicenseRef-SA-NC-1.0
-const JS_HEADER =
-  `/*!\n * Copyright (c) ${YEAR} ${ORG}\n * SPDX-License-Identifier: LicenseRef-SA-NC-1.0
+  // Mapping par défaut (si hreflang absent)
+  var target = {
+    en: '/', fr: '/fr/', de: '/de/', es: '/es/', it: '/it/',
+    pt: '/pt/', zh: '/zh/', hi: '/hi/', ar: '/ar/', ru: '/ru/', bn: '/bn/'
+  };
 
-function shouldIgnore(file) {
-  const rel = path.relative(process.cwd(), file).replace(/\\/g,'/');
-  if (rel.split('/').some(d => IGNORE_DIRS.has(d))) return true;
-  const lower = rel.toLowerCase();
-  if (/\.(png|jpg|jpeg|gif|webp|svg|pdf|woff2?|ttf|eot|mp4|webm|zip|gz|br)$/.test(lower)) return true;
-  return false;
-}
+  // Surcharge avec ce qui est DÉJÀ déclaré en <link rel="alternate" hreflang="..">
+  // -> évite toute hypothèse (ex: /en/ qui n'existe pas).
+  var links = document.querySelectorAll('link[rel="alternate"][hreflang]');
+  links.forEach(function (ln) {
+    var lang = (ln.getAttribute('hreflang') || '').toLowerCase();
+    if (!lang || lang === 'x-default') return;
+    var href = ln.getAttribute('href') || '/';
+    try {
+      // Normalise en chemin absolu de l'hôte courant
+      var path = new URL(href, location.origin).pathname;
+      if (!path.startsWith('/')) path = '/' + path;
+      if (!path.endsWith('/')) path += '/';
+      target[lang] = path;
+    } catch (e) { /* ignore */ }
+  });
 
-function applyHeader(file) {
-  if (shouldIgnore(file)) return;
-  const ext = path.extname(file).toLowerCase();
-  if (!['.html','.js','.css'].includes(ext)) return;
-  let src = fs.readFileSync(file, 'utf8');
+  // Pré-sélection selon <html lang="…">
+  var pageLang = (document.documentElement.lang || 'en').toLowerCase();
+  if (target[pageLang]) sel.value = pageLang;
 
-  // Normaliser fins de ligne
-  src = src.replace(/\r\n/g, '\n');
-
-  // Si déjà SPDX → remplace la ligne entière
-  if (/SPDX-License-Identifier: LicenseRef-SA-NC-1.0
-    src = src.replace(/SPDX-License-Identifier: LicenseRef-SA-NC-1.0
-    src = src.replace(/Copyright \(c\) \d{4} .*?/g, `Copyright (c) ${YEAR} ${ORG}`);
-    fs.writeFileSync(file, src);
-    return;
-  }
-
-  // Sinon, préfixer selon type
-  const header = (ext === '.html') ? HTML_HEADER : JS_HEADER;
-  fs.writeFileSync(file, header + src);
-}
-
-function walk(dir) {
-  for (const name of fs.readdirSync(dir)) {
-    const p = path.join(dir, name);
-    const stat = fs.lstatSync(p);
-    if (stat.isDirectory()) {
-      if (!IGNORE_DIRS.has(name)) walk(p);
-    } else if (stat.isFile()) {
-      applyHeader(p);
-    }
-  }
-}
-
-walk(process.cwd());
-console.log('SPDX headers applied.');
+  // Redirection RÉELLE vers le chemin de la langue choisie
+  sel.addEventListener('change', function () {
+    var lang = (this.value || 'en').toLowerCase();
+    var url = target[lang] || '/';
+    // pas de redirection si on est déjà sur la bonne page
+    var here = location.pathname;
+    if (!here.endsWith('/')) here += '/';
+    if (url !== here) location.assign(url);
+  });
+})();
