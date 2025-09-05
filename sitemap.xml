@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://documate.work/</loc><lastmod>2025-09-02</lastmod></url>
-  <url><loc>https://documate.work/fr/</loc><lastmod>2025-09-02</lastmod></url>
-  <url><loc>https://documate.work/de/</loc><lastmod>2025-09-02</lastmod></url>
-  <url><loc>https://documate.work/es/</loc><lastmod>2025-09-02</lastmod></url>
-  <url><loc>https://documate.work/it/</loc><lastmod>2025-09-02</lastmod></url>
-  <url><loc>https://documate.work/zh/</loc><lastmod>2025-09-02</lastmod></url>
-  <url><loc>https://documate.work/hi/</loc><lastmod>2025-09-02</lastmod></url>
-  <url><loc>https://documate.work/ar/</loc><lastmod>2025-09-02</lastmod></url>
-  <url><loc>https://documate.work/pt/</loc><lastmod>2025-09-02</lastmod></url>
-  <url><loc>https://documate.work/ru/</loc><lastmod>2025-09-02</lastmod></url>
-  <url><loc>https://documate.work/bn/</loc><lastmod>2025-09-02</lastmod></url>
+  <url><loc>https://documate.work/</loc></url>
+  <url><loc>https://documate.work/fr/</loc></url>
+  <url><loc>https://documate.work/de/</loc></url>
+  <url><loc>https://documate.work/es/</loc></url>
+  <url><loc>https://documate.work/it/</loc></url>
+  <url><loc>https://documate.work/pt/</loc></url>
+  <url><loc>https://documate.work/zh/</loc></url>
+  <url><loc>https://documate.work/hi/</loc></url>
+  <url><loc>https://documate.work/ar/</loc></url>
+  <url><loc>https://documate.work/ru/</loc></url>
+  <url><loc>https://documate.work/bn/</loc></url>
 </urlset>
