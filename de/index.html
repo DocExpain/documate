@@ -10,7 +10,7 @@
   <meta name="robots" content="index,follow" />
 
   <!-- Google Search Console -->
-  <meta name="google-site-verification" content="NOUVEAU_TOKEN_DOCUMATE_WORK" />
+  <meta name="google-site-verification" content="7fba15cbdb4cbaf7" />
 
   <!-- AdSense global (keep once per page) -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9411950027978678" crossorigin="anonymous"></script>
@@ -22,20 +22,20 @@
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin>
 
-  <!-- Hreflang (static full set) -->
-  <link rel="alternate" hreflang="x-default" href="https://documate.work/">
-  <link rel="alternate" hreflang="en" href="https://documate.work/">
-  <link rel="alternate" hreflang="fr" href="https://documate.work/fr/">
-  <link rel="alternate" hreflang="de" href="https://documate.work/de/">
-  <link rel="alternate" hreflang="es" href="https://documate.work/es/">
-  <link rel="alternate" hreflang="it" href="https://documate.work/it/">
-  <link rel="alternate" hreflang="zh" href="https://documate.work/zh/">
-  <link rel="alternate" hreflang="hi" href="https://documate.work/hi/">
-  <link rel="alternate" hreflang="ar" href="https://documate.work/ar/">
-  <link rel="alternate" hreflang="pt" href="https://documate.work/pt/">
-  <link rel="alternate" hreflang="ru" href="https://documate.work/ru/">
-  <link rel="alternate" hreflang="bn" href="https://documate.work/bn/">
 
+<!-- Hreflang (static full set) -->
+<link rel="alternate" hreflang="x-default" href="https://documate.work/">
+<link rel="alternate" hreflang="en" href="https://documate.work/en/">
+<link rel="alternate" hreflang="fr" href="https://documate.work/fr/">
+<link rel="alternate" hreflang="de" href="https://documate.work/de/">
+<link rel="alternate" hreflang="es" href="https://documate.work/es/">
+<link rel="alternate" hreflang="it" href="https://documate.work/it/">
+<link rel="alternate" hreflang="pt" href="https://documate.work/pt/">
+<link rel="alternate" hreflang="zh" href="https://documate.work/zh/">
+<link rel="alternate" hreflang="hi" href="https://documate.work/hi/">
+<link rel="alternate" hreflang="ar" href="https://documate.work/ar/">
+<link rel="alternate" hreflang="ru" href="https://documate.work/ru/">
+<link rel="alternate" hreflang="bn" href="https://documate.work/bn/">
   <!-- Open Graph / Twitter, will be rewritten by JS on load -->
   <meta property="og:type" content="website">
   <meta id="og-url" property="og:url" content="https://documate.work/de/">
@@ -126,6 +126,7 @@ body.sidebar-collapsed main{ grid-template-columns:1fr !important; }
 body.sidebar-collapsed #sidebar{ display:none; }
 body.sidebar-collapsed .show-sidebar-btn{ display:inline-block; }
 </style>
+  <script src="/scripts/lang-switch.js" defer></script>
 </head>
 <body>
   <header>
@@ -379,7 +380,7 @@ body.sidebar-collapsed .show-sidebar-btn{ display:inline-block; }
     langSel && langSel.addEventListener('change', e => {
       const lg = e.target.value; applyI18n(lg);
       // Redirect to language path so the URL reflects it (good for SEO and sharing)
-      if (LANG_PATH[lg]) window.history.replaceState({}, '', LANG_PATH[lg]);
+      if (LANG_PATH[lg]) location.href = LANG_PATH[lg];
     });
 
     // ----------------- Elements -----------------
