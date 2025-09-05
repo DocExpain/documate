@@ -9,7 +9,7 @@
   ],
 
   "rewrites": [
-    { "source": "/", "destination": "/index.html" },
+    { "source": "/",    "destination": "/index.html" },
 
     { "source": "/ar",  "destination": "/ar/index.html" },
     { "source": "/ar/", "destination": "/ar/index.html" },
@@ -43,19 +43,17 @@
   ],
 
   "headers": [
-    { "source": "/robots.txt",         "headers": [{ "key": "Content-Type", "value": "text/plain; charset=utf-8" }] },
-    { "source": "/ads.txt",            "headers": [{ "key": "Content-Type", "value": "text/plain; charset=utf-8" }] },
-    { "source": "/site.webmanifest",   "headers": [{ "key": "Content-Type", "value": "application/manifest+json; charset=utf-8" }] },
-    { "source": "/sitemap.xml",        "headers": [{ "key": "Content-Type", "value": "application/xml; charset=utf-8" }] },
+    { "source": "/robots.txt",        "headers": [{ "key": "Content-Type", "value": "text/plain; charset=utf-8" }] },
+    { "source": "/ads.txt",           "headers": [{ "key": "Content-Type", "value": "text/plain; charset=utf-8" }] },
+    { "source": "/site.webmanifest",  "headers": [{ "key": "Content-Type", "value": "application/manifest+json; charset=utf-8" }] },
+    { "source": "/sitemap.xml",       "headers": [{ "key": "Content-Type", "value": "application/xml; charset=utf-8" }] },
 
-    { "source": "/favicon.ico",        "headers": [{ "key": "Content-Type", "value": "image/x-icon" }] },
-    { "source": "/favicon-32.png",     "headers": [{ "key": "Content-Type", "value": "image/png" }] },
-    { "source": "/icon-192.png",       "headers": [{ "key": "Content-Type", "value": "image/png" }] },
-    { "source": "/icon-512.png",       "headers": [{ "key": "Content-Type", "value": "image/png" }] },
+    { "source": "/favicon.ico",       "headers": [{ "key": "Content-Type", "value": "image/x-icon" }] },
+    { "source": "/favicon-16.png",    "headers": [{ "key": "Content-Type", "value": "image/png" }] },
+    { "source": "/favicon-32.png",    "headers": [{ "key": "Content-Type", "value": "image/png" }] },
+    { "source": "/icon-192.png",      "headers": [{ "key": "Content-Type", "value": "image/png" }] },
+    { "source": "/icon-512.png",      "headers": [{ "key": "Content-Type", "value": "image/png" }] },
     { "source": "/apple-touch-icon.png","headers": [{ "key": "Content-Type", "value": "image/png" }] },
-    { "source": "/og.jpg",             "headers": [{ "key": "Content-Type", "value": "image/jpeg" }] }
-
-    // Note: we no longer set text/plain on all assets. Vercel defaults are fine,
-    // these entries are just to be explicit and to purge previous wrong types.
+    { "source": "/og.jpg",            "headers": [{ "key": "Content-Type", "value": "image/jpeg" }] }
   ]
 }
