@@ -264,6 +264,11 @@ body.sidebar-collapsed .show-sidebar-btn{ display:inline-block; }
   </div>
 
   <script>
+  function setText(id, txt){ var el=document.getElementById(id); if(el) el.textContent = txt; }
+  function setAttr(id, name, val){ var el=document.getElementById(id); if(el) el.setAttribute(name,val); }
+  </script>
+
+  <script>
     // ----------------- Language / routing -----------------
     const LANG_PATH = { en:'/', fr:'/fr/', de:'/de/', es:'/es/', it:'/it/', zh:'/zh/', hi:'/hi/', ar:'/ar/', pt:'/pt/', ru:'/ru/', bn:'/bn/' };
     const DEFAULT_LANG = 'en';
@@ -298,85 +303,88 @@ body.sidebar-collapsed .show-sidebar-btn{ display:inline-block; }
     const $ = sel => document.querySelector(sel);
     const byId = id => document.getElementById(id);
     function applyI18n(lang){
-      const T = I18N[lang] || I18N[DEFAULT_LANG];
-      const L = T;
-      const isRTL = (lang === 'ar');
+      var T = I18N[lang] || I18N[DEFAULT_LANG];
+      var isRTL = (lang === 'ar');
       document.documentElement.lang = lang;
       document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
 
-      // UI text
-      $('#tagline').textContent = L.tagline;
-      $('#label-language').textContent = (lang==='ar'?'اللغة':lang==='hi'?'भाषा':lang==='zh'?'语言':lang==='de'?'Sprache':lang==='fr'?'Langue':lang==='es'?'Idioma':lang==='it'?'Lingua':lang==='pt'?'Idioma':'Language');
-      $('#hero-title').textContent = L.heroTitle;
-      $('#hero-sub').textContent = L.heroSub;
-      $('#label-paste').textContent = L.pasteLabel;
-      $('#paste-hint').textContent = L.pasteHint;
-      $('#label-region').textContent = L.regionLabel;
-      $('#docText').placeholder = L.phDocText;
-      $('#region').placeholder = L.phRegion;
-      $('#btnExplainAll').textContent = L.btnExplainAll;
-      $('#btnExplainSel').textContent = L.btnExplainSel;
-      $('#btnSave').textContent = L.btnSave;
-      $('#btnLoad').textContent = L.btnLoad;
-      var elCF = document.getElementById('btnChooseFile'); if (elCF) elCF.textContent = T.chooseFile;
-      var elUC = document.getElementById('btnUseCamera'); if (elUC) elUC.textContent = T.useCamera;
-      $('#label-ask').textContent = L.askLabel;
-      $('#question').placeholder = L.phQuestion;
-      $('#btnAskSel').textContent = L.btnAskSel;
-      $('#btnAskAll').textContent = L.btnAskAll;
-      $('#badge-no-store').textContent = L.badgeNoStore;
-      $('#badge-tls').textContent = L.badgeTLS;
-      $('#badge-multi').textContent = L.badgeMulti;
-      $('#result-title').textContent = L.resultTitle;
-      $('#privacyTitle').textContent = L.trustTitle; $('#sidebar').setAttribute('aria-label', L.trustTitle); $('#showSidebar').textContent = L.trustTitle; $('#hideSidebar').textContent = L.hideSidebar;
-      $('#trust-1').textContent = L.trust1;
-      $('#trust-2').textContent = L.trust2;
-      $('#trust-3').textContent = L.trust3;
-      $('#trust-4').textContent = L.trust4;
-      $('#trust-5').textContent = L.trust5;
-      $('#pp-title').textContent = L.ppTitle;
-      $('#pp1').textContent = L.pp1; $('#pp2').textContent = L.pp2; $('#pp3').textContent = L.pp3; $('#pp4').textContent = L.pp4; $('#pp5').textContent = L.pp5;
-      $('#seo-title').textContent = L.seoTitle;
-      $('#seo-text').textContent = L.seoText;
-      $('#footer1').textContent = L.footer1;
-      $('#footer-consent').textContent = L.footerConsent;
-      $('#footer-clear').textContent = L.footerClear;
-      $('#consent-text').textContent = L.consentText;
-      $('#denyAds').textContent = L.deny;
-      $('#allowAds').textContent = L.allow;
+      setText('tagline', T.tagline);
+      var labelLang = (lang==='ar'?'اللغة':lang==='hi'?'भाषा':lang==='zh'?'语言':lang==='de'?'Sprache':lang==='fr'?'Langue':lang==='es'?'Idioma':lang==='it'?'Lingua':lang==='pt'?'Idioma':'Language');
+      setText('label-language', labelLang);
+      setText('hero-title', T.heroTitle);
+      setText('hero-sub', T.heroSub);
+      setText('label-paste', T.pasteLabel);
+      setText('paste-hint', T.pasteHint);
+      setText('label-region', T.regionLabel);
+      setAttr('docText','placeholder',T.phDocText);
+      setAttr('region','placeholder',T.phRegion);
+      setText('btnExplainAll', T.btnExplainAll);
+      setText('btnExplainSel', T.btnExplainSel);
+      setText('btnSave', T.btnSave);
+      setText('btnLoad', T.btnLoad);
+      setText('btnChooseFile', T.chooseFile);
+      setText('btnUseCamera', T.useCamera);
+      setText('label-ask', T.askLabel);
+      setAttr('question','placeholder',T.phQuestion);
+      setText('btnAskSel', T.btnAskSel);
+      setText('btnAskAll', T.btnAskAll);
+      setText('badge-no-store', T.badgeNoStore);
+      setText('badge-tls', T.badgeTLS);
+      setText('badge-multi', T.badgeMulti);
+      setText('result-title', T.resultTitle);
+      setText('privacyTitle', T.trustTitle);
+      setAttr('sidebar','aria-label',T.trustTitle);
+      setText('showSidebar', T.trustTitle);
+      setText('hideSidebar', T.hideSidebar);
+      setText('trust-1', T.trust1);
+      setText('trust-2', T.trust2);
+      setText('trust-3', T.trust3);
+      setText('trust-4', T.trust4);
+      setText('trust-5', T.trust5);
+      setText('pp-title', T.ppTitle);
+      setText('pp1', T.pp1);
+      setText('pp2', T.pp2);
+      setText('pp3', T.pp3);
+      setText('pp4', T.pp4);
+      setText('pp5', T.pp5);
+      setText('seo-title', T.seoTitle);
+      setText('seo-text', T.seoText);
+      setText('footer1', T.footer1);
+      setText('footer-consent', T.footerConsent);
+      setText('footer-clear', T.footerClear);
+      setText('consent-text', T.consentText);
+      setText('denyAds', T.deny);
+      setText('allowAds', T.allow);
 
-      // SEO metas
-      document.title = L.htmlTitle;
-      $('#meta-title').textContent = L.htmlTitle;
-      $('#meta-desc')?.setAttribute('content', L.htmlDesc);
-      const base = 'https://documate.work';
-      const path = LANG_PATH[lang] || '/';
-      $('#link-canonical')?.setAttribute('href', base + path);
-      $('#og-url')?.setAttribute('content', base + path);
-      $('#og-title')?.setAttribute('content', L.htmlTitle);
-      $('#og-desc')?.setAttribute('content', L.htmlDesc);
-      $('#tw-title')?.setAttribute('content', L.htmlTitle);
-      $('#tw-desc')?.setAttribute('content', L.htmlDesc);
+      var base = 'https://documate.work';
+      var path = LANG_PATH[lang] || '/';
+      setAttr('link-canonical','href', base + path);
+      setAttr('og-url','content', base + path);
+      setAttr('og-title','content', T.htmlTitle);
+      setAttr('og-desc','content', T.htmlDesc);
+      setAttr('tw-title','content', T.htmlTitle);
+      setAttr('tw-desc','content', T.htmlDesc);
 
-      // JSON-LD website
-      const ld = {"@context":"https://schema.org","@type":"WebSite","name":"DocuMate","url":"https://documate.work/","inLanguage":lang,"description":L.htmlDesc};
-      $('#jsonld-website').textContent = JSON.stringify(ld);
+      var mt=document.getElementById('meta-title'); if(mt && T.htmlTitle){ document.title = mt.textContent = T.htmlTitle; }
+      var md=document.getElementById('meta-desc'); if(md && T.htmlDesc){ md.setAttribute('content', T.htmlDesc); }
 
-      // Update select value label text (keep options static)
-      const sel = $('#langSel'); if (sel) sel.value = lang;
+      var ld={'@context':'https://schema.org','@type':'WebSite','name':'DocuMate','url':'https://documate.work/','inLanguage':lang,'description':T.htmlDesc};
+      setText('jsonld-website', JSON.stringify(ld));
 
-      // Expose strings for alerts
+      var sel = document.getElementById('langSel'); if (sel) sel.value = lang;
+
       window.STR = {
-        loading: L.loading, nothingSel:L.nothingSel, noText:L.noText,
-        saved:L.saved, loaded:L.loaded, cleared:L.cleared
+        loading: T.loading, nothingSel:T.nothingSel, noText:T.noText,
+        saved:T.saved, loaded:T.loaded, cleared:T.cleared
       };
     }
-
-    // Determine current language (URL path first, then browser)
-    let currentLang = guessLang();
-    if (!I18N[currentLang]) currentLang = DEFAULT_LANG;
-    applyI18n(currentLang);
-
+    // Determine current language
+    let currentLang;
+    (function(){
+      var initial = (document.documentElement.lang || 'en').toLowerCase();
+      currentLang = initial;
+      document.addEventListener('DOMContentLoaded', function(){ applyI18n(initial); });
+    })();
     // Handle language selector: instant update + optional redirect for SEO-friendly URLs
     const langSel = document.getElementById('langSel');
     langSel && langSel.addEventListener('change', e => {
