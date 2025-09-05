@@ -1,16 +1,62 @@
 {
+  "version": 2,
   "trailingSlash": true,
   "cleanUrls": true,
+
   "redirects": [
-    { "source": "/en", "destination": "/", "permanent": true },
-    { "source": "/:lang", "destination": "/:lang/", "permanent": true }
+    { "source": "/en",  "destination": "/", "permanent": true },
+    { "source": "/en/", "destination": "/", "permanent": true }
   ],
+
+  "rewrites": [
+    { "source": "/", "destination": "/index.html" },
+
+    { "source": "/ar",  "destination": "/ar/index.html" },
+    { "source": "/ar/", "destination": "/ar/index.html" },
+
+    { "source": "/bn",  "destination": "/bn/index.html" },
+    { "source": "/bn/", "destination": "/bn/index.html" },
+
+    { "source": "/de",  "destination": "/de/index.html" },
+    { "source": "/de/", "destination": "/de/index.html" },
+
+    { "source": "/es",  "destination": "/es/index.html" },
+    { "source": "/es/", "destination": "/es/index.html" },
+
+    { "source": "/fr",  "destination": "/fr/index.html" },
+    { "source": "/fr/", "destination": "/fr/index.html" },
+
+    { "source": "/hi",  "destination": "/hi/index.html" },
+    { "source": "/hi/", "destination": "/hi/index.html" },
+
+    { "source": "/it",  "destination": "/it/index.html" },
+    { "source": "/it/", "destination": "/it/index.html" },
+
+    { "source": "/pt",  "destination": "/pt/index.html" },
+    { "source": "/pt/", "destination": "/pt/index.html" },
+
+    { "source": "/ru",  "destination": "/ru/index.html" },
+    { "source": "/ru/", "destination": "/ru/index.html" },
+
+    { "source": "/zh",  "destination": "/zh/index.html" },
+    { "source": "/zh/", "destination": "/zh/index.html" }
+  ],
+
   "headers": [
     {
-      "source": "/(sitemap.xml|robots.txt|site.webmanifest|favicon.ico|favicon-32.png|icon-192.png|apple-touch-icon.png)",
+      "source": "/(sitemap.xml|robots.txt|site.webmanifest|favicon.ico|favicon-32.png|icon-192.png|apple-touch-icon.png|ads.txt)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=86400" }
+        { "key": "Cache-Control", "value": "public, max-age=3600" },
+        { "key": "Content-Type", "value": "text/plain; charset=utf-8" }
       ]
+    },
+    {
+      "source": "/site.webmanifest",
+      "headers": [{ "key": "Content-Type", "value": "application/manifest+json; charset=utf-8" }]
+    },
+    {
+      "source": "/sitemap.xml",
+      "headers": [{ "key": "Content-Type", "value": "application/xml; charset=utf-8" }]
     }
   ]
 }
