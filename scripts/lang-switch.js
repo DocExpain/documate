@@ -5,19 +5,19 @@
   var sel = document.getElementById('langSel');
   if (!sel) return;
 
-  // EN = racine "/", autres = "/xx/"
+  // Map: EN = root "/", others = "/xx/"
   var target = {
     en: '/', fr: '/fr/', de: '/de/', es: '/es/', it: '/it/', pt: '/pt/',
     zh: '/zh/', hi: '/hi/', ar: '/ar/', ru: '/ru/', bn: '/bn/'
   };
 
-  // Pré-sélection d’après <html lang="">
+  // Preselect according to <html lang="...">
   var pageLang = (document.documentElement.lang || 'en').toLowerCase();
   if (target[pageLang]) sel.value = pageLang;
 
+  // Real redirect (normalize trailing slash, avoid reloading same URL)
   sel.addEventListener('change', function () {
     var url = target[this.value] || '/';
-    // Normalise le chemin courant avec "/"
     var here = location.pathname;
     if (!here.endsWith('/')) here += '/';
     if (url !== here) location.assign(url);
