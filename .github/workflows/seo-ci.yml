@@ -85,11 +85,11 @@ jobs:
         with:
           urls: |
             ${{ env.BASE_URL }}/
-            ${{ env.BASE_URL }}/explain/bill
-            ${{ env.BASE_URL }}/explain/contract
+            ${{ env.BASE_URL }}/explain/bill/
+            ${{ env.BASE_URL }}/explain/contract/
             ${{ env.BASE_URL }}/fr/
-            ${{ env.BASE_URL }}/fr/expliquer/facture
-            ${{ env.BASE_URL }}/fr/expliquer/contrat
+            ${{ env.BASE_URL }}/fr/expliquer/facture/
+            ${{ env.BASE_URL }}/fr/expliquer/contrat/
           configPath: ./lighthouserc.json
           uploadArtifacts: true
           temporaryPublicStorage: true

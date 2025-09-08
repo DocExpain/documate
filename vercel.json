@@ -5,14 +5,21 @@
 
   "redirects": [
     { "source": "/en",  "destination": "/", "permanent": true },
-    { "source": "/en/", "destination": "/", "permanent": true }
+    { "source": "/en/", "destination": "/", "permanent": true },
+
+    { "source": "/explain/bill",         "destination": "/explain/bill/",         "permanent": true },
+    { "source": "/explain/contract",     "destination": "/explain/contract/",     "permanent": true },
+    { "source": "/fr/expliquer/facture", "destination": "/fr/expliquer/facture/", "permanent": true },
+    { "source": "/fr/expliquer/contrat", "destination": "/fr/expliquer/contrat/", "permanent": true }
   ],
 
   "rewrites": [
     { "source": "/", "destination": "/index.html" },
 
-    { "source": "/explain/:path*",         "destination": "/index.html" },
-    { "source": "/fr/expliquer/:path*",    "destination": "/fr/index.html" },
+    { "source": "/explain/bill/",         "destination": "/index.html" },
+    { "source": "/explain/contract/",     "destination": "/index.html" },
+    { "source": "/fr/expliquer/facture/", "destination": "/fr/index.html" },
+    { "source": "/fr/expliquer/contrat/", "destination": "/fr/index.html" },
 
     { "source": "/ar",  "destination": "/ar/index.html" },
     { "source": "/ar/", "destination": "/ar/index.html" },
