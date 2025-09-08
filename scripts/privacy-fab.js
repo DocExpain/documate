@@ -20,9 +20,10 @@
             || panel.querySelector('[data-privacy-hide]')
             || panel.querySelector('button, a'); // last resort if your header has a single "Hide" control
   var main = document.querySelector('main');
-  var help = document.getElementById('help-card');
+  var help = document.getElementById('help-card') || document.querySelector('#help-card');
+  var work = document.getElementById('work-card') || document.querySelector('#work-card');
   var helpParent = help ? help.parentNode : null;
-  var helpNext = help ? help.nextSibling : null; // to restore exact DOM position
+  var helpNext   = help ? help.nextSibling : null;
 
   // create the floating FAB
   var fab = document.getElementById('privacy-fab');
@@ -41,20 +42,17 @@
     if (panel) panel.style.display = open ? '' : 'none';
     if (main)  main.classList.toggle('no-privacy', !open);
     if (help) {
-      var isDesktop = window.matchMedia('(min-width: 981px)').matches;
       if (!open) {
-        if (isDesktop) {
-          // desktop: move to top and make full width
-          help.classList.add('fullwidth-help');
-          if (main && help !== main.firstElementChild) {
-            try { main.prepend(help); } catch(e){}
-          }
-        } else {
-          // mobile: do not move; CSS will hide it (no space taken)
-          help.classList.remove('fullwidth-help');
+        // Privacy hidden -> single column
+        // Move HELP INSIDE LEFT COLUMN, ABOVE the work card
+        help.classList.add('fullwidth-help');
+        if (work && work.parentNode) {
+          try { work.parentNode.insertBefore(help, work); } catch(e){}
+        } else if (main) {
+          try { main.prepend(help); } catch(e){}
         }
       } else {
-        // restore original position in all cases
+        // Restore original position
         help.classList.remove('fullwidth-help');
         if (helpParent) {
           try { helpParent.insertBefore(help, helpNext); } catch(e){}

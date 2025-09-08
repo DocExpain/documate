@@ -189,37 +189,31 @@ main.no-privacy > #privacy-card{
   display: none !important; /* ensure no ghost column */
 }
 
-/* Mobile already uses 1 column, keep it explicit */
-@media (max-width: 980px){
-  main{ grid-template-columns: 1fr; }
-}
 
-
-/* Single-column + restore rules when privacy is hidden */
+/* When privacy is hidden, collapse to one column */
 main.no-privacy{
-  grid-template-columns: minmax(0,1fr) !important; /* one column */
+  grid-template-columns: minmax(0,1fr) !important;
   grid-auto-flow: row dense;
 }
-main.no-privacy > #work-card{
-  grid-column: 1 / -1; /* span full width */
-  width: 100%;
-}
-main.no-privacy > #privacy-card{
-  display: none !important; /* hide privacy card entirely */
-}
-/* Make the “Documents we can help with” full-width and place it at top when privacy hidden */
-main.no-privacy > #help-card.fullwidth-help{
+main.no-privacy > #privacy-card{ display:none !important; }
+
+/* Help card becomes full width and sits above the work card */
+main.no-privacy #help-card.fullwidth-help{
   grid-column: 1 / -1;
   width: 100%;
   margin-bottom: 16px;
 }
 
-@media (max-width: 980px){
-  /* On phone/tablet, if privacy is hidden, fully hide the help card */
-  main.no-privacy > #help-card { 
-    display: none !important;
-  }
+/* Ensure the left card spans full width */
+main.no-privacy #work-card{
+  grid-column: 1 / -1;
+  width: 100%;
 }
+
+@media (max-width: 980px){
+  main{ grid-template-columns: 1fr; } /* explicit on mobile */
+}
+
 </style>
 </head>
 <body>
