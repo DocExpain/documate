@@ -11,36 +11,27 @@
   "rewrites": [
     { "source": "/", "destination": "/index.html" },
 
-    { "source": "/explain/(.*)",          "destination": "/index.html" },
-    { "source": "/fr/expliquer/(.*)",     "destination": "/fr/index.html" },
+    { "source": "/explain/:path*",         "destination": "/index.html" },
+    { "source": "/fr/expliquer/:path*",    "destination": "/fr/index.html" },
 
     { "source": "/ar",  "destination": "/ar/index.html" },
     { "source": "/ar/", "destination": "/ar/index.html" },
-
     { "source": "/bn",  "destination": "/bn/index.html" },
     { "source": "/bn/", "destination": "/bn/index.html" },
-
     { "source": "/de",  "destination": "/de/index.html" },
     { "source": "/de/", "destination": "/de/index.html" },
-
     { "source": "/es",  "destination": "/es/index.html" },
     { "source": "/es/", "destination": "/es/index.html" },
-
     { "source": "/fr",  "destination": "/fr/index.html" },
     { "source": "/fr/", "destination": "/fr/index.html" },
-
     { "source": "/hi",  "destination": "/hi/index.html" },
     { "source": "/hi/", "destination": "/hi/index.html" },
-
     { "source": "/it",  "destination": "/it/index.html" },
     { "source": "/it/", "destination": "/it/index.html" },
-
     { "source": "/pt",  "destination": "/pt/index.html" },
     { "source": "/pt/", "destination": "/pt/index.html" },
-
     { "source": "/ru",  "destination": "/ru/index.html" },
     { "source": "/ru/", "destination": "/ru/index.html" },
-
     { "source": "/zh",  "destination": "/zh/index.html" },
     { "source": "/zh/", "destination": "/zh/index.html" }
   ],
@@ -50,7 +41,6 @@
     { "source": "/ads.txt",           "headers": [{ "key": "Content-Type", "value": "text/plain; charset=utf-8" }] },
     { "source": "/site.webmanifest",  "headers": [{ "key": "Content-Type", "value": "application/manifest+json; charset=utf-8" }] },
     { "source": "/sitemap.xml",       "headers": [{ "key": "Content-Type", "value": "application/xml; charset=utf-8" }] },
-
     { "source": "/favicon.ico",       "headers": [{ "key": "Content-Type", "value": "image/x-icon" }] },
     { "source": "/favicon-16.png",    "headers": [{ "key": "Content-Type", "value": "image/png" }] },
     { "source": "/favicon-32.png",    "headers": [{ "key": "Content-Type", "value": "image/png" }] },
