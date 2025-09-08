@@ -108,11 +108,11 @@
     .consent{position:fixed;bottom:12px;left:12px;right:12px;background:#111827;color:#fff;padding:14px;border-radius:12px;display:none;z-index:50}
     .consent .row{justify-content:flex-end}
   /* Collapsible labels auto-switch */
-#privacyBox .label-show { display:none; }
-#privacyBox[open] .label-hide { display:inline; }
-#privacyBox[open] .label-show { display:none; }
-#privacyBox:not([open]) .label-hide { display:none; }
-#privacyBox:not([open]) .label-show { display:inline; }
+#privacy-card .label-show { display:none; }
+#privacy-card[open] .label-hide { display:inline; }
+#privacy-card[open] .label-show { display:none; }
+#privacy-card:not([open]) .label-hide { display:none; }
+#privacy-card:not([open]) .label-show { display:inline; }
 
 /* Optional: nicer spacing */
 .privacy-summary { display:flex; justify-content:space-between; align-items:center; cursor:pointer; }
@@ -158,6 +158,25 @@ body.sidebar-collapsed .show-sidebar-btn{ display:inline-block; }
 /* sécurité si l’ancien panneau utilise .privacy-panel.collapsed */
 .privacy-collapsed { display: none !important; }
 
+/* when privacy is hidden, use single-column layout */
+main.no-privacy { grid-template-columns: 1fr !important; }
+/* floating action button for restoring privacy panel */
+.privacy-fab{
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 60;
+  background: #111827;
+  color: #fff;
+  border: 0;
+  padding: 10px 14px;
+  border-radius: 999px;
+  box-shadow: 0 10px 30px rgba(2,6,23,.18);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+}
+.privacy-fab:focus { outline: 2px solid #2563eb; outline-offset: 2px; }
 </style>
 </head>
 <body>
@@ -247,11 +266,11 @@ body.sidebar-collapsed .show-sidebar-btn{ display:inline-block; }
     </section>
 
       <!-- Privacy & Trust (collapsible, accessible, no-JS needed) -->
-  <details id="privacyBox" class="card legal" open>
+  <details id="privacy-card" class="card legal" open>
     <summary class="privacy-summary" role="button">
       <span class="privacy-title" id="privacy-title">Privacy & Trust</span>
       <span class="privacy-toggle">
-        <span class="label-hide" id="privacy-hide">Hide</span>
+        <span class="label-hide" id="privacy-hide-toggle">Hide</span>
         <span class="label-show" id="privacy-show">Show</span>
       </span>
     </summary>
@@ -371,7 +390,7 @@ body.sidebar-collapsed .show-sidebar-btn{ display:inline-block; }
       setText('result-title', T.resultTitle);
       setText('privacy-title', T.trustTitle);
       var sh = document.getElementById('privacy-show');
-      var hd = document.getElementById('privacy-hide');
+      var hd = document.getElementById('privacy-hide-toggle');
       if (sh) sh.textContent = T.showPrivacy || 'Show';
       if (hd) hd.textContent = T.hidePrivacy || 'Hide';
       setText('trust-1', T.trust1);
@@ -750,7 +769,7 @@ async function ensureHeavyLibs(){
 </script>
 <script>
 (function(){
-  var box = document.getElementById('privacyBox');
+  var box = document.getElementById('privacy-card');
   if (!box) return;
 
   // Persist state

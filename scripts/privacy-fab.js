@@ -2,102 +2,65 @@
  * SPDX-License-Identifier: LicenseRef-SA-NC-1.0
  */
 (function () {
-  function t(key, fallback) {
+  function t(key, fallbackEn, fallbackFr) {
     try {
       var lang = (document.documentElement.lang || 'en').toLowerCase();
       var T = (window.I18N && window.I18N[lang]) || {};
-      return (T && T[key]) || fallback;
-    } catch (e) { return fallback; }
+      return (T && T[key]) || (lang === 'fr' ? (fallbackFr || fallbackEn) : fallbackEn);
+    } catch (e) { return fallbackEn; }
   }
 
-  function applyState(open) {
-    // hide/show panel and fab
-    if (panel) {
-      // si on est sur <details>, on laisse open=true pendant l’affichage puis on cache totalement quand fermé
-      if (isDetails) {
-        if (open) {
-          panel.open = true;
-          panel.style.display = '';
-        } else {
-          panel.open = false;
-          // on cache entièrement le bloc pour libérer l’espace (et masquer le <summary>)
-          panel.style.display = 'none';
-        }
-      } else {
-        panel.classList.toggle('privacy-collapsed', !open);
-        panel.style.display = open ? '' : 'none';
-      }
-    }
-    if (fab) {
-      fab.hidden = !!open;
-      fab.setAttribute('aria-expanded', open ? 'true' : 'false');
-      fab.setAttribute('title', open ? hideLbl : showLbl);
-    }
-    try { localStorage.setItem('privacy-open', open ? '1' : '0'); } catch (e) {}
-  }
-
-  function restore() {
-    var saved = null;
-    try { saved = localStorage.getItem('privacy-open'); } catch (e) {}
-    return saved !== '0'; // défaut: ouvert
-  }
-
-  // 1) Détection du panneau : supporte <details id="privacyBox"> ou <div id="privacy-panel"> / .card.legal
-  var panel = document.getElementById('privacyBox')
-          || document.getElementById('privacy-panel')
-          || document.querySelector('.card.legal,#privacyBox');
+  // selectors (minimal assumptions)
+  var panel = document.getElementById('privacy-card')
+           || document.getElementById('privacyBox')
+           || document.querySelector('.card.legal'); // the privacy card element
   if (!panel) return;
 
-  var isDetails = panel.tagName === 'DETAILS';
+  var hideBtn = document.getElementById('privacy-hide-toggle')
+            || panel.querySelector('[data-privacy-hide]')
+            || panel.querySelector('button, a'); // last resort if your header has a single "Hide" control
+  var main = document.querySelector('main');
 
-  // 2) Créer la puce flottante
-  var showLbl = t('showPrivacy', 'Afficher');
-  var hideLbl = t('hidePrivacy', 'Masquer');
-
+  // create the floating FAB
   var fab = document.getElementById('privacy-fab');
   if (!fab) {
     fab = document.createElement('button');
     fab.id = 'privacy-fab';
     fab.type = 'button';
     fab.className = 'privacy-fab';
-    fab.setAttribute('aria-controls', panel.id || 'privacyBox');
-    fab.setAttribute('aria-expanded', 'false');
-    fab.hidden = true;
-    fab.textContent = showLbl;
     document.body.appendChild(fab);
   }
 
-  // 3) Raccorder tes contrôles existants (si présents)
-  var btnLegacy = document.getElementById('privacy-toggle');     // ancienne implémentation
-  var sum = isDetails ? panel.querySelector('summary') : null;   // <summary> si <details>
+  var SHOW = t('showPrivacy', 'Show', 'Afficher');
+  var HIDE = t('hidePrivacy', 'Hide', 'Masquer');
 
-  function minimize(e) {
-    if (e) e.preventDefault();
-    applyState(false);
-  }
-  function reopen(e) {
-    if (e) e.preventDefault();
-    applyState(true);
-    try { panel.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (e2) {}
-  }
-
-  // 4) Écouteurs : clic sur la puce pour ré-ouvrir
-  fab.addEventListener('click', reopen);
-
-  // 5) Si on a un bouton existant “Masquer”, on le branche sur minimize
-  if (btnLegacy) btnLegacy.addEventListener('click', function (e) {
-    e.preventDefault(); minimize();
-  });
-
-  // 6) Si <details>, on intercepte le toggle
-  if (isDetails && sum) {
-    panel.addEventListener('toggle', function () {
-      // Si l’utilisateur “ferme” le details, on passe en mode fab (panel hidden)
-      if (!panel.open) { applyState(false); }
-      else { applyState(true); }
-    });
+  function applyState(open) {
+    if (panel) panel.style.display = open ? '' : 'none';
+    if (main)  main.classList.toggle('no-privacy', !open);
+    fab.hidden = !!open;
+    fab.setAttribute('aria-expanded', open ? 'true':'false');
+    fab.setAttribute('title', open ? HIDE : SHOW);
+    fab.textContent = SHOW;
+    try { localStorage.setItem('privacy-open', open ? '1' : '0'); } catch(e){}
   }
 
-  // 7) État initial depuis localStorage
+  function restore() {
+    var s = null;
+    try { s = localStorage.getItem('privacy-open'); } catch(e){}
+    return s !== '0'; // default open
+  }
+
+  // wire events
+  if (hideBtn) {
+    hideBtn.addEventListener('click', function(e){ e.preventDefault(); applyState(false); });
+    // keep label up-to-date if this is a text button
+    try {
+      var txt = hideBtn.textContent.trim().toLowerCase();
+      if (txt === 'hide' || txt === 'masquer') hideBtn.textContent = HIDE;
+    } catch(e){}
+  }
+  fab.addEventListener('click', function(e){ e.preventDefault(); applyState(true); try{ panel.scrollIntoView({behavior:'smooth', block:'start'});}catch(e){}; });
+
+  // initial
   applyState(restore());
 })();
