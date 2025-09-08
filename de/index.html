@@ -214,6 +214,17 @@ main.no-privacy #work-card{
   main{ grid-template-columns: 1fr; } /* explicit on mobile */
 }
 
+/* === layout-fix: privacy collapsed -> single column + help on top === */
+main.no-privacy { 
+  grid-template-columns: 1fr !important; 
+}
+
+#help-card.fullwidth-help { 
+  grid-column: 1 / -1 !important; 
+  width: 100%;
+  margin-bottom: 16px;
+}
+
 </style>
 </head>
 <body>
@@ -840,5 +851,49 @@ async function ensureHeavyLibs(){
 </script>
 <script defer src="/scripts/lang-switch.js"></script>
 <script defer src="/scripts/privacy-fab.js"></script>
+<script>
+/* === layout-fix: collapse privacy -> make left area full width, move help on top === */
+(function () {
+  var main    = document.querySelector('main');
+  var privacy = document.getElementById('privacy-card');  // <details>
+  var help    = document.getElementById('help-card');      // right column block
+  var work    = document.getElementById('work-card');      // left form card
+  if (!main || !privacy || !help || !work) return;
+
+  function applyLayout() {
+    var hidden = !privacy.open; // <details> closed => hidden
+    if (hidden) {
+      // single column
+      main.classList.add('no-privacy');
+
+      // help full width above the form
+      help.classList.add('fullwidth-help');
+      help.style.gridColumn = '1 / -1';
+
+      // move help-card before work-card to ensure it appears on top
+      if (help !== main.firstElementChild) {
+        try { main.insertBefore(help, main.firstElementChild); } catch (e) {}
+      }
+    } else {
+      // restore two columns
+      main.classList.remove('no-privacy');
+
+      // restore help to the right column (grid column 2)
+      help.classList.remove('fullwidth-help');
+      help.style.gridColumn = '2';
+
+      // put help-card after privacy (or at the end) so it stays in right side
+      try { main.appendChild(help); } catch (e) {}
+    }
+  }
+
+  // initial state on load
+  applyLayout();
+
+  // react when user opens/closes the <details>
+  privacy.addEventListener('toggle', applyLayout);
+})();
+</script>
+
 </body>
 </html>
