@@ -225,6 +225,21 @@ main.no-privacy {
   margin-bottom: 16px;
 }
 
+/* OCR inline status under the upload button */
+.status.ocr-status{
+  display:flex; align-items:center; gap:8px;
+  font-size:13px; color: var(--muted);
+  margin:8px 0 4px;
+}
+.status.ocr-status.ok  { color: var(--ok); }
+.status.ocr-status.err { color: #b91c1c; }
+.status .spinner{
+  width:14px; height:14px; border-radius:50%;
+  border:2px solid #cbd5e1; border-top-color:#2563eb;
+  animation:spin .9s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg) } }
+
 </style>
 </head>
 <body>
@@ -262,6 +277,7 @@ main.no-privacy {
   <input type="file" id="camera" accept="image/*" capture="environment" class="file-native" />
   <span id="fileName" class="hint">No file chosen</span>
 </div>
+<div id="ocr-status" class="status ocr-status" hidden aria-live="polite" aria-atomic="true"></div>
 
       <label for="docText" id="label-paste">…or paste your text here</label>
       <textarea id="docText" placeholder="Paste the content of your document…"></textarea>
@@ -605,15 +621,42 @@ main.no-privacy {
   const fileInput = document.getElementById('file');
   const camInput  = document.getElementById('camera');
   const docText   = document.getElementById('docText');
-  const resultBox = document.getElementById('result');
   const btnUseCamera = document.getElementById('btnUseCamera');
 
   // Langue → Tesseract
   const TESS_LANG_MAP = { en:'eng', fr:'fra', de:'deu', es:'spa', it:'ita', pt:'por', ru:'rus', bn:'ben', hi:'hin', ar:'ara', zh:'chi_sim' };
   const currentLang = ()=> (document.documentElement.lang || 'en').toLowerCase();
   const tessLangFor = lg => TESS_LANG_MAP[lg] || 'eng';
+  function ocrSet(msg, cls){
+    const el = document.getElementById('ocr-status'); if(!el) return;
+    el.hidden = false;
+    el.classList.remove('ok','err');
+    if (cls) el.classList.add(cls);
+    el.innerHTML = '<span class="spinner" aria-hidden="true"></span>' + (msg || '');
+  }
+  function ocrOK(msg){
+    const el = document.getElementById('ocr-status'); if(!el) return;
+    el.hidden = false; el.classList.remove('err'); el.classList.add('ok');
+    el.innerHTML = (msg || '');
+  }
+  function ocrError(msg){
+    const el = document.getElementById('ocr-status'); if(!el) return;
+    el.hidden = false; el.classList.remove('ok'); el.classList.add('err');
+    el.innerHTML = (msg || 'Could not read this file');
+  }
+  function ocrClear(){
+    const el = document.getElementById('ocr-status'); if(!el) return;
+    el.hidden = true; el.classList.remove('ok','err'); el.textContent = '';
+  }
 
-  const setStatus = msg => { if (resultBox) resultBox.textContent = msg; };
+  // i18n helpers (fallbacks):
+  function T(key, fallback){
+    try {
+      var lang = (document.documentElement.lang||'en').toLowerCase();
+      return (window.I18N && I18N[lang] && I18N[lang][key]) || fallback;
+    } catch(e){ return fallback; }
+  }
+
 
   // Nettoyage texte (fix regex)
   function postProcess(s){
@@ -720,14 +763,22 @@ main.no-privacy {
   async function processFile(file){
     if (!file || !docText) return;
     await ensureHeavyLibs();
-    setStatus(window.STR?.loading || "Working…");
-    try{
+        try{
       const name = (file.name||'').toLowerCase();
       const buf  = await file.arrayBuffer();
 
       // PDF
       if (name.endsWith('.pdf')){
-        const pdf = await pdfjsLib.getDocument({ data:new Uint8Array(buf) }).promise;
+        const task = pdfjsLib.getDocument({ data:new Uint8Array(buf) });
+        task.onProgress = function(p){
+          if (p && p.total){
+            var pct = Math.round((p.loaded / p.total) * 100);
+            ocrSet(T('ocrExtracting','Extracting text… ') + pct + '%');
+          } else {
+            ocrSet(T('ocrExtracting','Extracting text…'));
+          }
+        };
+        const pdf = await task.promise;
         let out = '';
         for (let p=1;p<=pdf.numPages;p++){
           const page=await pdf.getPage(p);
@@ -738,47 +789,48 @@ main.no-privacy {
         if (isLikelyXML(out)) out = stripXML(out);
         if (!out || out.trim().length<20){
           const lang = tessLangFor(currentLang());
-          out = await ocrPdfWithTesseract(pdf, lang, (d,t)=>setStatus(`OCR ${d}/${t}…`));
+          out = await ocrPdfWithTesseract(pdf, lang, (d,t)=>ocrSet(T('ocrExtracting','Extracting text… ') + Math.round((d/t)*100) + '%'));
         }
         docText.value = out.trim() || '[No selectable text found in this PDF]';
-        setStatus('✓ PDF processed');
+        ocrOK(T('ocrDone','Text extracted.')); setTimeout(ocrClear, 1000);
         return;
       }
 
       // IMAGE
       if (isImgName(name) || (file.type && file.type.startsWith('image/'))){
-        setStatus('Reading image…');
+        ocrSet(T('ocrRecognizing','Recognizing text…'));
         const langLocal = tessLangFor(currentLang());
         const lang = (langLocal==='eng') ? 'eng' : `eng+${langLocal}`; // mix utile
-        const txt = await ocrImageFile(file, lang, p=>setStatus(`OCR ${p}%…`));
+        const txt = await ocrImageFile(file, lang, p=>ocrSet(T('ocrRecognizing','Recognizing text… ') + p + '%'));
         docText.value = txt || '[No text recognized in this image]';
-        setStatus('✓ Image OCR done');
+        ocrOK(T('ocrDone','Text extracted.')); setTimeout(ocrClear, 1000);
         return;
       }
 
       // DOCX
       if (name.endsWith('.docx')){
+        ocrSet(T('ocrConverting','Converting document…'));
         const res = await window.mammoth.extractRawText({ arrayBuffer: buf });
         docText.value = (res.value||'').trim();
-        setStatus('✓ DOCX loaded');
+        ocrOK(T('ocrDone','Text extracted.')); setTimeout(ocrClear, 1000);
         return;
       }
 
       // TXT / inconnu
       const txt = await (new Response(new Blob([buf]))).text();
       docText.value = txt;
-      setStatus('✓ Text loaded');
+      ocrOK(T('ocrDone','Text extracted.')); setTimeout(ocrClear, 1000);
 
     }catch(err){
       console.error(err);
-      setStatus('⚠️ Read error');
+      ocrError(T('ocrFail','Could not read this file.'));
       docText.value = 'Could not read file. Try a clearer image (good light, flat), or export to PDF/DOCX.';
     }
   }
 
   // Upload fichier + caméra
-  fileInput && fileInput.addEventListener('change', e => processFile(e.target.files?.[0]));
-  camInput  && camInput.addEventListener('change',  e => processFile(e.target.files?.[0]));
+  fileInput && fileInput.addEventListener('change', e => { ocrSet(T('ocrReading','Reading file…')); processFile(e.target.files?.[0]); });
+  camInput  && camInput.addEventListener('change',  e => { ocrSet(T('ocrReading','Reading file…')); processFile(e.target.files?.[0]); });
   btnUseCamera && btnUseCamera.addEventListener('click', () => camInput?.click());
 
   // Coller une capture DANS le textarea
@@ -788,6 +840,7 @@ main.no-privacy {
       for (const it of items){
         if (it.type && it.type.startsWith('image/')){
           e.preventDefault();
+          ocrSet(T('ocrReading','Reading file…'));
           return processFile(it.getAsFile());
         }
       }
@@ -798,7 +851,7 @@ main.no-privacy {
     docText.addEventListener('drop', e=>{
       e.preventDefault();
       const f = e.dataTransfer?.files?.[0];
-      if (f) processFile(f);
+      if (f){ ocrSet(T('ocrReading','Reading file…')); processFile(f); }
     });
   }
 })();
