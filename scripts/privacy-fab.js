@@ -20,6 +20,9 @@
             || panel.querySelector('[data-privacy-hide]')
             || panel.querySelector('button, a'); // last resort if your header has a single "Hide" control
   var main = document.querySelector('main');
+  var help = document.getElementById('help-card');
+  var helpParent = help ? help.parentNode : null;
+  var helpNext = help ? help.nextSibling : null; // to restore exact DOM position
 
   // create the floating FAB
   var fab = document.getElementById('privacy-fab');
@@ -37,6 +40,21 @@
   function applyState(open) {
     if (panel) panel.style.display = open ? '' : 'none';
     if (main)  main.classList.toggle('no-privacy', !open);
+    if (help) {
+      if (!open) {
+        // move to top and make it full-width
+        help.classList.add('fullwidth-help');
+        if (main && help !== main.firstElementChild) {
+          try { main.prepend(help); } catch(e){}
+        }
+      } else {
+        // restore to original position and width
+        help.classList.remove('fullwidth-help');
+        if (helpParent) {
+          try { helpParent.insertBefore(help, helpNext); } catch(e){}
+        }
+      }
+    }
     fab.hidden = !!open;
     fab.setAttribute('aria-expanded', open ? 'true':'false');
     fab.setAttribute('title', open ? HIDE : SHOW);
