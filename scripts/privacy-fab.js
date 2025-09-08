@@ -41,14 +41,20 @@
     if (panel) panel.style.display = open ? '' : 'none';
     if (main)  main.classList.toggle('no-privacy', !open);
     if (help) {
+      var isDesktop = window.matchMedia('(min-width: 981px)').matches;
       if (!open) {
-        // move to top and make it full-width
-        help.classList.add('fullwidth-help');
-        if (main && help !== main.firstElementChild) {
-          try { main.prepend(help); } catch(e){}
+        if (isDesktop) {
+          // desktop: move to top and make full width
+          help.classList.add('fullwidth-help');
+          if (main && help !== main.firstElementChild) {
+            try { main.prepend(help); } catch(e){}
+          }
+        } else {
+          // mobile: do not move; CSS will hide it (no space taken)
+          help.classList.remove('fullwidth-help');
         }
       } else {
-        // restore to original position and width
+        // restore original position in all cases
         help.classList.remove('fullwidth-help');
         if (helpParent) {
           try { helpParent.insertBefore(help, helpNext); } catch(e){}
@@ -61,6 +67,11 @@
     fab.textContent = SHOW;
     try { localStorage.setItem('privacy-open', open ? '1' : '0'); } catch(e){}
   }
+
+  try {
+    var mq = window.matchMedia('(min-width: 981px)');
+    mq.addEventListener('change', function(){ applyState(localStorage.getItem('privacy-open') !== '0'); });
+  } catch(e){}
 
   function restore() {
     var s = null;
