@@ -137,6 +137,27 @@
 body.sidebar-collapsed main{ grid-template-columns:1fr !important; }
 body.sidebar-collapsed #sidebar{ display:none; }
 body.sidebar-collapsed .show-sidebar-btn{ display:inline-block; }
+/* privacy floating action button */
+.privacy-fab{
+  position: fixed;
+  right: 16px;   /* change en 16px left: si tu préfères en bas-gauche */
+  bottom: 16px;
+  z-index: 60;
+  background: #111827;
+  color: #fff;
+  border: 0;
+  padding: 10px 14px;
+  border-radius: 999px;
+  box-shadow: 0 10px 30px rgba(2,6,23,.18);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+}
+.privacy-fab:focus{ outline: 2px solid #2563eb; outline-offset: 2px; }
+
+/* sécurité si l’ancien panneau utilise .privacy-panel.collapsed */
+.privacy-collapsed { display: none !important; }
+
 </style>
 </head>
 <body>
@@ -762,5 +783,6 @@ async function ensureHeavyLibs(){
 })();
 </script>
 <script defer src="/scripts/lang-switch.js"></script>
+<script defer src="/scripts/privacy-fab.js"></script>
 </body>
 </html>
