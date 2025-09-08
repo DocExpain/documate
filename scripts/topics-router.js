@@ -15,7 +15,8 @@
   };
 
   function withSlash(p){ return p.endsWith("/") ? p : p + "/"; }
-  function lang(){ return location.pathname.startsWith("/fr/") ? "fr" : "en"; }
+  function curLang(){ return location.pathname.startsWith("/fr/") ? "fr" : "en"; }
+
   function getTopicFromQuery(){
     var t = new URLSearchParams(location.search).get("topic");
     return (t && TOPICS[t]) ? t : null;
@@ -32,12 +33,11 @@
     var conf = TOPICS[topic];
     if (!conf) return p;
     if (p === conf.en.path || p === conf.fr.path) return p;
-    return (conf[lang()] && conf[lang()].path) || conf.en.path;
+    return (conf[curLang()] && conf[curLang()].path) || conf.en.path;
   }
 
   var origin = location.origin;
   var topic = getTopicFromQuery() || getTopicFromPath();
-
   var canonPath = topic ? canonicalFor(topic) : withSlash(location.pathname);
   var canonicalAbs = origin + canonPath;
 
@@ -49,14 +49,13 @@
   var tw = document.querySelector('meta[name="twitter:url"]');
   if (tw) tw.setAttribute("content", canonicalAbs);
 
-  // Minimal FAQ for LH structured-data audit (only on topic pages)
   if (topic && !document.getElementById("ld-faq")) {
     var FAQ = {
       "@context":"https://schema.org",
       "@type":"FAQPage",
       "mainEntity":[
-        {"@type":"Question","name": (lang()==="fr" ? "Comment ça marche ?" : "How does it work?"),
-         "acceptedAnswer":{"@type":"Answer","text": (lang()==="fr" ? "Importez ou collez le document, puis posez vos questions." : "Upload or paste your document, then ask questions.")}}
+        {"@type":"Question","name": (curLang()==="fr" ? "Comment ça marche ?" : "How does it work?"),
+         "acceptedAnswer":{"@type":"Answer","text": (curLang()==="fr" ? "Importez ou collez le document, puis posez vos questions." : "Upload or paste your document, then ask questions.")}}
       ]
     };
     var s = document.createElement("script");

@@ -11,15 +11,9 @@
   "rewrites": [
     { "source": "/", "destination": "/index.html" },
 
-    /* Topic pages — EN (both forms) */
-    { "source": "/explain/:topic",  "destination": "/index.html" },
-    { "source": "/explain/:topic/", "destination": "/index.html" },
+    { "source": "/explain/(.*)",          "destination": "/index.html" },
+    { "source": "/fr/expliquer/(.*)",     "destination": "/fr/index.html" },
 
-    /* Topic pages — FR (both forms) */
-    { "source": "/fr/expliquer/:topic",  "destination": "/fr/index.html" },
-    { "source": "/fr/expliquer/:topic/", "destination": "/fr/index.html" },
-
-    /* Language roots */
     { "source": "/ar",  "destination": "/ar/index.html" },
     { "source": "/ar/", "destination": "/ar/index.html" },
 
