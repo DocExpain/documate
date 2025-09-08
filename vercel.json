@@ -26,6 +26,9 @@
     { "source": "/fr",  "destination": "/fr/index.html" },
     { "source": "/fr/", "destination": "/fr/index.html" },
 
+    { "source": "/explain/:topic/",       "destination": "/index.html" },
+    { "source": "/fr/expliquer/:topic/",  "destination": "/fr/index.html" },
+
     { "source": "/hi",  "destination": "/hi/index.html" },
     { "source": "/hi/", "destination": "/hi/index.html" },
 
