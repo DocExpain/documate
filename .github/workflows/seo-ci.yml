@@ -13,25 +13,23 @@ on:
 
 jobs:
   smoke:
-    name: Smoke (DOM rendu)
     runs-on: ubuntu-latest
     env:
       BASE_URL: ${{ github.event.inputs.base_url || 'https://documate.work' }}
     steps:
       - uses: actions/checkout@v4
-
-      # Installe Playwright + Chromium sans toucher package.json
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
+
       - name: Install Playwright module
         run: npm i --no-save playwright@1.47.2
-      - name: Install Playwright
+
+      - name: Install Playwright browsers
         run: npx playwright@1.47.2 install --with-deps chromium
 
       - name: Run smoke checks
-        run: node scripts/seo-smoke.js "$BASE_URL"
+        run: node scripts/seo-smoke.cjs "$BASE_URL"
 
   warmup:
     name: Warmup
