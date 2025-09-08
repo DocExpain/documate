@@ -10,12 +10,12 @@ function full(base, path) {
 }
 
 const PAGES = [
-  { path: '/',                canonical: '/',                      expectFAQ: false },
-  { path: '/explain/bill',    canonical: '/explain/bill',          expectFAQ: true  },
-  { path: '/explain/contract',canonical: '/explain/contract',      expectFAQ: true  },
-  { path: '/fr/',             canonical: '/fr/',                   expectFAQ: false },
-  { path: '/fr/expliquer/facture', canonical: '/fr/expliquer/facture', expectFAQ: true },
-  { path: '/fr/expliquer/contrat', canonical: '/fr/expliquer/contrat', expectFAQ: true }
+  { path: '/',                   canonical: '/',                        expectFAQ: false },
+  { path: '/explain/bill/',      canonical: '/explain/bill/',            expectFAQ: true  },
+  { path: '/explain/contract/',  canonical: '/explain/contract/',        expectFAQ: true  },
+  { path: '/fr/',                canonical: '/fr/',                      expectFAQ: false },
+  { path: '/fr/expliquer/facture/', canonical: '/fr/expliquer/facture/', expectFAQ: true },
+  { path: '/fr/expliquer/contrat/',  canonical: '/fr/expliquer/contrat/',  expectFAQ: true }
 ];
 
 (async () => {
