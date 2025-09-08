@@ -39,7 +39,11 @@
     { "source": "/ru/", "destination": "/ru/index.html" },
 
     { "source": "/zh",  "destination": "/zh/index.html" },
-    { "source": "/zh/", "destination": "/zh/index.html" }
+    { "source": "/zh/", "destination": "/zh/index.html" },
+    { "source": "/explain/bill",       "destination": "/?topic=bill" },
+    { "source": "/explain/contract",   "destination": "/?topic=contract" },
+    { "source": "/fr/expliquer/facture","destination": "/fr/?topic=facture" },
+    { "source": "/fr/expliquer/contrat","destination": "/fr/?topic=contrat" }
   ],
 
   "headers": [
