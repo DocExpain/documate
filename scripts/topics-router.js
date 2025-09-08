@@ -2,6 +2,65 @@
  * SPDX-FileCopyrightText: 2025 DocExpain
  * SPDX-License-Identifier: LicenseRef-SA-NC-1.0
  */
+const TOPICS = {
+  bill: {
+    en: { path: "/explain/bill/" },
+    fr: { path: "/fr/expliquer/facture/" }
+  },
+  contract: {
+    en: { path: "/explain/contract/" },
+    fr: { path: "/fr/expliquer/contrat/" }
+  }
+};
+
+function getTopicFromQuery(){
+  const t = new URLSearchParams(location.search).get("topic");
+  return (t && TOPICS[t]) ? t : null;
+}
+function getTopicFromPath(){
+  const p = (location.pathname.endsWith("/") ? location.pathname : location.pathname + "/");
+  for (const key of Object.keys(TOPICS)) {
+    if (p === TOPICS[key].en.path || p === TOPICS[key].fr.path) return key;
+  }
+  return null;
+}
+function currentLang(){
+  return location.pathname.startsWith("/fr/") ? "fr" : "en";
+}
+function canonicalFor(topic){
+  const p = (location.pathname.endsWith("/") ? location.pathname : location.pathname + "/");
+  const conf = TOPICS[topic];
+  if (!conf) return p;
+  if (p === conf.en.path || p === conf.fr.path) return p;
+  return (conf[currentLang()]?.path) || conf.en.path;
+}
+
+(function(){
+  const origin = location.origin;
+  const linkCanonical =
+    document.getElementById("link-canonical") ||
+    document.querySelector('link[rel="canonical"]');
+
+  function withSlash(p){ return p.endsWith("/") ? p : p + "/"; }
+
+  const qTopic = getTopicFromQuery();
+  const pTopic = getTopicFromPath();
+  const topic  = qTopic || pTopic;
+
+  if (!topic) {
+    if (linkCanonical) linkCanonical.href = origin + withSlash(location.pathname);
+    return;
+  }
+
+  const canonPath = canonicalFor(topic);
+  if (linkCanonical) linkCanonical.href = origin + canonPath;
+
+  const ogUrl = document.querySelector('meta[property="og:url"]');
+  if (ogUrl) ogUrl.setAttribute("content", origin + canonPath);
+  const twUrl = document.querySelector('meta[name="twitter:url"]');
+  if (twUrl) twUrl.setAttribute("content", origin + canonPath);
+})();
+
 (function () {
   var lang = (document.documentElement.lang || 'en').toLowerCase();
   var CFG = {
@@ -72,7 +131,6 @@
   function $(s){ return document.querySelector(s); }
   function setText(sel, txt){ var el=$(sel); if(el && txt) el.textContent=txt; }
   function setMeta(name, content){ var m=document.querySelector('meta[name="'+name+'"]'); if(m && content) m.setAttribute('content', content); }
-  function setCanonical(url){ var l=document.querySelector('link[rel="canonical"]'); if(l && url) l.setAttribute('href', url); }
   function injectFAQ(faq){
     var root=document.getElementById('faq'); if(!root) return;
     root.innerHTML='';
@@ -112,7 +170,6 @@
 
   document.title=conf.title;
   setMeta('description', conf.desc);
-  setCanonical(location.origin + conf.path);
   setText('.hero h2', conf.h1);
   injectFAQ(conf.faq);
   injectFAQJsonLD(conf.faq);
