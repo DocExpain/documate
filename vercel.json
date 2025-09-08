@@ -5,11 +5,16 @@
 
   "redirects": [
     { "source": "/en",  "destination": "/", "permanent": true },
-    { "source": "/en/", "destination": "/", "permanent": true }
+    { "source": "/en/", "destination": "/", "permanent": true },
+    { "source": "/explain/:topic",       "destination": "/explain/:topic/",       "permanent": true },
+    { "source": "/fr/expliquer/:topic",  "destination": "/fr/expliquer/:topic/",  "permanent": true }
   ],
 
   "rewrites": [
     { "source": "/",    "destination": "/index.html" },
+
+    { "source": "/explain/:topic/",       "destination": "/index.html" },
+    { "source": "/fr/expliquer/:topic/",  "destination": "/fr/index.html" },
 
     { "source": "/ar",  "destination": "/ar/index.html" },
     { "source": "/ar/", "destination": "/ar/index.html" },
@@ -25,9 +30,6 @@
 
     { "source": "/fr",  "destination": "/fr/index.html" },
     { "source": "/fr/", "destination": "/fr/index.html" },
-
-    { "source": "/explain/:topic/",       "destination": "/index.html" },
-    { "source": "/fr/expliquer/:topic/",  "destination": "/fr/index.html" },
 
     { "source": "/hi",  "destination": "/hi/index.html" },
     { "source": "/hi/", "destination": "/hi/index.html" },
