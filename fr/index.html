@@ -272,8 +272,8 @@ main.no-privacy {
         <p id="hero-sub">Free, private, multilingual. Not legal advice.</p>
       </div>
       <nav class="topics" id="topics-fr" style="margin:10px 0;">
-        <a href="/fr/expliquer/facture">Expliquer une facture</a> ·
-        <a href="/fr/expliquer/contrat">Expliquer un contrat</a>
+        <a href="/fr/expliquer/facture/">Expliquer une facture</a> ·
+        <a href="/fr/expliquer/contrat/">Expliquer un contrat</a>
       </nav>
       <!-- File input (customized & translatable) -->
 <div class="file-row">
@@ -963,7 +963,7 @@ async function ensureHeavyLibs(){
   var lang=(document.documentElement.lang||'fr').toLowerCase();
   var CFG={ fr:{
     facture:{
-      path:"/fr/expliquer/facture",
+      path:"/fr/expliquer/facture/",
       title:"Expliquer une facture — Gratuit & privé | DocuMate",
       desc:"Téléversez votre facture ou collez le texte. Explications en langage simple. Multi-langue.",
       h1:"Expliquer une facture en langage simple",
@@ -972,13 +972,13 @@ async function ensureHeavyLibs(){
         ["Est-ce privé ?","Nous ne stockons pas vos documents ; le transfert est chiffré. Vous pouvez enregistrer localement."]
       ],
       alternates:[
-        ["en","https://documate.work/explain/bill"],
-        ["fr","https://documate.work/fr/expliquer/facture"],
-        ["x-default","https://documate.work/fr/expliquer/facture"]
+        ["en","https://documate.work/explain/bill/"],
+        ["fr","https://documate.work/fr/expliquer/facture/"],
+        ["x-default","https://documate.work/fr/expliquer/facture/"]
       ]
     },
     contrat:{
-      path:"/fr/expliquer/contrat",
+      path:"/fr/expliquer/contrat/",
       title:"Expliquer un contrat — Langage simple | DocuMate",
       desc:"Collez ou importez un contrat et obtenez une explication en langage simple. Pas un conseil juridique.",
       h1:"Expliquer un contrat en langage simple",
@@ -986,9 +986,9 @@ async function ensureHeavyLibs(){
         ["Pouvez-vous expliquer une clause ?","Oui, posez une question sur un passage précis ; nous le résumons clairement."]
       ],
       alternates:[
-        ["en","https://documate.work/explain/contract"],
-        ["fr","https://documate.work/fr/expliquer/contrat"],
-        ["x-default","https://documate.work/fr/expliquer/contrat"]
+        ["en","https://documate.work/explain/contract/"],
+        ["fr","https://documate.work/fr/expliquer/contrat/"],
+        ["x-default","https://documate.work/fr/expliquer/contrat/"]
       ]
     }
   }};
