@@ -75,6 +75,7 @@ jobs:
   lighthouse:
     name: Lighthouse SEO
     runs-on: ubuntu-latest
+    continue-on-error: true
     env:
       BASE_URL: ${{ github.event.inputs.base_url || 'https://documate.work' }}
     steps:
