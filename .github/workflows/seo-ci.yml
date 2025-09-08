@@ -25,11 +25,28 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+      - name: Install Playwright module
+        run: npm i --no-save playwright@1.47.2
       - name: Install Playwright
         run: npx playwright@1.47.2 install --with-deps chromium
 
       - name: Run smoke checks
         run: node scripts/seo-smoke.js "$BASE_URL"
+
+  warmup:
+    name: Warmup
+    runs-on: ubuntu-latest
+    env:
+      BASE_URL: ${{ github.event.inputs.base_url || 'https://documate.work' }}
+    steps:
+      - name: Warm up site
+        run: |
+          set -e
+          code=$(curl -s -o /dev/null -w "%{http_code}" -IL "$BASE_URL")
+          if [ "$code" != "200" ]; then
+            echo "::error file=warmup::Unexpected status $code for $BASE_URL"
+            exit 1
+          fi
 
   assets:
     name: Assets 200
