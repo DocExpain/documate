@@ -5,17 +5,21 @@
 
   "redirects": [
     { "source": "/en",  "destination": "/", "permanent": true },
-    { "source": "/en/", "destination": "/", "permanent": true },
-    { "source": "/explain/:topic",       "destination": "/explain/:topic/",       "permanent": true },
-    { "source": "/fr/expliquer/:topic",  "destination": "/fr/expliquer/:topic/",  "permanent": true }
+    { "source": "/en/", "destination": "/", "permanent": true }
   ],
 
   "rewrites": [
-    { "source": "/",    "destination": "/index.html" },
+    { "source": "/", "destination": "/index.html" },
 
-    { "source": "/explain/:topic/",       "destination": "/index.html" },
-    { "source": "/fr/expliquer/:topic/",  "destination": "/fr/index.html" },
+    /* Topic pages — EN (both forms) */
+    { "source": "/explain/:topic",  "destination": "/index.html" },
+    { "source": "/explain/:topic/", "destination": "/index.html" },
 
+    /* Topic pages — FR (both forms) */
+    { "source": "/fr/expliquer/:topic",  "destination": "/fr/index.html" },
+    { "source": "/fr/expliquer/:topic/", "destination": "/fr/index.html" },
+
+    /* Language roots */
     { "source": "/ar",  "destination": "/ar/index.html" },
     { "source": "/ar/", "destination": "/ar/index.html" },
 
@@ -44,15 +48,7 @@
     { "source": "/ru/", "destination": "/ru/index.html" },
 
     { "source": "/zh",  "destination": "/zh/index.html" },
-    { "source": "/zh/", "destination": "/zh/index.html" },
-    { "source": "/explain/bill",        "destination": "/?topic=bill" },
-    { "source": "/explain/bill/",       "destination": "/?topic=bill" },
-    { "source": "/explain/contract",    "destination": "/?topic=contract" },
-    { "source": "/explain/contract/",   "destination": "/?topic=contract" },
-    { "source": "/fr/expliquer/facture", "destination": "/fr/?topic=facture" },
-    { "source": "/fr/expliquer/facture/", "destination": "/fr/?topic=facture" },
-    { "source": "/fr/expliquer/contrat", "destination": "/fr/?topic=contrat" },
-    { "source": "/fr/expliquer/contrat/", "destination": "/fr/?topic=contrat" }
+    { "source": "/zh/", "destination": "/zh/index.html" }
   ],
 
   "headers": [
