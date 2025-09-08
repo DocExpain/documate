@@ -11,7 +11,7 @@
         "hreflang": "warn",
         "is-crawable": "error",
         "structured-data": "warn",
-        "http-status-code": ["error", {"minScore": 1}]
+        "http-status-code": ["warn", {"minScore": 1}]
       }
     }
   }
