@@ -177,6 +177,22 @@ main.no-privacy { grid-template-columns: 1fr !important; }
   font-size: 14px;
 }
 .privacy-fab:focus { outline: 2px solid #2563eb; outline-offset: 2px; }
+/* When privacy is hidden, make the grid single-column and expand the left card */
+main.no-privacy{
+  grid-template-columns: minmax(0,1fr) !important; /* full width, no second column */
+}
+main.no-privacy > #work-card{
+  grid-column: 1 / -1;      /* span all columns */
+  width: 100%;
+}
+main.no-privacy > #privacy-card{
+  display: none !important; /* ensure no ghost column */
+}
+
+/* Mobile already uses 1 column, keep it explicit */
+@media (max-width: 980px){
+  main{ grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
@@ -202,7 +218,7 @@ main.no-privacy { grid-template-columns: 1fr !important; }
   </header>
 
   <main>
-    <section class="card">
+    <section class="card" id="work-card">
       <div class="hero">
         <h2 id="hero-title">Explain contracts, bills & official documents in plain language</h2>
         <p id="hero-sub">Free, private, multilingual. Not legal advice.</p>
