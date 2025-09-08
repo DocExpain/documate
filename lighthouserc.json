@@ -9,7 +9,7 @@
         "canonical": "error",
         "meta-description": "error",
         "hreflang": "warn",
-        "is-crawable": "error",
+        "is-crawlable": "error",
         "structured-data": "warn",
         "http-status-code": ["error", {"minScore": 1}]
       }
