@@ -5,42 +5,19 @@
 
   "redirects": [
     { "source": "/en",  "destination": "/", "permanent": true },
-    { "source": "/en/", "destination": "/", "permanent": true },
-
-    { "source": "/explain/bill",         "destination": "/explain/bill/",         "permanent": true },
-    { "source": "/explain/contract",     "destination": "/explain/contract/",     "permanent": true },
-    { "source": "/fr/expliquer/facture", "destination": "/fr/expliquer/facture/", "permanent": true },
-    { "source": "/fr/expliquer/contrat", "destination": "/fr/expliquer/contrat/", "permanent": true }
+    { "source": "/en/", "destination": "/", "permanent": true }
   ],
 
-  "rewrites": [
-    { "source": "/", "destination": "/index.html" },
+  "routes": [
+    { "src": "^/$", "dest": "/index.html" },
 
-    { "source": "/explain/bill/",         "destination": "/index.html" },
-    { "source": "/explain/contract/",     "destination": "/index.html" },
-    { "source": "/fr/expliquer/facture/", "destination": "/fr/index.html" },
-    { "source": "/fr/expliquer/contrat/", "destination": "/fr/index.html" },
+    { "src": "^/explain(/.*)?$",          "dest": "/index.html" },
+    { "src": "^/fr/expliquer(/.*)?$",     "dest": "/fr/index.html" },
 
-    { "source": "/ar",  "destination": "/ar/index.html" },
-    { "source": "/ar/", "destination": "/ar/index.html" },
-    { "source": "/bn",  "destination": "/bn/index.html" },
-    { "source": "/bn/", "destination": "/bn/index.html" },
-    { "source": "/de",  "destination": "/de/index.html" },
-    { "source": "/de/", "destination": "/de/index.html" },
-    { "source": "/es",  "destination": "/es/index.html" },
-    { "source": "/es/", "destination": "/es/index.html" },
-    { "source": "/fr",  "destination": "/fr/index.html" },
-    { "source": "/fr/", "destination": "/fr/index.html" },
-    { "source": "/hi",  "destination": "/hi/index.html" },
-    { "source": "/hi/", "destination": "/hi/index.html" },
-    { "source": "/it",  "destination": "/it/index.html" },
-    { "source": "/it/", "destination": "/it/index.html" },
-    { "source": "/pt",  "destination": "/pt/index.html" },
-    { "source": "/pt/", "destination": "/pt/index.html" },
-    { "source": "/ru",  "destination": "/ru/index.html" },
-    { "source": "/ru/", "destination": "/ru/index.html" },
-    { "source": "/zh",  "destination": "/zh/index.html" },
-    { "source": "/zh/", "destination": "/zh/index.html" }
+    { "src": "^/(ar|bn|de|es|hi|it|pt|ru|zh)/?$", "dest": "/$1/index.html" },
+
+    { "src": "^/(robots\\.txt|ads\\.txt|site\\.webmanifest|sitemap\\.xml)$", "dest": "/$1" },
+    { "src": "^/(favicon\\.ico|favicon-16\\.png|favicon-32\\.png|icon-192\\.png|icon-512\\.png|apple-touch-icon\\.png|og\\.jpg)$", "dest": "/$1" }
   ],
 
   "headers": [
