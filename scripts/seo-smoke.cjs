@@ -1,23 +1,16 @@
 // SPDX-License-Identifier: LicenseRef-SA-NC-1.0
-/* Smoke SEO minimal avec Puppeteer : vérifie canonical / et /explain/bill/ (+ fallback) */
+/* Smoke SEO avec Puppeteer : log console & pageerror, fallback, attente stricte de la canonical */
 const puppeteer = require("puppeteer");
 
 const BASE = (process.argv[2] || "https://documate.work/").replace(/\/+$/, "") + "/";
+function url(p){ return (BASE + p.replace(/^\/+/, "")).replace(/\/+$/, "/"); }
 
-function url(...parts){ return BASE + parts.join("").replace(/^\/+/, ""); }
-
-async function open(page, target) {
-  process.stdout.write(`\n→ Opening ${target}\n`);
-  const res = await page.goto(target, { waitUntil: "domcontentloaded", timeout: 30000 }).catch(() => null);
-  return res;
-}
-
-async function waitCanonical(page, timeout=20000) {
-  await page.waitForFunction(() => !!document.querySelector('link[rel="canonical"]'), { timeout });
-  return page.evaluate(() => {
+async function waitCanonicalMatches(page, startsWith, timeout=20000) {
+  await page.waitForFunction((prefix) => {
     const l = document.querySelector('link[rel="canonical"]');
-    return l ? l.href : null;
-  });
+    return !!(l && typeof l.href === 'string' && l.href.toLowerCase().startsWith(prefix.toLowerCase()));
+  }, { timeout }, startsWith);
+  return page.evaluate(() => document.querySelector('link[rel="canonical"]').href);
 }
 
 (async () => {
@@ -25,39 +18,37 @@ async function waitCanonical(page, timeout=20000) {
   const page = await browser.newPage();
   page.setDefaultTimeout(30000);
 
+  // instrumentation debug
+  page.on('console', msg => console.log('console:', msg.text()));
+  page.on('pageerror', err => console.error('PageError:', err.message));
+
   // 1) HOME
-  await open(page, url("/"));
-  const homeCanon = await waitCanonical(page);
-  if (homeCanon !== url("/")) {
-    console.error(`❌ ${url("/")} canonical mismatch (seen: "${homeCanon || "(missing)"}")`);
+  const home = url("/");
+  console.log(`\n→ Opening ${home}`);
+  await page.goto(home, { waitUntil: "domcontentloaded" });
+  const homeCanon = await waitCanonicalMatches(page, home, 15000).catch(() => null);
+  if (homeCanon !== home) {
+    console.error(`❌ ${home} canonical mismatch (seen: "${homeCanon || "(missing)"}")`);
     await browser.close(); process.exit(1);
   }
-  console.log(`✅ OK: ${url("/")} (canonical: ${homeCanon})`);
+  console.log(`✅ OK: ${home} (canonical: ${homeCanon})`);
 
-  // 2) TOPIC BILL
+  // 2) BILL (pretty + fallback)
   const pretty = url("/explain/bill/");
   const fallback = url("/index.html?topic=bill");
 
-  let res = await open(page, pretty);
-  let canon;
-  try {
-    canon = await waitCanonical(page, 15000);
-  } catch {
-    canon = null;
-  }
+  console.log(`→ Opening ${pretty}`);
+  await page.goto(pretty, { waitUntil: "domcontentloaded" });
+  let canon = await waitCanonicalMatches(page, pretty, 15000).catch(() => null);
 
-  const expect = pretty; // canonical attendue
-  const ok = typeof canon === "string" && canon.toLowerCase().startsWith(expect.toLowerCase());
-
-  if (!ok) {
+  if (!canon) {
     console.log(`   ↪ Fallback to ${fallback}`);
-    await open(page, fallback);
-    try {
-      canon = await waitCanonical(page, 20000);
-    } catch {}
+    await page.goto(fallback, { waitUntil: "domcontentloaded" });
+    // ici on attend que la canonical change VERS la pretty (script runtime)
+    canon = await waitCanonicalMatches(page, pretty, 20000).catch(() => null);
   }
 
-  if (typeof canon === "string" && canon.toLowerCase().startsWith(expect.toLowerCase())) {
+  if (canon && canon.toLowerCase().startsWith(pretty.toLowerCase())) {
     console.log(`✅ OK: ${pretty} (canonical: ${canon})`);
     await browser.close(); process.exit(0);
   } else {
