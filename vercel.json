@@ -18,10 +18,12 @@
 
     { "source": "/(.*\\.(?:js|css|png|jpg|jpeg|gif|svg|webp|ico|json|txt|woff|woff2|map))", "destination": "/$1" },
 
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/fr/", "destination": "/fr/index.html" },
+
     { "source": "/explain/:topic/", "destination": "/index.html?topic=:topic" },
     { "source": "/fr/expliquer/:topic/", "destination": "/fr/index.html?topic=:topic" },
 
-    { "source": "/fr/", "destination": "/fr/index.html" },
     { "source": "/(.*)", "destination": "/" }
   ],
   "headers": [
