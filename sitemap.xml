@@ -1,35 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xhtml="http://www.w3.org/1999/xhtml">
-  <url>
-    <loc>https://documate.work/</loc>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://documate.work/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://documate.work/"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://documate.work/fr/"/>
-  </url>
-  <url>
-    <loc>https://documate.work/explain/bill/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://documate.work/explain/bill/"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://documate.work/fr/expliquer/facture/"/>
-  </url>
-  <url>
-    <loc>https://documate.work/explain/contract/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://documate.work/explain/contract/"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://documate.work/fr/expliquer/contrat/"/>
-  </url>
-  <url>
-    <loc>https://documate.work/fr/</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://documate.work/fr/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://documate.work/"/>
-  </url>
-  <url>
-    <loc>https://documate.work/fr/expliquer/facture/</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://documate.work/fr/expliquer/facture/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://documate.work/explain/bill/"/>
-  </url>
-  <url>
-    <loc>https://documate.work/fr/expliquer/contrat/</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://documate.work/fr/expliquer/contrat/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://documate.work/explain/contract/"/>
-  </url>
+<!-- SPDX-License-Identifier: LicenseRef-SA-NC-1.0 -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://documate.work/</loc></url>
+  <url><loc>https://documate.work/explain/bill/</loc></url>
+  <url><loc>https://documate.work/explain/contract/</loc></url>
+  <url><loc>https://documate.work/fr/</loc></url>
+  <url><loc>https://documate.work/fr/expliquer/facture/</loc></url>
+  <url><loc>https://documate.work/fr/expliquer/contrat/</loc></url>
 </urlset>
