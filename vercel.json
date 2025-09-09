@@ -3,33 +3,43 @@
   "trailingSlash": true,
   "cleanUrls": true,
 
-  "rewrites": [
-    { "source": "/explain",              "destination": "/index.html" },
-    { "source": "/explain/:path*",       "destination": "/index.html" },
-
-    { "source": "/fr/expliquer",         "destination": "/fr/index.html" },
-    { "source": "/fr/expliquer/:path*",  "destination": "/fr/index.html" },
-
-    { "source": "/:lang(en|fr|ar|bn|de|es|hi|it|pt|ru|zh)",     "destination": "/:lang/index.html" },
-    { "source": "/:lang(en|fr|ar|bn|de|es|hi|it|pt|ru|zh)/",    "destination": "/:lang/index.html" }
+  "redirects": [
+    { "source": "/explain/:topic", "destination": "/explain/:topic/", "permanent": true },
+    { "source": "/fr/expliquer/:topic", "destination": "/fr/expliquer/:topic/", "permanent": true }
   ],
 
-  "redirects": [
-    { "source": "/en",  "destination": "/", "permanent": true },
-    { "source": "/en/", "destination": "/", "permanent": true }
+  "rewrites": [
+    /* Laisse passer les assets/fichiers tels quels */
+    { "source": "/(robots\\.txt|sitemap\\.xml|favicon\\.ico)", "destination": "/$1" },
+    { "source": "/(.*\\.(?:js|css|png|jpg|jpeg|gif|svg|webp|ico|json|txt|woff|woff2|map))", "destination": "/$1" },
+
+    /* Homes locales statiques (si tu les as exportées) */
+    { "source": "/ar/", "destination": "/ar/index.html" },
+    { "source": "/bn/", "destination": "/bn/index.html" },
+    { "source": "/de/", "destination": "/de/index.html" },
+    { "source": "/es/", "destination": "/es/index.html" },
+    { "source": "/fr/", "destination": "/fr/index.html" },
+    { "source": "/hi/", "destination": "/hi/index.html" },
+    { "source": "/it/", "destination": "/it/index.html" },
+    { "source": "/pt/", "destination": "/pt/index.html" },
+    { "source": "/ru/", "destination": "/ru/index.html" },
+    { "source": "/zh/", "destination": "/zh/index.html" },
+
+    /* Routes “topic” -> index + query (pour que l’app rende le bon écran) */
+    { "source": "/explain/:topic/", "destination": "/index.html?topic=:topic" },
+    { "source": "/fr/expliquer/:topic/", "destination": "/fr/index.html?topic=:topic" },
+
+    /* Fallback SPA: toute autre route -> index */
+    { "source": "/(.*)", "destination": "/index.html" }
   ],
 
   "headers": [
-    { "source": "/robots.txt",           "headers": [{ "key": "Content-Type", "value": "text/plain; charset=utf-8" }] },
-    { "source": "/ads.txt",              "headers": [{ "key": "Content-Type", "value": "text/plain; charset=utf-8" }] },
-    { "source": "/site.webmanifest",     "headers": [{ "key": "Content-Type", "value": "application/manifest+json; charset=utf-8" }] },
-    { "source": "/sitemap.xml",          "headers": [{ "key": "Content-Type", "value": "application/xml; charset=utf-8" }] },
-    { "source": "/favicon.ico",          "headers": [{ "key": "Content-Type", "value": "image/x-icon" }] },
-    { "source": "/favicon-16.png",       "headers": [{ "key": "Content-Type", "value": "image/png" }] },
-    { "source": "/favicon-32.png",       "headers": [{ "key": "Content-Type", "value": "image/png" }] },
-    { "source": "/icon-192.png",         "headers": [{ "key": "Content-Type", "value": "image/png" }] },
-    { "source": "/icon-512.png",         "headers": [{ "key": "Content-Type", "value": "image/png" }] },
-    { "source": "/apple-touch-icon.png", "headers": [{ "key": "Content-Type", "value": "image/png" }] },
-    { "source": "/og.jpg",               "headers": [{ "key": "Content-Type", "value": "image/jpeg" }] }
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "index, follow" },
+        { "key": "Cache-Control", "value": "public, max-age=0, s-maxage=600" }
+      ]
+    }
   ]
 }
