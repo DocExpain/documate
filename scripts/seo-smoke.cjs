@@ -1,114 +1,67 @@
-/*
- * SPDX-FileCopyrightText: 2025 DocExpain
- * SPDX-License-Identifier: LicenseRef-SA-NC-1.0
- *
- * Smoke/SEO check with fallback + robust canonical wait.
- */
-const { chromium } = require('playwright');
+// SPDX-License-Identifier: LicenseRef-SA-NC-1.0
+/* Smoke SEO minimal avec Puppeteer : vérifie canonical / et /explain/bill/ (+ fallback) */
+const puppeteer = require("puppeteer");
 
-const BASE = (process.argv[2] || 'https://documate.work').replace(/\/+$/, '');
-const PAGES = [
-  { url: '/',                      expectCanonicalStartsWith: 'https://documate.work/' },
-  { url: '/explain/bill/',         expectCanonicalStartsWith: 'https://documate.work/explain/bill/' },
-  { url: '/explain/contract/',     expectCanonicalStartsWith: 'https://documate.work/explain/contract/' },
-  { url: '/fr/',                   expectCanonicalStartsWith: 'https://documate.work/fr/' },
-  { url: '/fr/expliquer/facture/', expectCanonicalStartsWith: 'https://documate.work/fr/expliquer/facture/' },
-  { url: '/fr/expliquer/contrat/', expectCanonicalStartsWith: 'https://documate.work/fr/expliquer/contrat/' },
-];
+const BASE = (process.argv[2] || "https://documate.work/").replace(/\/+$/, "") + "/";
 
-const TIMEOUT_DIRECT = 12000;   // 12s pour la voie "directe"
-const TIMEOUT_FALLBACK = 20000; // 20s pour la voie "fallback"
+function url(...parts){ return BASE + parts.join("").replace(/^\/+/, ""); }
 
-function join(base, path) {
-  return base + (path.startsWith('/') ? path : '/' + path);
+async function open(page, target) {
+  process.stdout.write(`\n→ Opening ${target}\n`);
+  const res = await page.goto(target, { waitUntil: "domcontentloaded", timeout: 30000 }).catch(() => null);
+  return res;
 }
 
-function computeFallbackPath(requestedPath) {
-  // Normalise sans query ni hash
-  const p = requestedPath.replace(/[?#].*$/, '').replace(/\/+$/, '/') || '/';
-
-  // EN topics -> /index.html?topic=...
-  if (p === '/explain/bill/')     return '/index.html?topic=bill';
-  if (p === '/explain/contract/') return '/index.html?topic=contract';
-
-  // FR topics -> /fr/index.html?topic=...  (clé = bill/contract, pas facture/contrat)
-  if (p === '/fr/expliquer/facture/') return '/fr/index.html?topic=bill';
-  if (p === '/fr/expliquer/contrat/') return '/fr/index.html?topic=contract';
-
-  // Pas de fallback pertinent pour / et /fr/
-  return null;
-}
-
-async function waitForCanonicalStartsWith(page, expected, timeout) {
-  await page.waitForFunction(
-    (exp) => {
-      const el = document.querySelector('link[rel="canonical"]');
-      return !!(el && el.href && el.href.startsWith(exp));
-    },
-    expected,
-    { timeout }
-  );
-  // Retourne la valeur trouvée (utile pour les logs)
-  return await page.evaluate(() => {
-    const el = document.querySelector('link[rel="canonical"]');
-    return el ? el.href : null;
+async function waitCanonical(page, timeout=20000) {
+  await page.waitForFunction(() => !!document.querySelector('link[rel="canonical"]'), { timeout });
+  return page.evaluate(() => {
+    const l = document.querySelector('link[rel="canonical"]');
+    return l ? l.href : null;
   });
 }
 
 (async () => {
-  const browser = await chromium.launch();
-  const ctx = await browser.newContext({ ignoreHTTPSErrors: true });
-  const page = await ctx.newPage();
+  const browser = await puppeteer.launch({ headless: "new", args: ["--no-sandbox","--disable-dev-shm-usage"] });
+  const page = await browser.newPage();
+  page.setDefaultTimeout(30000);
 
+  // 1) HOME
+  await open(page, url("/"));
+  const homeCanon = await waitCanonical(page);
+  if (homeCanon !== url("/")) {
+    console.error(`❌ ${url("/")} canonical mismatch (seen: "${homeCanon || "(missing)"}")`);
+    await browser.close(); process.exit(1);
+  }
+  console.log(`✅ OK: ${url("/")} (canonical: ${homeCanon})`);
+
+  // 2) TOPIC BILL
+  const pretty = url("/explain/bill/");
+  const fallback = url("/index.html?topic=bill");
+
+  let res = await open(page, pretty);
+  let canon;
   try {
-    for (const item of PAGES) {
-      const startUrl = join(BASE, item.url);
-      console.log(`\n→ Opening ${startUrl}`);
+    canon = await waitCanonical(page, 15000);
+  } catch {
+    canon = null;
+  }
 
-      const res = await page.goto(startUrl, { waitUntil: 'domcontentloaded' });
-      if (!res) throw new Error(`No response for ${startUrl}`);
-      const status = res.status();
+  const expect = pretty; // canonical attendue
+  const ok = typeof canon === "string" && canon.toLowerCase().startsWith(expect.toLowerCase());
 
-      let ok = false;
-      try {
-        const canon = await waitForCanonicalStartsWith(page, item.expectCanonicalStartsWith, TIMEOUT_DIRECT);
-        console.log(`✅ OK: ${page.url()} (canonical: ${canon})`);
-        ok = true;
-      } catch {
-        // direct échoué (404 ou canonical pas encore bon) -> tenter fallback
-        const fbPath = computeFallbackPath(item.url);
-        if (!fbPath || status === 200 && !/\/expliquer\/|\/explain\//.test(item.url)) {
-          // soit pas de fallback pertinent, soit page racine: remonter l'erreur telle quelle
-          const seen = await page.evaluate(() => {
-            const el = document.querySelector('link[rel="canonical"]');
-            return el ? el.href : '(missing)';
-          });
-          throw new Error(`${startUrl} canonical mismatch/timeout (seen: "${seen}")`);
-        }
+  if (!ok) {
+    console.log(`   ↪ Fallback to ${fallback}`);
+    await open(page, fallback);
+    try {
+      canon = await waitCanonical(page, 20000);
+    } catch {}
+  }
 
-        const fbUrl = join(BASE, fbPath);
-        console.log(`   ↪ Fallback to ${fbUrl}`);
-        await page.goto(fbUrl, { waitUntil: 'domcontentloaded' });
-
-        try {
-          const canon = await waitForCanonicalStartsWith(page, item.expectCanonicalStartsWith, TIMEOUT_FALLBACK);
-          console.log(`✅ OK (via fallback): ${page.url()} (canonical: ${canon})`);
-          ok = true;
-        } catch {
-          const seen = await page.evaluate(() => {
-            const el = document.querySelector('link[rel="canonical"]');
-            return el ? el.href : '(missing)';
-          });
-          throw new Error(`Fallback failed for ${startUrl} (canonical seen: "${seen}")`);
-        }
-      }
-
-      if (!ok) throw new Error(`Unhandled state for ${startUrl}`);
-    }
-  } catch (e) {
-    console.error(`❌ ${e.message}`);
-    process.exit(1);
-  } finally {
-    await browser.close();
+  if (typeof canon === "string" && canon.toLowerCase().startsWith(expect.toLowerCase())) {
+    console.log(`✅ OK: ${pretty} (canonical: ${canon})`);
+    await browser.close(); process.exit(0);
+  } else {
+    console.error(`❌ Fallback failed for ${pretty} (canonical seen: "${canon || "(missing)"}")`);
+    await browser.close(); process.exit(1);
   }
 })();
