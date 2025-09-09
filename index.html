@@ -1,38 +1,71 @@
-<!--
-SPDX-FileCopyrightText: 2025 DocExpain
-SPDX-License-Identifier: LicenseRef-SA-NC-1.0
--->
 <!doctype html>
+<!-- SPDX-License-Identifier: LicenseRef-SA-NC-1.0 -->
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <link id="canonical-link" rel="canonical" href="https://documate.work/">
+  <script id="canonical-bootstrap">
+(function () {
+  var ORIGIN = location.origin;
+  var path = (location.pathname.replace(/\/+$/, '/') || '/');
+  var lang = path.startsWith('/fr/') ? 'fr' : 'en';
+
+  // Déduction du topic key (bill|contract) depuis ?topic=... ou depuis le pathname "propre"
+  var params = new URLSearchParams(location.search);
+  function keyFromQuery() {
+    var t = (params.get('topic') || '').toLowerCase();
+    return (t === 'bill' || t === 'contract') ? t : null;
+  }
+  function keyFromPath() {
+    var m = path.match(/^\/explain\/([^/]+)\/$/);
+    if (m) {
+      var en = m[1].toLowerCase();
+      if (en === 'bill' || en === 'contract') return en;
+    }
+    m = path.match(/^\/fr\/expliquer\/([^/]+)\/$/);
+    if (m) {
+      var fr = m[1].toLowerCase();
+      if (fr === 'facture') return 'bill';
+      if (fr === 'contrat') return 'contract';
+    }
+    return null;
+  }
+  var key = keyFromQuery() || keyFromPath();
+
+  // Construit l'URL canonique "jolie" à partir de la clé
+  function canonicalHref(lang, key) {
+    if (!key) return ORIGIN + (lang === 'fr' ? '/fr/' : '/');
+    if (lang === 'fr') {
+      var frSlug = (key === 'bill') ? 'facture' : 'contrat';
+      return ORIGIN + '/fr/expliquer/' + frSlug + '/';
+    } else {
+      return ORIGIN + '/explain/' + key + '/';
+    }
+  }
+  var canonicalAbs = canonicalHref(lang, key);
+
+  // Met à jour/insère la canonical immédiatement
+  var link = document.getElementById('canonical-link') || document.querySelector('link[rel="canonical"]');
+  if (!link) {
+    link = document.createElement('link');
+    link.setAttribute('rel', 'canonical');
+    link.id = 'canonical-link';
+    document.head.appendChild(link);
+  }
+  link.setAttribute('href', canonicalAbs);
+
+  // Aligne og:url et twitter:url si présents
+  var og = document.querySelector('meta[property="og:url"]');
+  if (og) og.setAttribute('content', canonicalAbs);
+  var tw = document.querySelector('meta[name="twitter:url"]');
+  if (tw) tw.setAttribute('content', canonicalAbs);
+
+  // Expose (optionnel)
+  window.__DOCUMATE_TOPIC__ = key || null;
+  window.__DOCUMATE_CANONICAL__ = canonicalAbs;
+})();
+</script>
   <meta name="robots" content="index,follow">
-  <script>
-    (function () {
-      // Canonical absolu forcé sur le domaine de prod
-      var HOST = 'https://documate.work';
-      var p = location.pathname;
-
-      // /explain/:topic/ -> canonical identique avec slash final
-      var m = p.match(/^\/explain\/([^\/]+)\/?$/);
-      if (m) {
-        document.getElementById('canonical-link').href = HOST + '/explain/' + m[1] + '/';
-        return;
-      }
-
-      // /fr/expliquer/:topic/
-      m = p.match(/^\/fr\/expliquer\/([^\/]+)\/?$/);
-      if (m) {
-        document.getElementById('canonical-link').href = HOST + '/fr/expliquer/' + m[1] + '/';
-        return;
-      }
-
-      // Homes locales et racine
-      if (p.startsWith('/fr/')) { document.getElementById('canonical-link').href = HOST + '/fr/'; return; }
-      document.getElementById('canonical-link').href = HOST + '/';
-    })();
-  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <!-- Google Search Console -->
