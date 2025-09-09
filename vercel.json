@@ -1,39 +1,74 @@
-{
-  "version": 2,
-  "trailingSlash": true,
-  "cleanUrls": true,
+/*
+ * SPDX-FileCopyrightText: 2025 DocExpain
+ * SPDX-License-Identifier: LicenseRef-SA-NC-1.0
+ *
+ * Smoke/SEO check with fallback + robust canonical wait.
+ */
+const { chromium } = require('playwright');
 
-  "redirects": [
-    { "source": "/explain/:topic", "destination": "/explain/:topic/", "permanent": true },
-    { "source": "/fr/expliquer/:topic", "destination": "/fr/expliquer/:topic/", "permanent": true }
-  ],
+const BASE = (process.argv[2] || 'https://documate.work').replace(/\/+$/, '');
+const PAGES = [
+  { url: '/',                      expectCanonicalStartsWith: 'https://documate.work/' },
+  { url: '/explain/bill/',         expectCanonicalStartsWith: 'https://documate.work/explain/bill/' },
+  { url: '/explain/contract/',     expectCanonicalStartsWith: 'https://documate.work/explain/contract/' },
+  { url: '/fr/',                   expectCanonicalStartsWith: 'https://documate.work/fr/' },
+  { url: '/fr/expliquer/facture/', expectCanonicalStartsWith: 'https://documate.work/fr/expliquer/facture/' },
+  { url: '/fr/expliquer/contrat/', expectCanonicalStartsWith: 'https://documate.work/fr/expliquer/contrat/' },
+];
 
-  "rewrites": [
-    { "source": "/robots.txt", "destination": "/robots.txt" },
-    { "source": "/sitemap.xml", "destination": "/sitemap.xml" },
-    { "source": "/favicon.ico", "destination": "/favicon.ico" },
-    { "source": "/site.webmanifest", "destination": "/site.webmanifest" },
-    { "source": "/icon-192.png", "destination": "/icon-192.png" },
-    { "source": "/icon-512.png", "destination": "/icon-512.png" },
-    { "source": "/apple-touch-icon.png", "destination": "/apple-touch-icon.png" },
-    { "source": "/og.jpg", "destination": "/og.jpg" },
+const TIMEOUT_DIRECT = 12000;   // 12s pour la voie "directe"
+const TIMEOUT_FALLBACK = 20000; // 20s pour la voie "fallback"
 
-    { "source": "/(.*\\.(?:js|css|png|jpg|jpeg|gif|svg|webp|ico|json|txt|woff|woff2|map))", "destination": "/$1" },
-
-    { "source": "/explain/:topic/", "destination": "/?topic=:topic" },
-    { "source": "/fr/expliquer/:topic/", "destination": "/fr/?topic=:topic" },
-
-    { "source": "/fr/", "destination": "/fr/index.html" },
-    { "source": "/(.*)", "destination": "/" }
-  ],
-
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        { "key": "X-Robots-Tag", "value": "index, follow" },
-        { "key": "Cache-Control", "value": "public, max-age=0, s-maxage=600" }
-      ]
-    }
-  ]
+function join(base, path) {
+  return base + (path.startsWith('/') ? path : '/' + path);
 }
+
+function computeFallbackPath(requestedPath) {
+  // Normalise sans query ni hash
+  const p = requestedPath.replace(/[?#].*$/, '').replace(/\/+$/, '/') || '/';
+
+  // EN topics -> /index.html?topic=...
+  if (p === '/explain/bill/')     return '/index.html?topic=bill';
+  if (p === '/explain/contract/') return '/index.html?topic=contract';
+
+  // FR topics -> /fr/index.html?topic=...  (clé = bill/contract, pas facture/contrat)
+  if (p === '/fr/expliquer/facture/') return '/fr/index.html?topic=bill';
+  if (p === '/fr/expliquer/contrat/') return '/fr/index.html?topic=contract';
+
+  // Pas de fallback pertinent pour / et /fr/
+  return null;
+}
+
+async function waitForCanonicalStartsWith(page, expected, timeout) {
+  await page.waitForFunction(
+    (exp) => {
+      const el = document.querySelector('link[rel="canonical"]');
+      return !!(el && el.href && el.href.startsWith(exp));
+    },
+    expected,
+    { timeout }
+  );
+  // Retourne la valeur trouvée (utile pour les logs)
+  return await page.evaluate(() => {
+    const el = document.querySelector('link[rel="canonical"]');
+    return el ? el.href : null;
+  });
+}
+
+(async () => {
+  const browser = await chromium.launch();
+  const ctx = await browser.newContext({ ignoreHTTPSErrors: true });
+  const page = await ctx.newPage();
+
+  try {
+    for (const item of PAGES) {
+      const startUrl = join(BASE, item.url);
+      console.log(`\n→ Opening ${startUrl}`);
+
+      const res = await page.goto(startUrl, { waitUntil: 'domcontentloaded' });
+      if (!res) throw new Error(`No response for ${startUrl}`);
+      const status = res.status();
+
+      let ok = false;
+      try {
+        const canon = await waitForCa
