@@ -3,51 +3,54 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8" />
-  <!-- Canonical hardening START -->
   <script id="canonical-bootstrap">
-(function () {
-  var ORIGIN = location.origin;
-  var PATH = (location.pathname.replace(/\/+$/, '/') || '/');
-  var LANG = PATH.startsWith('/fr/') ? 'fr' : 'en';
-  var params = new URLSearchParams(location.search);
-  function keyFromQuery(){ var t=(params.get('topic')||'').toLowerCase(); return (t==='bill'||t==='contract')?t:null; }
-  function keyFromPath(){
-    var m = PATH.match(/^\/explain\/([^/]+)\/$/); if (m){ var en=m[1].toLowerCase(); if (en==='bill'||en==='contract') return en; }
-    m = PATH.match(/^\/fr\/expliquer\/([^/]+)\/$/); if (m){ var fr=m[1].toLowerCase(); if (fr==='facture') return 'bill'; if (fr==='contrat') return 'contract'; }
-    return null;
-  }
-  var key = keyFromQuery() || keyFromPath();
-  var canonicalAbs = !key
-    ? ORIGIN + (LANG==='fr'?'/fr/':'/')
-    : (LANG==='fr'
-       ? ORIGIN + '/fr/expliquer/' + (key==='bill'?'facture':'contrat') + '/'
-       : ORIGIN + '/explain/' + key + '/');
-
-  // 1) Retire toutes les canonical existantes
-  var olds = Array.prototype.slice.call(document.querySelectorAll('link[rel="canonical"]'));
-  for (var i=0; i<olds.length; i++) { olds[i].parentNode.removeChild(olds[i]); }
-
-  // 2) Crée UNE seule canonical, tout en haut du <head>
-  var link = document.createElement('link');
-  link.rel = 'canonical';
-  link.id = 'canonical-link';
-  link.href = canonicalAbs;
-  document.head.insertBefore(link, document.head.firstChild);
-
-  // 3) Aligne og:url et twitter:url
-  var og = document.querySelector('meta[property="og:url"]');
-  if (!og) { og = document.createElement('meta'); og.setAttribute('property','og:url'); document.head.appendChild(og); }
-  og.setAttribute('content', canonicalAbs);
-
-  var tw = document.querySelector('meta[name="twitter:url"]');
-  if (!tw) { tw = document.createElement('meta'); tw.setAttribute('name','twitter:url'); document.head.appendChild(tw); }
-  tw.setAttribute('content', canonicalAbs);
-
-  window.__DOCUMATE_TOPIC__ = key || null;
-  window.__DOCUMATE_CANONICAL__ = canonicalAbs;
-})();
+  (function () {
+    try {
+      var ORIGIN = location.origin;
+      var PATH = (location.pathname.replace(/\/+$/, '/') || '/');
+      var LANG = PATH.startsWith('/fr/') ? 'fr' : 'en';
+      var params = new URLSearchParams(location.search);
+  
+      function keyFromQuery(){ var t=(params.get('topic')||'').toLowerCase(); return (t==='bill'||t==='contract')?t:null; }
+      function keyFromPath(){
+        var m = PATH.match(/^\/explain\/([^/]+)\/$/);
+        if (m) { var en=m[1].toLowerCase(); if (en==='bill'||en==='contract') return en; }
+        m = PATH.match(/^\/fr\/expliquer\/([^/]+)\/$/);
+        if (m) { var fr=m[1].toLowerCase(); if (fr==='facture') return 'bill'; if (fr==='contrat') return 'contract'; }
+        return null;
+      }
+  
+      var key = keyFromQuery() || keyFromPath();
+      var canonicalAbs;
+      if (!key) {
+        canonicalAbs = ORIGIN + (LANG==='fr'?'/fr/':'/');
+      } else if (LANG==='fr') {
+        canonicalAbs = ORIGIN + '/fr/expliquer/' + (key==='bill'?'facture':'contrat') + '/';
+      } else {
+        canonicalAbs = ORIGIN + '/explain/' + key + '/';
+      }
+  
+      // 1) retire toutes les canonical existantes
+      document.querySelectorAll('link[rel="canonical"]').forEach(function(n){ n.parentNode.removeChild(n); });
+  
+      // 2) crée UNE seule canonical, tout en haut du <head>
+      var link = document.createElement('link');
+      link.rel='canonical'; link.href=canonicalAbs; link.id='canonical-link';
+      document.head.insertBefore(link, document.head.firstChild);
+  
+      // 3) aligne og:url & twitter:url
+      var og=document.querySelector('meta[property="og:url"]')||document.createElement('meta');
+      og.setAttribute('property','og:url'); og.setAttribute('content', canonicalAbs);
+      if(!og.parentNode) document.head.appendChild(og);
+      var tw=document.querySelector('meta[name="twitter:url"]')||document.createElement('meta');
+      tw.setAttribute('name','twitter:url'); tw.setAttribute('content', canonicalAbs);
+      if(!tw.parentNode) document.head.appendChild(tw);
+  
+      window.__DOCUMATE_TOPIC__ = key || null;
+      window.__DOCUMATE_CANONICAL__ = canonicalAbs;
+    } catch(e) { try { console.error('canonical-bootstrap error', e); } catch(_){} }
+  })();
   </script>
-  <!-- Canonical hardening END -->
   <meta property="og:url" content="https://documate.work/fr/">
   <meta name="twitter:url" content="https://documate.work/fr/">
   <meta name="robots" content="index,follow">
@@ -318,7 +321,7 @@ main.no-privacy {
         <a href="/fr/expliquer/facture/">Expliquer une facture</a> ·
         <a href="/fr/expliquer/contrat/">Expliquer un contrat</a>
       </nav>
-      <!-- File input (customized & translatable) -->
+  <!-- File input (customized & translatable) -->
 <div class="file-row">
   <input type="file" id="file" accept=".pdf,.txt,.docx,.png,.jpg,.jpeg,.webp" class="file-native" />
   <label for="file" class="btn" id="btnChooseFile">Choose a file</label>
@@ -332,7 +335,7 @@ main.no-privacy {
       <textarea id="docText" placeholder="Paste the content of your document…"></textarea>
       <div class="hint" id="paste-hint">Your document stays on your device until you click an action below.</div>      </div>
 
-      <!-- Region / Country -->
+  <!-- Region / Country -->
       <label for="region" style="margin-top:12px;" id="label-region">Region / Country (optional, for local rules)</label>
       <input type="text" id="region" placeholder="e.g., United States / California" />
 
@@ -360,14 +363,14 @@ main.no-privacy {
       <div id="result" class="results" aria-live="polite"></div>
 
       <div class="ads">
-        <!-- Ad slot (render only after consent + push) -->
+  <!-- Ad slot (render only after consent + push) -->
         <ins class="adsbygoogle ad-slot"
              style="display:block"
              data-ad-client="ca-pub-9411950027978678"
              data-ad-slot="PASTE_YOUR_AD_SLOT_ID"
              data-ad-format="auto"
              data-full-width-responsive="true"></ins>
-        <script>
+  <script>
           if (location.search.includes("adtest=1")) {
             document.querySelectorAll("ins.adsbygoogle").forEach(i => i.setAttribute("data-adtest","on"));
           }
@@ -382,7 +385,7 @@ main.no-privacy {
       <div id="faq"></div>
     </section>
 
-      <!-- Privacy & Trust (collapsible, accessible, no-JS needed) -->
+  <!-- Privacy & Trust (collapsible, accessible, no-JS needed) -->
   <details id="privacy-card" class="card legal" open>
     <summary class="privacy-summary" role="button">
       <span class="privacy-title" id="privacy-title">Privacy & Trust</span>
