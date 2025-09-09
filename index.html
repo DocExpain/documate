@@ -4,49 +4,57 @@
 <head>
   <meta charset="utf-8" />
   <script id="canonical-bootstrap">
-(function () {
-  try {
-    var ORIGIN = location.origin;
-    var PATH = (location.pathname.replace(/\/+$/, '/') || '/');
-    var LANG = PATH.startsWith('/fr/') ? 'fr' : 'en';
-    var params = new URLSearchParams(location.search);
+  (function () {
+    try {
+      var ORIGIN = location.origin;
+      var PATH = (location.pathname.replace(/\/+$/, '/') || '/');
+      var LANG = PATH.startsWith('/fr/') ? 'fr' : 'en';
+      var params = new URLSearchParams(location.search);
 
-    function keyFromQuery(){ var t=(params.get('topic')||'').toLowerCase(); return (t==='bill'||t==='contract')?t:null; }
-    function keyFromPath(){
-      var m = PATH.match(/^\/explain\/([^/]+)\/$/);
-      if (m) { var en=m[1].toLowerCase(); if (en==='bill'||en==='contract') return en; }
-      m = PATH.match(/^\/fr\/expliquer\/([^/]+)\/$/);
-      if (m) { var fr=m[1].toLowerCase(); if (fr==='facture') return 'bill'; if (fr==='contrat') return 'contract'; }
-      return null;
-    }
+      function keyFromQuery() {
+        var t=(params.get('topic')||'').toLowerCase();
+        return (t==='bill'||t==='contract') ? t : null;
+      }
+      function keyFromPath() {
+        var m = PATH.match(/^\/explain\/([^/]+)\/$/);
+        if (m) { var en=m[1].toLowerCase(); if (en==='bill'||en==='contract') return en; }
+        m = PATH.match(/^\/fr\/expliquer\/([^/]+)\/$/);
+        if (m) { var fr=m[1].toLowerCase(); if (fr==='facture') return 'bill'; if (fr==='contrat') return 'contract'; }
+        return null;
+      }
 
-    var key = keyFromQuery() || keyFromPath();
-    var canonicalAbs;
-    if (!key) canonicalAbs = ORIGIN + (LANG==='fr'?'/fr/':'/');
-    else canonicalAbs = (LANG==='fr')
-      ? ORIGIN + '/fr/expliquer/' + (key==='bill'?'facture':'contrat') + '/'
-      : ORIGIN + '/explain/' + key + '/';
+      var key = keyFromQuery() || keyFromPath();
+      var canonicalAbs;
+      if (!key) {
+        canonicalAbs = ORIGIN + (LANG==='fr'?'/fr/':'/');
+      } else {
+        canonicalAbs = (LANG==='fr')
+          ? ORIGIN + '/fr/expliquer/' + (key==='bill'?'facture':'contrat') + '/'
+          : ORIGIN + '/explain/' + key + '/';
+      }
 
-    // retire toutes les canonical existantes
-    document.querySelectorAll('link[rel="canonical"]').forEach(function(n){ n.remove(); });
+      // retire toutes les canonicals existantes
+      document.querySelectorAll('link[rel="canonical"]').forEach(function(n){ n.remove(); });
 
-    // crée UNE seule canonical en tête de <head>
-    var link = document.createElement('link');
-    link.rel='canonical'; link.href=canonicalAbs; link.id='canonical-link';
-    document.head.insertBefore(link, document.head.firstChild);
+      // crée UNE seule canonique, tout en haut du <head>
+      var link=document.createElement('link');
+      link.rel='canonical'; link.href=canonicalAbs; link.id='canonical-link';
+      document.head.insertBefore(link, document.head.firstChild);
 
-    // aligne og:url & twitter:url
-    var og=document.querySelector('meta[property="og:url"]')||document.createElement('meta');
-    og.setAttribute('property','og:url'); og.setAttribute('content', canonicalAbs);
-    if(!og.parentNode) document.head.appendChild(og);
-    var tw=document.querySelector('meta[name="twitter:url"]')||document.createElement('meta');
-    tw.setAttribute('name','twitter:url'); tw.setAttribute('content', canonicalAbs);
-    if(!tw.parentNode) document.head.appendChild(tw);
+      // aligne og:url & twitter:url
+      var og=document.querySelector('meta[property="og:url"]')||document.createElement('meta');
+      og.setAttribute('property','og:url'); og.setAttribute('content', canonicalAbs);
+      if(!og.parentNode) document.head.appendChild(og);
 
-    window.__DOCUMATE_TOPIC__ = key || null;
-    window.__DOCUMATE_CANONICAL__ = canonicalAbs;
-  } catch(e) { try { console.error('canonical-bootstrap error', e); } catch(_){} }
-})();
+      var tw=document.querySelector('meta[name="twitter:url"]')||document.createElement('meta');
+      tw.setAttribute('name','twitter:url'); tw.setAttribute('content', canonicalAbs);
+      if(!tw.parentNode) document.head.appendChild(tw);
+
+      // debug utile
+      window.__DOCUMATE_TOPIC__ = key || null;
+      window.__DOCUMATE_CANONICAL__ = canonicalAbs;
+    } catch(e) { try { console.error('canonical-bootstrap error', e); } catch(_){} }
+  })();
   </script>
   <meta property="og:url" content="https://documate.work/">
   <meta name="twitter:url" content="https://documate.work/">
