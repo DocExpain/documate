@@ -2,37 +2,21 @@
   "version": 2,
   "trailingSlash": true,
   "cleanUrls": true,
-
   "redirects": [
     { "source": "/explain/:topic", "destination": "/explain/:topic/", "permanent": true },
     { "source": "/fr/expliquer/:topic", "destination": "/fr/expliquer/:topic/", "permanent": true }
   ],
-
   "rewrites": [
-    /* Laisse passer les assets/fichiers tels quels */
-    { "source": "/(robots\\.txt|sitemap\\.xml|favicon\\.ico)", "destination": "/$1" },
-    { "source": "/(.*\\.(?:js|css|png|jpg|jpeg|gif|svg|webp|ico|json|txt|woff|woff2|map))", "destination": "/$1" },
+    { "source": "/robots.txt", "destination": "/robots.txt" },
+    { "source": "/sitemap.xml", "destination": "/sitemap.xml" },
+    { "source": "/favicon.ico", "destination": "/favicon.ico" },
 
-    /* Homes locales statiques (si tu les as exportées) */
-    { "source": "/ar/", "destination": "/ar/index.html" },
-    { "source": "/bn/", "destination": "/bn/index.html" },
-    { "source": "/de/", "destination": "/de/index.html" },
-    { "source": "/es/", "destination": "/es/index.html" },
-    { "source": "/fr/", "destination": "/fr/index.html" },
-    { "source": "/hi/", "destination": "/hi/index.html" },
-    { "source": "/it/", "destination": "/it/index.html" },
-    { "source": "/pt/", "destination": "/pt/index.html" },
-    { "source": "/ru/", "destination": "/ru/index.html" },
-    { "source": "/zh/", "destination": "/zh/index.html" },
-
-    /* Routes “topic” -> index + query (pour que l’app rende le bon écran) */
     { "source": "/explain/:topic/", "destination": "/index.html?topic=:topic" },
     { "source": "/fr/expliquer/:topic/", "destination": "/fr/index.html?topic=:topic" },
 
-    /* Fallback SPA: toute autre route -> index */
+    { "source": "/(.*\\.(?:js|css|png|jpg|jpeg|gif|svg|webp|ico|json|txt|woff|woff2|map))", "destination": "/$1" },
     { "source": "/(.*)", "destination": "/index.html" }
   ],
-
   "headers": [
     {
       "source": "/(.*)",
