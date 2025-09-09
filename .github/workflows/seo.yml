@@ -13,17 +13,25 @@ on:
       - "scripts/**"
   workflow_dispatch:
 
+concurrency:
+  group: seo-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   spdx_fix:
     name: SPDX quick-fix
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      # ⚠️ pas de cache: "npm" => plus d'erreur de lockfile manquant
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: "npm"
-      - run: npm i globby@14
+      - name: Install deps for script
+        run: |
+          set -e
+          [ -f package.json ] || npm init -y -q
+          npm i globby@14
       - name: Run SPDX fixer
         run: node scripts/spdx-fix.cjs
 
@@ -73,22 +81,17 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: "npm"
       - name: Cache Puppeteer Chromium
         uses: actions/cache@v4
         with:
           path: ~/.cache/puppeteer
-          key: puppeteer-${{ runner.os }}-v1
-      - name: Installer Puppeteer (sans Playwright)
+          key: puppeteer-${{ runner.os }}-v3
+      - name: Install Puppeteer (no Playwright)
         run: |
           set -e
-          # Ne rien installer de Playwright. On force Puppeteer uniquement :
-          npm pkg delete devDependencies."@playwright/test" 2>/dev/null || true
-          npm pkg delete dependencies."@playwright/test" 2>/dev/null || true
-          npm pkg delete devDependencies."playwright" 2>/dev/null || true
-          npm pkg delete dependencies."playwright" 2>/dev/null || true
+          [ -f package.json ] || npm init -y -q
           npm i puppeteer@22
-      - name: Lancer les smoke checks
+      - name: Run smoke checks
         env:
           NODE_OPTIONS: "--max-old-space-size=512"
         run: node scripts/seo-smoke.cjs "https://documate.work/"
