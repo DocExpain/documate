@@ -64,24 +64,33 @@ jobs:
           done
 
   smoke:
+    name: Smoke
     runs-on: ubuntu-latest
     needs: assets
+    timeout-minutes: 7
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: "npm"
-      - name: Cache Puppeteer
+      - name: Cache Puppeteer Chromium
         uses: actions/cache@v4
         with:
           path: ~/.cache/puppeteer
           key: puppeteer-${{ runner.os }}-v1
-      - name: Install deps
+      - name: Installer Puppeteer (sans Playwright)
         run: |
-          npm -v || true
-          [ -f package-lock.json ] && npm ci || npm i puppeteer@22
-      - name: Run smoke checks
+          set -e
+          # Ne rien installer de Playwright. On force Puppeteer uniquement :
+          npm pkg delete devDependencies."@playwright/test" 2>/dev/null || true
+          npm pkg delete dependencies."@playwright/test" 2>/dev/null || true
+          npm pkg delete devDependencies."playwright" 2>/dev/null || true
+          npm pkg delete dependencies."playwright" 2>/dev/null || true
+          npm i puppeteer@22
+      - name: Lancer les smoke checks
+        env:
+          NODE_OPTIONS: "--max-old-space-size=512"
         run: node scripts/seo-smoke.cjs "https://documate.work/"
 
   lighthouse:

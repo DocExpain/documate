@@ -5,6 +5,9 @@
   "type": "module",
   "dependencies": {
     "openai": "^4.56.0"
+  },
+  "devDependencies": {
+    "puppeteer": "22.x"
   }
 }
 
