@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 /**
- * SPDX quick-fix: add missing SPDX header to common text-based files.
- * Non-destructive, idempotent.
+ * SPDX quick-fix: add missing SPDX header to text-based files (idempotent).
  */
 import { readFileSync, writeFileSync } from "node:fs";
 import { globby } from "globby";
@@ -22,15 +21,14 @@ for (const f of files) {
   const isYaml = f.endsWith(".yml") || f.endsWith(".yaml");
   const isJsTs = /\.(c|m)?js$|\.tsx?$/.test(f);
   let header;
-  if (isHtml) header = `<!-- ${SPDX} -->\n`;
-  else if (isCss) header = `/* ${SPDX} */\n`;
-  else if (isYaml) header = `# ${SPDX}\n`;
-  else if (isSh) header = `# ${SPDX}\n`;
-  else if (isJsTs) header = `// ${SPDX}\n`;
-  else header = `# ${SPDX}\n`;
-  // place after <!doctype html> if present, else at start
+  if (isHtml) header = `<!-- ${SPDX} -->\\n`;
+  else if (isCss) header = `/* ${SPDX} */\\n`;
+  else if (isYaml) header = `# ${SPDX}\\n`;
+  else if (isSh) header = `# ${SPDX}\\n`;
+  else if (isJsTs) header = `// ${SPDX}\\n`;
+  else header = `# ${SPDX}\\n`;
   if (isHtml && /^<!doctype/i.test(s)) {
-    s = s.replace(/^(<!doctype[^>]*>\s*)/i, `$1${header}`);
+    s = s.replace(/^(<!doctype[^>]*>\\s*)/i, `$1${header}`);
   } else {
     s = header + s;
   }
