@@ -22,14 +22,22 @@ function join(base, path) {
   const browser = await chromium.launch();
   const ctx = await browser.newContext({ ignoreHTTPSErrors: true });
   const page = await ctx.newPage();
+  page.setDefaultTimeout(10000); // 10s pour les attentes
 
   try {
     for (const p of PAGES) {
       const startUrl = join(BASE, p.url);
-      const res = await page.goto(startUrl, { waitUntil: 'domcontentloaded' });
+      console.log(`→ Opening ${startUrl}`);
+      const res = await page.goto(startUrl, { waitUntil: 'networkidle' });
       if (!res) throw new Error(`No response for ${startUrl}`);
       const status = res.status();
       if (status !== 200) throw new Error(`${startUrl} returned ${status}`);
+
+      // Attendre que la balise canonical soit réécrite par le JS de la page
+      await page.waitForFunction((expected) => {
+        const el = document.querySelector('link[rel="canonical"]');
+        return !!el && typeof el.href === 'string' && el.href.startsWith(expected);
+      }, p.expectCanonicalStartsWith);
 
       const canonical = await page.evaluate(() => {
         const el = document.querySelector('link[rel="canonical"]');
@@ -39,7 +47,8 @@ function join(base, path) {
       if (!canonical.startsWith(p.expectCanonicalStartsWith)) {
         throw new Error(`${page.url()} canonical mismatch: got "${canonical}" expected startsWith "${p.expectCanonicalStartsWith}"`);
       }
-      console.log(`✅ OK: ${page.url()}`);
+
+      console.log(`✅ OK: ${page.url()} (canonical: ${canonical})`);
     }
   } catch (e) {
     console.error(`❌ ${e.message}`);
