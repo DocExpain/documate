@@ -2,12 +2,10 @@
   "version": 2,
   "trailingSlash": true,
   "cleanUrls": true,
-
   "redirects": [
     { "source": "/explain/:topic", "destination": "/explain/:topic/", "permanent": true },
     { "source": "/fr/expliquer/:topic", "destination": "/fr/expliquer/:topic/", "permanent": true }
   ],
-
   "rewrites": [
     { "source": "/robots.txt", "destination": "/robots.txt" },
     { "source": "/sitemap.xml", "destination": "/sitemap.xml" },
@@ -20,13 +18,12 @@
 
     { "source": "/(.*\\.(?:js|css|png|jpg|jpeg|gif|svg|webp|ico|json|txt|woff|woff2|map))", "destination": "/$1" },
 
-    { "source": "/explain/:topic/", "destination": "/?topic=:topic" },
-    { "source": "/fr/expliquer/:topic/", "destination": "/fr/?topic=:topic" },
+    { "source": "/explain/:topic/", "destination": "/index.html?topic=:topic" },
+    { "source": "/fr/expliquer/:topic/", "destination": "/fr/index.html?topic=:topic" },
 
     { "source": "/fr/", "destination": "/fr/index.html" },
     { "source": "/(.*)", "destination": "/" }
   ],
-
   "headers": [
     {
       "source": "/(.*)",
