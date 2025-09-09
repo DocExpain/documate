@@ -1,31 +1,24 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
+
+  // Force Vercel à prendre /public comme sortie (sinon 404 sur /)
+  "framework": null,
+  "outputDirectory": "public",
+
   "trailingSlash": true,
   "cleanUrls": true,
+
   "redirects": [
     { "source": "/explain/:topic", "destination": "/explain/:topic/", "permanent": true },
     { "source": "/fr/expliquer/:topic", "destination": "/fr/expliquer/:topic/", "permanent": true }
   ],
+
   "rewrites": [
-    { "source": "/robots.txt", "destination": "/robots.txt" },
-    { "source": "/sitemap.xml", "destination": "/sitemap.xml" },
-    { "source": "/favicon.ico", "destination": "/favicon.ico" },
-    { "source": "/site.webmanifest", "destination": "/site.webmanifest" },
-    { "source": "/icon-192.png", "destination": "/icon-192.png" },
-    { "source": "/icon-512.png", "destination": "/icon-512.png" },
-    { "source": "/apple-touch-icon.png", "destination": "/apple-touch-icon.png" },
-    { "source": "/og.jpg", "destination": "/og.jpg" },
-
-    { "source": "/(.*\\.(?:js|css|png|jpg|jpeg|gif|svg|webp|ico|json|txt|woff|woff2|map))", "destination": "/$1" },
-
-    { "source": "/", "destination": "/index.html" },
-    { "source": "/fr/", "destination": "/fr/index.html" },
-
     { "source": "/explain/:topic/", "destination": "/index.html?topic=:topic" },
-    { "source": "/fr/expliquer/:topic/", "destination": "/fr/index.html?topic=:topic" },
-
-    { "source": "/(.*)", "destination": "/" }
+    { "source": "/fr/expliquer/:topic/", "destination": "/fr/index.html?topic=:topic" }
   ],
+
   "headers": [
     {
       "source": "/(.*)",
