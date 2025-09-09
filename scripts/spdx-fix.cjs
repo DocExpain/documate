@@ -1,37 +1,66 @@
 #!/usr/bin/env node
+// SPDX-License-Identifier: LicenseRef-SA-NC-1.0
 /**
- * SPDX quick-fix: add missing SPDX header to text-based files (idempotent).
+ * Ajoute un en-tête SPDX aux fichiers manquants.
+ * - Compatible Node CommonJS (CJS)
+ * - Charge globby (ESM-only) via import dynamique
  */
-import { readFileSync, writeFileSync } from "node:fs";
-import { globby } from "globby";
-const SPDX = "SPDX-License-Identifier: LicenseRef-SA-NC-1.0";
-const exts = ["html","xml","txt","js","cjs","mjs","ts","tsx","css","md","yml","yaml","sh"];
-const files = await globby([
-  `**/*.{${exts.join(",")}}`,
-  "!node_modules/**",
-  "!.git/**",
-  "!.vercel/**"
-]);
-for (const f of files) {
-  let s = readFileSync(f, "utf8");
-  if (s.includes(SPDX)) continue;
-  const isHtml = f.endsWith(".html") || f.endsWith(".xml");
-  const isCss  = f.endsWith(".css");
-  const isSh   = f.endsWith(".sh");
-  const isYaml = f.endsWith(".yml") || f.endsWith(".yaml");
-  const isJsTs = /\.(c|m)?js$|\.tsx?$/.test(f);
-  let header;
-  if (isHtml) header = `<!-- ${SPDX} -->\\n`;
-  else if (isCss) header = `/* ${SPDX} */\\n`;
-  else if (isYaml) header = `# ${SPDX}\\n`;
-  else if (isSh) header = `# ${SPDX}\\n`;
-  else if (isJsTs) header = `// ${SPDX}\\n`;
-  else header = `# ${SPDX}\\n`;
-  if (isHtml && /^<!doctype/i.test(s)) {
-    s = s.replace(/^(<!doctype[^>]*>\\s*)/i, `$1${header}`);
-  } else {
-    s = header + s;
+
+const fs = require("node:fs");
+const path = require("node:path");
+
+(async () => {
+  // globby v14 est ESM-only → import dynamique
+  const { globby } = await import("globby");
+
+  const SPDX = "LicenseRef-SA-NC-1.0";
+  const patterns = [
+    "**/*.{js,cjs,mjs,ts,tsx,css,scss,html}",
+    "!node_modules/**",
+    "!.git/**",
+    "!dist/**",
+    "!build/**",
+    "!out/**",
+    "!public/**" // ajuste si besoin
+  ];
+
+  const files = await globby(patterns, { dot: false });
+
+  for (const file of files) {
+    let src;
+    try {
+      src = fs.readFileSync(file, "utf8");
+    } catch {
+      continue;
+    }
+
+    // déjà présent ?
+    if (src.includes("SPDX-License-Identifier")) continue;
+
+    let header;
+    if (file.endsWith(".html")) {
+      // HTML → commentaire HTML, après le doctype si présent
+      header = `<!-- SPDX-License-Identifier: ${SPDX} -->\n`;
+      const m = src.match(/^\s*<!doctype[^>\n]*>\s*/i);
+      if (m) {
+        src = src.slice(0, m[0].length) + header + src.slice(m[0].length);
+      } else {
+        src = header + src;
+      }
+    } else if (file.endsWith(".css") || file.endsWith(".scss")) {
+      // CSS/SCSS
+      header = `/* SPDX-License-Identifier: ${SPDX} */\n`;
+      src = header + src;
+    } else {
+      // JS/TS/etc.
+      header = `// SPDX-License-Identifier: ${SPDX}\n`;
+      src = header + src;
+    }
+
+    fs.writeFileSync(file, src);
+    console.log("SPDX added:", file);
   }
-  writeFileSync(f, s, "utf8");
-}
-console.log(`SPDX ensured in ${files.length} files`);
+
+  // succès
+  process.exit(0);
+})();
