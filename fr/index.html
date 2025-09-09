@@ -6,8 +6,34 @@ SPDX-License-Identifier: LicenseRef-SA-NC-1.0
 <html lang="fr">
 <head>
   <meta charset="utf-8" />
+  <link id="canonical-link" rel="canonical" href="https://documate.work/">
+  <meta name="robots" content="index,follow">
+  <script>
+    (function () {
+      // Canonical absolu forcé sur le domaine de prod
+      var HOST = 'https://documate.work';
+      var p = location.pathname;
+
+      // /explain/:topic/ -> canonical identique avec slash final
+      var m = p.match(/^\/explain\/([^\/]+)\/?$/);
+      if (m) {
+        document.getElementById('canonical-link').href = HOST + '/explain/' + m[1] + '/';
+        return;
+      }
+
+      // /fr/expliquer/:topic/
+      m = p.match(/^\/fr\/expliquer\/([^\/]+)\/?$/);
+      if (m) {
+        document.getElementById('canonical-link').href = HOST + '/fr/expliquer/' + m[1] + '/';
+        return;
+      }
+
+      // Homes locales et racine
+      if (p.startsWith('/fr/')) { document.getElementById('canonical-link').href = HOST + '/fr/'; return; }
+      document.getElementById('canonical-link').href = HOST + '/';
+    })();
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="robots" content="index,follow" />
 
   <!-- Google Search Console -->
   <meta name="google-site-verification" content="7fba15cbdb4cbaf7" />
@@ -17,7 +43,6 @@ SPDX-License-Identifier: LicenseRef-SA-NC-1.0
 
   <title id="meta-title">DocuMate — Comprenez vos documents facilement</title>
   <meta id="meta-desc" name="description" content="DocuMate explique contrats, factures et documents officiels en langage simple. Gratuit, privé, multilingue.">
-  <link id="link-canonical" rel="canonical" href="https://documate.work/fr/" />
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin>
@@ -489,7 +514,7 @@ main.no-privacy {
 
       var base = 'https://documate.work';
       var path = LANG_PATH[lang] || '/';
-      setAttr('link-canonical','href', base + path);
+      setAttr('canonical-link','href', base + path);
       setAttr('og-url','content', base + path);
       setAttr('og-title','content', T.htmlTitle);
       setAttr('og-desc','content', T.htmlDesc);
@@ -990,7 +1015,7 @@ async function ensureHeavyLibs(){
   const absolute = location.origin + data.canonical;
 
   // --- set canonical
-  const link = document.getElementById('link-canonical') || document.querySelector('link[rel="canonical"]');
+  const link = document.getElementById('canonical-link') || document.querySelector('link[rel="canonical"]');
   if (link) link.href = absolute;
 
   // --- JSON-LD FAQ (idempotent)
