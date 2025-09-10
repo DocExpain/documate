@@ -15,7 +15,10 @@ const CHECKS = [
 ];
 
 (async () => {
-  const browser = await puppeteer.launch({ headless: "new", args:["--no-sandbox","--disable-dev-shm-usage"] });
+  const browser = await puppeteer.launch({
+    headless: "new",
+    args: ["--no-sandbox","--disable-dev-shm-usage"]
+  });
   try {
     const page = await browser.newPage();
 
@@ -26,7 +29,7 @@ const CHECKS = [
       if (!res) throw new Error(`No response for ${target}`);
       if (res.status() !== 200) throw new Error(`${target} returned ${res.status()}`);
 
-      // petite attente pour laisser le canonical bootstrap poser la balise
+      // Laisse le bootstrap poser la canonical
       await page.waitForFunction(() => !!document.querySelector('link[rel="canonical"]'), { timeout: 15000 });
       let canon = await page.evaluate(() => document.querySelector('link[rel="canonical"]')?.href || null);
 
