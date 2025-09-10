@@ -117,9 +117,6 @@
   <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"SoftwareApplication","name":"DocuMate","applicationCategory":"ProductivityApplication","operatingSystem":"Web","url":"https://documate.work/","featureList":["Explain contracts","Multilingual","Private","OCR for images/PDF"],"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
 </script>
-  <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Mes documents sont-ils stockés ?","acceptedAnswer":{"@type":"Answer","text":"Non. Le contenu reste local jusqu’à l’action d’analyse, et nous ne le conservons pas côté serveur."}},{"@type":"Question","name":"Puis-je analyser une photo ou un scan ?","acceptedAnswer":{"@type":"Answer","text":"Oui. Collez ou uploadez une image/scan, OCR intégré puis explication en langage simple."}}]}
-</script>
 
   <!-- Mammoth.js (DOCX) -->
   <script defer src="https://unpkg.com/mammoth@1.6.0/mammoth.browser.min.js"></script>
@@ -293,6 +290,40 @@ main.no-privacy {
 @keyframes spin { to { transform: rotate(360deg) } }
 
 </style>
+  <script type="application/ld+json" id="faq-json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "@id": "https://documate.work/#faq",
+    "inLanguage": "en",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How does it work?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Upload or paste your document, then ask questions."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Are my documents stored?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Content remains local until you run an analysis; it is not kept server-side."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I analyze a photo or a scan?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Paste or upload an image or PDF; OCR runs automatically before the explanation."
+        }
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
   <header>
