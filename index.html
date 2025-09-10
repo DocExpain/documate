@@ -1041,34 +1041,66 @@ async function ensureHeavyLibs(){
   const link = document.getElementById('canonical-link') || document.querySelector('link[rel="canonical"]');
   if (link) link.href = absolute;
 
-    // --- JSON-LD FAQ (idempotent)
+  // --- JSON-LD FAQ (idempotent)
+  (function () {
+    // Empêche toute double exécution si un autre script relance la même logique
+    if (window.__DOCUMATE_FAQ_JSONLD_DONE__) return;
+    window.__DOCUMATE_FAQ_JSONLD_DONE__ = true;
+
+    // 1) Supprimer tout FAQPage déjà présent (sécurité anti-doublon)
+    var toDelete = [];
+    document.querySelectorAll('script[type="application/ld+json"]').forEach(function(s) {
+      try {
+        var txt = s.textContent || '';
+        // rapide : ne parse que si présence de la clé
+        if (!/"@type"\s*:\s*"?FAQPage"?/i.test(txt)) return;
+        var json = JSON.parse(txt);
+        var t = json && json['@type'];
+        var isFAQ = (t === 'FAQPage') || (Array.isArray(t) && t.indexOf('FAQPage') >= 0);
+        if (isFAQ) toDelete.push(s);
+      } catch (e) { /* ignore parse errors */ }
+    });
+    toDelete.forEach(function(s){ s.parentNode && s.parentNode.removeChild(s); });
+
+    // 2) Déterminer la langue de la page
+    var lang = (document.documentElement.getAttribute('lang') || '').toLowerCase();
+    if (!lang) lang = location.pathname.startsWith('/fr/') ? 'fr' : 'en';
+
+    // 3) Récupérer les QA actives posées par la page (data.faq doit exister dans le script principal)
+    var items = (window.data && Array.isArray(window.data.faq)) ? window.data.faq : [];
+
+    // 4) Construire un @id stable basé sur l’URL canonique déjà calculée par le bootstrap
+    //    `absolute` est mis par le canonical-bootstrap. Fallback sûr si absent.
+    var canonical = (typeof window.absolute === 'string' && window.absolute) 
+                    ? window.absolute 
+                    : (location.origin + location.pathname + location.search);
+    // On retire les query params pour l’@id et on ajoute l’ancre #faq
+    var hashId = canonical.split('#')[0].split('?')[0] + '#faq';
+
+    // 5) Construire l’objet FAQPage
+    var faqObj = {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "@id": hashId,
+      "inLanguage": lang,
+      "mainEntity": items.map(function(x) {
+        return {
+          "@type": "Question",
+          "name": x.q,
+          "acceptedAnswer": { "@type": "Answer", "text": x.a }
+        };
+      })
+    };
+
+    // 6) Injecter une seule fois
     if (!document.getElementById('ld-faq')) {
-      // Déduire la langue de la page (html[lang] ou chemin)
-      var lang =
-        document.documentElement.getAttribute('lang') ||
-        (location.pathname.startsWith('/fr/') ? 'fr' : 'en');
-
-      // Construire l’objet FAQ avec @id unique et inLanguage corrects
-      var faqObj = {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "@id": (absolute || (location.origin + (lang === 'fr' ? '/fr/' : '/'))) + "#faq",
-        "inLanguage": lang,
-        "mainEntity": (data.faq || []).map(function(x) {
-          return {
-            "@type": "Question",
-            "name": x.q,
-            "acceptedAnswer": { "@type": "Answer", "text": x.a }
-          };
-        })
-      };
-
       var s = document.createElement('script');
       s.id = 'ld-faq';
       s.type = 'application/ld+json';
       s.textContent = JSON.stringify(faqObj);
       document.head.appendChild(s);
     }
+  })();
 })();
 </script>
 
