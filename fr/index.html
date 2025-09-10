@@ -117,6 +117,7 @@
   <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"SoftwareApplication","name":"DocuMate","applicationCategory":"ProductivityApplication","operatingSystem":"Web","url":"https://documate.work/","featureList":["Explain contracts","Multilingual","Private","OCR for images/PDF"],"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
 </script>
+  <script id="jsonld-faq" type="application/ld+json"></script>
 
   <!-- Mammoth.js (DOCX) -->
   <script defer src="https://unpkg.com/mammoth@1.6.0/mammoth.browser.min.js"></script>
@@ -382,11 +383,6 @@ main.no-privacy {
         </script>
       </div>
     </section>
-    <section class="card" id="faq-card">
-      <h3 id="faq-title">FAQ</h3>
-      <div id="faq"></div>
-    </section>
-
   <!-- Privacy & Trust (collapsible, accessible, no-JS needed) -->
   <details id="privacy-card" class="card legal" open>
     <summary class="privacy-summary" role="button">
@@ -421,6 +417,11 @@ main.no-privacy {
     <h3 style="margin-top:18px;" id="seo-title">Documents we can help with</h3>
     <p class="legal" id="seo-text">Contracts, rental agreements, utility bills, bank letters, insurance terms, general conditions, and more.</p>
   </div>
+
+  <section class="card" id="faq-card">
+    <h3 id="faq-title">FAQ</h3>
+    <div id="faq"></div>
+  </section>
 </main>
 
   <footer>
@@ -476,6 +477,35 @@ main.no-privacy {
       ru:{langName:"Русский", tagline:"Понимайте документы легко", heroTitle:"Поясняем договоры, счета и официальные письма простым языком", heroSub:"Бесплатно, приватно, многоязычно. Не юридическая консультация.", uploadLabel:"Загрузите документ (PDF/TXT/DOCX/PNG/JPG/WEBP)", pasteLabel:"…или вставьте текст сюда", pasteHint:"Ваш документ остаётся на устройстве, пока вы не выберете действие ниже.", regionLabel:"Регион / Страна (необязательно, для местных правил)", phDocText:"Вставьте содержимое документа…", phRegion:"напр., Россия / Москва", phQuestion:"напр., Что означает этот пункт? / Объясните, как будто мне пять лет", btnExplainAll:"Объяснить весь документ", btnExplainSel:"Объяснить только выделенное", btnSave:"Сохранить локально", btnLoad:"Загрузить последнее", btnCamera:"Use camera",chooseFile:"Выбрать файл",useCamera:"Использовать камеру",dropHint:"Drop an image here, or press Ctrl/Cmd+V to paste a screenshot.", askLabel:"Задать вопрос по фрагменту (необязательно)", btnAskSel:"Спросить о выделенном", btnAskAll:"Спросить о всём документе", hideSidebar:"Скрыть",showPrivacy:"Показать",hidePrivacy:"Скрыть", badgeNoStore:"Без хранения", badgeTLS:"Шифрование", badgeMulti:"Многоязычно", resultTitle:"Пояснение / Ответ", trustTitle:"Конфиденциальность и доверие", trust1:"Ваш текст отправляется только провайдеру ИИ для генерации пояснений. Мы не храним документы. Передача по HTTPS.", trust2:"DocuMate не создаёт аккаунты и не хранит ваш контент на серверах.", trust3:"Данные, отправленные через API, по умолчанию не используются для обучения.", trust4:"Сервис предоставляет информацию простым языком, это не юрконсультация.", trust5:"Важно: ИИ может ошибаться; проверяйте ключевые детали.", ppTitle:"Политика конфиденциальности (кратко)", pp1:"Нет серверного хранения; обработка в памяти и удаление.", pp2:"Только HTTPS; без аналитики по умолчанию; реклама только с согласия.", pp3:"«Сохранить локально» хранит текст только в вашем браузере.", pp4:"Не отправляйте особо чувствительные данные.", pp5:"Информация, не юридическая консультация.", seoTitle:"С какими документами помогаем", seoText:"Договоры, аренда, коммунальные счета, письма банка, условия страховки и др.", footer1:"Бесплатные пояснения документов на ИИ", footerConsent:"Настройки рекламы", footerClear:"Очистить локальные данные", consentText:"Сайт может показывать ненавязчивую рекламу. Принять рекламные cookies/скрипты?", deny:"Отклонить", allow:"Разрешить", loading:"Идёт обработка…", nothingSel:"Нет выделения: выделите текст.", noText:"Нет текста для обработки.", saved:"Сохранено локально.", loaded:"Последний документ загружен.", cleared:"Локальные данные очищены.", htmlTitle:"DocuMate — Понимайте документы легко", htmlDesc:"DocuMate объясняет договоры, счета и официальные письма простым языком."},
       bn:{langName:"বাংলা", tagline:"সহজে আপনার নথি বুঝুন", heroTitle:"চুক্তি, বিল ও সরকারি নথি সাধারণ ভাষায় ব্যাখ্যা করুন", heroSub:"ফ্রি, ব্যক্তিগত, বহু-ভাষিক। আইনি পরামর্শ নয়।", uploadLabel:"ডকুমেন্ট আপলোড করুন (PDF/TXT/DOCX/PNG/JPG/WEBP)", pasteLabel:"…অথবা এখানে টেক্সট পেস্ট করুন", pasteHint:"নীচের বোতাম ক্লিক না করা পর্যন্ত আপনার নথি আপনার ডিভাইসেই থাকে।", regionLabel:"অঞ্চল / দেশ (ঐচ্ছিক, স্থানীয় নিয়ম)", phDocText:"আপনার নথির বিষয়বস্তু পেস্ট করুন…", phRegion:"যেমন: বাংলাদেশ / ঢাকা", phQuestion:"যেমন: এই ধারার অর্থ কী? / আমাকে পাঁচ বছরের শিশুর মতো বুঝিয়ে বলুন", btnExplainAll:"পুরো ডকুমেন্ট ব্যাখ্যা করুন", btnExplainSel:"শুধু নির্বাচিত অংশ ব্যাখ্যা করুন", btnSave:"লোকালি সেভ", btnLoad:"শেষটি লোড করুন", btnCamera:"Use camera",chooseFile:"ফাইল বাছাই করুন",useCamera:"ক্যামেরা ব্যবহার করুন",dropHint:"Drop an image here, or press Ctrl/Cmd+V to paste a screenshot.", askLabel:"কোনো অংশ নিয়ে নির্দিষ্ট প্রশ্ন (ঐচ্ছিক)", btnAskSel:"নির্বাচিত অংশ নিয়ে প্রশ্ন", btnAskAll:"পুরো ডকুমেন্ট নিয়ে প্রশ্ন", hideSidebar:"লুকান",showPrivacy:"দেখান",hidePrivacy:"লুকান", badgeNoStore:"সংরক্ষণ নয়", badgeTLS:"এনক্রিপ্টেড", badgeMulti:"বহুভাষিক", resultTitle:"ব্যাখ্যা / উত্তর", trustTitle:"গোপনীয়তা ও বিশ্বাস", trust1:"আপনার টেক্সট কেবল ব্যাখ্যার জন্য আমাদের AI প্রোভাইডারের কাছে পাঠানো হয়। আমরা নথি রাখি না। HTTPS দ্বারা পরিবহন।", trust2:"DocuMate অ্যাকাউন্ট তৈরি করে না এবং সার্ভারে আপনার কন্টেন্ট সংরক্ষণ করে না।", trust3:"API দিয়ে পাঠানো ডেটা ডিফল্টে মডেল ট্রেনিংয়ে ব্যবহৃত হয় না।", trust4:"এটি সাধারণ ভাষায় ব্যাখ্যা; আইনি পরামর্শ নয়।", trust5:"গুরুত্বপূর্ণ: AI ভুল করতে পারে; গুরুত্বপূর্ণ বিষয় যাচাই করুন।", ppTitle:"গোপনীয়তা নীতি (সংক্ষিপ্ত)", pp1:"সার্ভারে সংরক্ষণ নয়; মেমোরিতে প্রক্রিয়া করে বাদ দেওয়া হয়।", pp2:"শুধু HTTPS; ডিফল্টে কোনো অ্যানালিটিক্স নয়; বিজ্ঞাপন কেবল সম্মতিতে।", pp3:"“লোকালি সেভ” কেবল আপনার ব্রাউজারে টেক্সট রাখে।", pp4:"অত্যন্ত সংবেদনশীল ডেটা পাঠাবেন না।", pp5:"তথ্যগত, আইনি পরামর্শ নয়।", seoTitle:"যে নথিতে আমরা সাহায্য করি", seoText:"চুক্তি, ভাড়ার চুক্তি, ইউটিলিটি বিল, ব্যাংকের চিঠি, বীমা শর্তাদি ইত্যাদি।", footer1:"AI-চালিত ফ্রি ডকুমেন্ট ব্যাখ্যা", footerConsent:"বিজ্ঞাপনের সম্মতি", footerClear:"লোকাল ডেটা মুছুন", consentText:"বিনামূল্যে রাখতে এই সাইটে সাদামাটা বিজ্ঞাপন দেখানো হতে পারে। আপনি কি বিজ্ঞাপনের কুকি/স্ক্রিপ্ট গ্রহণ করবেন?", deny:"না", allow:"হ্যাঁ", loading:"চলছে…", nothingSel:"কোনো নির্বাচন নেই: আগে টেক্সট নির্বাচন করুন।", noText:"প্রসেস করার মতো টেক্সট নেই।", saved:"লোকালি সেভ করা হয়েছে।", loaded:"শেষ ডকুমেন্ট লোড হয়েছে।", cleared:"লোকাল ডেটা মুছে ফেলা হয়েছে।", htmlTitle:"DocuMate — সহজে আপনার নথি বুঝুন", htmlDesc:"DocuMate সাধারণ ভাষায় চুক্তি, বিল ও সরকারি নথি ব্যাখ্যা করে।"}
     };
+    // ---- FAQ JSON-LD: single instance per page ----
+    function faqEntitiesFor(lang){
+      const QA = {
+        en: [
+          { q: "How does it work?", a: "Upload or paste your document, then ask questions." },
+          { q: "Are my documents stored?", a: "No. Your content stays local until you click an action; we do not keep it server-side." }
+        ],
+        fr: [
+          { q: "Mes documents sont-ils stockés ?", a: "Non. Le contenu reste local jusqu’à l’action d’analyse ; nous ne le conservons pas côté serveur." },
+          { q: "Puis-je analyser une photo ou un scan ?", a: "Oui. Collez ou uploadez une image/scan, OCR intégré puis explication en langage simple." }
+        ]
+      };
+      const list = QA[lang] || QA.en;
+      return list.map(({q,a}) => ({
+        "@type":"Question",
+        "name": q,
+        "acceptedAnswer": { "@type":"Answer", "text": a }
+      }));
+    }
+
+    function renderFAQJsonLd(lang){
+      const el = document.getElementById('jsonld-faq');
+      if(!el) return;
+      el.textContent = JSON.stringify({
+        "@context":"https://schema.org",
+        "@type":"FAQPage",
+        "mainEntity": faqEntitiesFor(lang)
+      });
+    }
 
     // Apply I18N to UI and SEO meta
     const $ = sel => document.querySelector(sel);
@@ -549,6 +579,8 @@ main.no-privacy {
 
       var ld={'@context':'https://schema.org','@type':'WebSite','name':'DocuMate','url':'https://documate.work/','inLanguage':lang,'description':T.htmlDesc};
       setText('jsonld-website', JSON.stringify(ld));
+
+      renderFAQJsonLd(lang);
 
       var sel = document.getElementById('langSel'); if (sel) sel.value = lang;
 
@@ -1006,103 +1038,6 @@ async function ensureHeavyLibs(){
 })();
 </script>
 
-<script>
-(function () {
-  const lang = (document.documentElement.lang || 'en').slice(0,2);
-
-  // Map path -> canonical + FAQ per language (minimal content is enough for SEO audit)
-  const TOPICS = {
-    '/explain/bill/': {
-      en: { canonical: '/explain/bill/',    faq:[{q:'How do I understand a utility bill?', a:'Upload or paste it. DocuMate highlights the key parts and explains them in plain English.'}] },
-      fr: { canonical: '/fr/expliquer/facture/', faq:[{q:'Comment comprendre une facture ?', a:'Collez ou uploadez le document. DocuMate explique les éléments importants en langage simple.'}] }
-    },
-    '/explain/contract/': {
-      en: { canonical: '/explain/contract/',    faq:[{q:'How to read a contract?', a:'Paste the contract. DocuMate extracts clauses and explains them in plain language.'}] },
-      fr: { canonical: '/fr/expliquer/contrat/', faq:[{q:'Comment lire un contrat ?', a:'Collez le contrat. DocuMate résume les clauses et les explique simplement.'}] }
-    },
-    '/fr/expliquer/facture/':   null, // will be handled when FR page loads
-    '/fr/expliquer/contrat/':   null
-  };
-
-  // Detect topic from current path (normalize trailing slash)
-  const p = location.pathname.endsWith('/') ? location.pathname : location.pathname + '/';
-  let conf = TOPICS[p];
-  if (!conf) {
-    // if we are on FR topic but running EN file, map back
-    if (p === '/fr/expliquer/facture/' ) conf = TOPICS['/explain/bill/'];
-    if (p === '/fr/expliquer/contrat/' ) conf = TOPICS['/explain/contract/'];
-  }
-  if (!conf) return; // not a topic page
-
-  const data = conf[lang] || conf.en;
-  const absolute = location.origin + data.canonical;
-
-  // --- set canonical
-  const link = document.getElementById('canonical-link') || document.querySelector('link[rel="canonical"]');
-  if (link) link.href = absolute;
-
-  // --- JSON-LD FAQ (idempotent)
-  (function () {
-    // Empêche toute double exécution si un autre script relance la même logique
-    if (window.__DOCUMATE_FAQ_JSONLD_DONE__) return;
-    window.__DOCUMATE_FAQ_JSONLD_DONE__ = true;
-
-    // 1) Supprimer tout FAQPage déjà présent (sécurité anti-doublon)
-    var toDelete = [];
-    document.querySelectorAll('script[type="application/ld+json"]').forEach(function(s) {
-      try {
-        var txt = s.textContent || '';
-        // rapide : ne parse que si présence de la clé
-        if (!/"@type"\s*:\s*"?FAQPage"?/i.test(txt)) return;
-        var json = JSON.parse(txt);
-        var t = json && json['@type'];
-        var isFAQ = (t === 'FAQPage') || (Array.isArray(t) && t.indexOf('FAQPage') >= 0);
-        if (isFAQ) toDelete.push(s);
-      } catch (e) { /* ignore parse errors */ }
-    });
-    toDelete.forEach(function(s){ s.parentNode && s.parentNode.removeChild(s); });
-
-    // 2) Déterminer la langue de la page
-    var lang = (document.documentElement.getAttribute('lang') || '').toLowerCase();
-    if (!lang) lang = location.pathname.startsWith('/fr/') ? 'fr' : 'en';
-
-    // 3) Récupérer les QA actives posées par la page (data.faq doit exister dans le script principal)
-    var items = (window.data && Array.isArray(window.data.faq)) ? window.data.faq : [];
-
-    // 4) Construire un @id stable basé sur l’URL canonique déjà calculée par le bootstrap
-    //    `absolute` est mis par le canonical-bootstrap. Fallback sûr si absent.
-    var canonical = (typeof window.absolute === 'string' && window.absolute) 
-                    ? window.absolute 
-                    : (location.origin + location.pathname + location.search);
-    // On retire les query params pour l’@id et on ajoute l’ancre #faq
-    var hashId = canonical.split('#')[0].split('?')[0] + '#faq';
-
-    // 5) Construire l’objet FAQPage
-    var faqObj = {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "@id": hashId,
-      "inLanguage": lang,
-      "mainEntity": items.map(function(x) {
-        return {
-          "@type": "Question",
-          "name": x.q,
-          "acceptedAnswer": { "@type": "Answer", "text": x.a }
-        };
-      })
-    };
-
-    // 6) Injecter une seule fois
-    if (!document.getElementById('ld-faq')) {
-      var s = document.createElement('script');
-      s.id = 'ld-faq';
-      s.type = 'application/ld+json';
-      s.textContent = JSON.stringify(faqObj);
-      document.head.appendChild(s);
-    }
-  })();
-})();
-</script>
 
 <script defer src="/scripts/topics-router.js"></script>
 </body>
