@@ -290,40 +290,6 @@ main.no-privacy {
 @keyframes spin { to { transform: rotate(360deg) } }
 
 </style>
-  <script type="application/ld+json" id="faq-json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "@id": "https://documate.work/fr/#faq",
-    "inLanguage": "fr",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "Mes documents sont-ils stockés ?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Non. Le contenu reste local jusqu’à l’action d’analyse, et nous ne le conservons pas côté serveur."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Puis-je analyser une photo ou un scan ?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Oui. Collez ou uploadez une image ou un PDF ; l’OCR s’exécute automatiquement avant l’explication."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Comment ça marche ?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Collez ou importez votre document puis posez vos questions."
-        }
-      }
-    ]
-  }
-  </script>
 </head>
 <body>
   <header>
@@ -1077,19 +1043,30 @@ async function ensureHeavyLibs(){
 
   // --- JSON-LD FAQ (idempotent)
   if (!document.getElementById('ld-faq')) {
-    const faq = {
-      "@context":"https://schema.org",
-      "@type":"FAQPage",
-      "mainEntity": data.faq.map(x => ({
-        "@type":"Question",
-        "name": x.q,
-        "acceptedAnswer": { "@type":"Answer", "text": x.a }
-      }))
+    // Déduire la langue de la page (html[lang] ou chemin)
+    var lang =
+      document.documentElement.getAttribute('lang') ||
+      (location.pathname.startsWith('/fr/') ? 'fr' : 'en');
+
+    // Construire l’objet FAQ avec @id unique et inLanguage corrects
+    var faqObj = {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "@id": (absolute || (location.origin + (lang === 'fr' ? '/fr/' : '/'))) + "#faq",
+      "inLanguage": lang,
+      "mainEntity": (data.faq || []).map(function(x) {
+        return {
+          "@type": "Question",
+          "name": x.q,
+          "acceptedAnswer": { "@type": "Answer", "text": x.a }
+        };
+      })
     };
-    const s = document.createElement('script');
-    s.type = 'application/ld+json';
+
+    var s = document.createElement('script');
     s.id = 'ld-faq';
-    s.textContent = JSON.stringify(faq);
+    s.type = 'application/ld+json';
+    s.textContent = JSON.stringify(faqObj);
     document.head.appendChild(s);
   }
 })();

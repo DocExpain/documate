@@ -290,40 +290,6 @@ main.no-privacy {
 @keyframes spin { to { transform: rotate(360deg) } }
 
 </style>
-  <script type="application/ld+json" id="faq-json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "@id": "https://documate.work/#faq",
-    "inLanguage": "en",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "How does it work?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Upload or paste your document, then ask questions."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Are my documents stored?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "No. Content remains local until you run an analysis; it is not kept server-side."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Can I analyze a photo or a scan?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Yes. Paste or upload an image or PDF; OCR runs automatically before the explanation."
-        }
-      }
-    ]
-  }
-  </script>
 </head>
 <body>
   <header>
@@ -1075,23 +1041,34 @@ async function ensureHeavyLibs(){
   const link = document.getElementById('canonical-link') || document.querySelector('link[rel="canonical"]');
   if (link) link.href = absolute;
 
-  // --- JSON-LD FAQ (idempotent)
-  if (!document.getElementById('ld-faq')) {
-    const faq = {
-      "@context":"https://schema.org",
-      "@type":"FAQPage",
-      "mainEntity": data.faq.map(x => ({
-        "@type":"Question",
-        "name": x.q,
-        "acceptedAnswer": { "@type":"Answer", "text": x.a }
-      }))
-    };
-    const s = document.createElement('script');
-    s.type = 'application/ld+json';
-    s.id = 'ld-faq';
-    s.textContent = JSON.stringify(faq);
-    document.head.appendChild(s);
-  }
+    // --- JSON-LD FAQ (idempotent)
+    if (!document.getElementById('ld-faq')) {
+      // Déduire la langue de la page (html[lang] ou chemin)
+      var lang =
+        document.documentElement.getAttribute('lang') ||
+        (location.pathname.startsWith('/fr/') ? 'fr' : 'en');
+
+      // Construire l’objet FAQ avec @id unique et inLanguage corrects
+      var faqObj = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "@id": (absolute || (location.origin + (lang === 'fr' ? '/fr/' : '/'))) + "#faq",
+        "inLanguage": lang,
+        "mainEntity": (data.faq || []).map(function(x) {
+          return {
+            "@type": "Question",
+            "name": x.q,
+            "acceptedAnswer": { "@type": "Answer", "text": x.a }
+          };
+        })
+      };
+
+      var s = document.createElement('script');
+      s.id = 'ld-faq';
+      s.type = 'application/ld+json';
+      s.textContent = JSON.stringify(faqObj);
+      document.head.appendChild(s);
+    }
 })();
 </script>
 
