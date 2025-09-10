@@ -19,15 +19,31 @@ const CHECKS = [
     headless: "new",
     args: ["--no-sandbox","--disable-dev-shm-usage"]
   });
+
   try {
     const page = await browser.newPage();
+
+    // Désactive le cache et force une requête fraîche
+    await page.setCacheEnabled(false);
+    await page.setExtraHTTPHeaders({
+      "Cache-Control": "no-cache, no-store, max-age=0",
+      "Pragma": "no-cache",
+      "User-Agent": "Documate-SEO-SMOKE/1.0"
+    });
+
+    async function open(url) {
+      const res = await page.goto(url, { waitUntil: "domcontentloaded", timeout: 30000 });
+      if (!res) throw new Error(`No response for ${url}`);
+      const status = res.status();
+      // Accepte 200 et 304 (chargé depuis cache => DOM dispo)
+      if (![200, 304].includes(status)) throw new Error(`${url} returned ${status}`);
+      return res;
+    }
 
     for (const c of CHECKS) {
       const target = abs(c.url);
       process.stdout.write(`\n→ Opening ${target}\n`);
-      let res = await page.goto(target, { waitUntil: "domcontentloaded", timeout: 30000 });
-      if (!res) throw new Error(`No response for ${target}`);
-      if (res.status() !== 200) throw new Error(`${target} returned ${res.status()}`);
+      await open(target);
 
       // Laisse le bootstrap poser la canonical
       await page.waitForFunction(() => !!document.querySelector('link[rel="canonical"]'), { timeout: 15000 });
@@ -38,9 +54,7 @@ const CHECKS = [
         if (c.fallback) {
           const fb = abs(c.fallback);
           console.log(`   ↪ Fallback to ${fb}`);
-          res = await page.goto(fb, { waitUntil: "domcontentloaded", timeout: 30000 });
-          if (!res) throw new Error(`No response for ${fb}`);
-          if (res.status() !== 200) throw new Error(`${fb} returned ${res.status()}`);
+          await open(fb);
           await page.waitForFunction(() => !!document.querySelector('link[rel="canonical"]'), { timeout: 15000 });
           canon = await page.evaluate(() => document.querySelector('link[rel="canonical"]')?.href || null);
         }
