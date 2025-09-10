@@ -1,0 +1,1069 @@
+<!doctype html>
+<!-- SPDX-License-Identifier: LicenseRef-SA-NC-1.0 -->
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <script id="canonical-bootstrap">
+(function () {
+    try {
+      var ORIGIN = location.origin;
+      var PATH = (location.pathname.replace(/\/+$/, '/') || '/');
+      var LANG = PATH.startsWith('/fr/') ? 'fr' : 'en';
+      var params = new URLSearchParams(location.search);
+
+      function keyFromQuery() {
+        var t=(params.get('topic')||'').toLowerCase();
+        return (t==='bill'||t==='contract') ? t : null;
+      }
+      function keyFromPath() {
+        var m = PATH.match(/^\/explain\/([^/]+)\/$/);
+        if (m) { var en=m[1].toLowerCase(); if (en==='bill'||en==='contract') return en; }
+        m = PATH.match(/^\/fr\/expliquer\/([^/]+)\/$/);
+        if (m) { var fr=m[1].toLowerCase(); if (fr==='facture') return 'bill'; if (fr==='contrat') return 'contract'; }
+        return null;
+      }
+
+      var key = keyFromQuery() || keyFromPath();
+      var canonicalAbs;
+      if (!key) {
+        canonicalAbs = ORIGIN + (LANG==='fr'?'/fr/':'/');
+      } else {
+        canonicalAbs = (LANG==='fr')
+          ? ORIGIN + '/fr/expliquer/' + (key==='bill'?'facture':'contrat') + '/'
+          : ORIGIN + '/explain/' + key + '/';
+      }
+
+      // retire toutes les canonicals existantes
+      document.querySelectorAll('link[rel="canonical"]').forEach(function(n){ n.remove(); });
+
+      // crée UNE seule canonique, tout en haut du <head>
+      var link=document.createElement('link');
+      link.rel='canonical'; link.href=canonicalAbs; link.id='canonical-link';
+      document.head.insertBefore(link, document.head.firstChild);
+
+      // aligne og:url & twitter:url
+      var og=document.querySelector('meta[property="og:url"]')||document.createElement('meta');
+      og.setAttribute('property','og:url'); og.setAttribute('content', canonicalAbs);
+      if(!og.parentNode) document.head.appendChild(og);
+
+      var tw=document.querySelector('meta[name="twitter:url"]')||document.createElement('meta');
+      tw.setAttribute('name','twitter:url'); tw.setAttribute('content', canonicalAbs);
+      if(!tw.parentNode) document.head.appendChild(tw);
+
+      // debug utile
+      window.__DOCUMATE_TOPIC__ = key || null;
+      window.__DOCUMATE_CANONICAL__ = canonicalAbs;
+    } catch(e) { try { console.error('canonical-bootstrap error', e); } catch(_){} }
+})();
+</script>
+  <meta property="og:url" content="https://documate.work/">
+  <meta name="twitter:url" content="https://documate.work/">
+  <meta name="robots" content="index,follow">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Google Search Console -->
+  <meta name="google-site-verification" content="7fba15cbdb4cbaf7" />
+
+  <!-- AdSense global (keep once per page) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9411950027978678" crossorigin="anonymous"></script>
+
+  <title id="meta-title">DocuMate — Understand your documents easily</title>
+  <meta id="meta-desc" name="description" content="Paste or upload contracts, bills and official documents. Clear explanations, private, multilingual. OCR for images/PDF.">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin>
+  <link rel="preconnect" href="https://googleads.g.doubleclick.net" crossorigin>
+
+
+<!-- Hreflang (static full set) -->
+<link rel="alternate" hreflang="x-default" href="https://documate.work/">
+<link rel="alternate" hreflang="en" href="https://documate.work/">
+<link rel="alternate" hreflang="fr" href="https://documate.work/fr/">
+<link rel="alternate" hreflang="de" href="https://documate.work/de/">
+<link rel="alternate" hreflang="es" href="https://documate.work/es/">
+<link rel="alternate" hreflang="it" href="https://documate.work/it/">
+<link rel="alternate" hreflang="pt" href="https://documate.work/pt/">
+<link rel="alternate" hreflang="zh" href="https://documate.work/zh/">
+<link rel="alternate" hreflang="hi" href="https://documate.work/hi/">
+<link rel="alternate" hreflang="ar" href="https://documate.work/ar/">
+<link rel="alternate" hreflang="ru" href="https://documate.work/ru/">
+<link rel="alternate" hreflang="bn" href="https://documate.work/bn/">
+  <!-- Open Graph / Twitter, will be rewritten by JS on load -->
+  <meta property="og:type" content="website">
+  <meta id="og-url" property="og:url" content="https://documate.work/">
+  <meta id="og-title" property="og:title" content="DocuMate — Understand your documents easily">
+  <meta id="og-desc" property="og:description" content="Paste or upload contracts, bills and official documents. Clear explanations, private, multilingual. OCR for images/PDF.">
+  <meta property="og:image" content="https://documate.work/og.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta id="tw-title" name="twitter:title" content="DocuMate — Understand your documents easily">
+  <meta id="tw-desc" name="twitter:description" content="Paste or upload contracts, bills and official documents. Clear explanations, private, multilingual. OCR for images/PDF.">
+  <meta name="twitter:image" content="https://documate.work/og.jpg">
+
+  <!-- Favicon & app icons -->
+  <link rel="icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="theme-color" content="#2563eb">
+
+  <!-- JSON-LD structured data -->
+  <script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Organization","name":"DocuMate","url":"https://documate.work/","logo":"https://documate.work/icon-192.png"}
+</script>
+  <script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebSite","name":"DocuMate","url":"https://documate.work/","inLanguage":["en","fr","de","es","it","pt","zh","hi","ar","ru","bn"],"description":"Explain contracts, bills and official documents in plain language."}
+</script>
+  <script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"DocuMate","applicationCategory":"ProductivityApplication","operatingSystem":"Web","url":"https://documate.work/","featureList":["Explain contracts","Multilingual","Private","OCR for images/PDF"],"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+</script>
+  <script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Mes documents sont-ils stockés ?","acceptedAnswer":{"@type":"Answer","text":"Non. Le contenu reste local jusqu’à l’action d’analyse, et nous ne le conservons pas côté serveur."}},{"@type":"Question","name":"Puis-je analyser une photo ou un scan ?","acceptedAnswer":{"@type":"Answer","text":"Oui. Collez ou uploadez une image/scan, OCR intégré puis explication en langage simple."}}]}
+</script>
+
+  <!-- Mammoth.js (DOCX) -->
+  <script defer src="https://unpkg.com/mammoth@1.6.0/mammoth.browser.min.js"></script>
+
+  <style>
+    :root { --bg:#f7f9fc; --card:#fff; --ink:#0f172a; --muted:#475569; --accent:#2563eb; --ok:#16a34a; --warn:#b45309; --br:14px; --shadow:0 10px 30px rgba(2,6,23,.08); }
+    *{box-sizing:border-box}
+    body{margin:0;font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg)}
+    header{padding:22px 16px;background:#fff;box-shadow:var(--shadow);position:sticky;top:0;z-index:5}
+    .wrap{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:16px}
+    .brand{display:flex;gap:12px;align-items:center;text-decoration:none;color:inherit}
+    .brand-logo{font-size:28px}
+    .brand h1{font-size:20px;margin:0}
+    .brand p{margin:0;color:var(--muted);font-size:13px}
+    .lang{margin-left:auto;display:flex;gap:8px;align-items:center}
+    .lang select{padding:8px 10px;border:1px solid #e5e7eb;border-radius:10px;background:#fff}
+    main{max-width:1100px;margin:28px auto;padding:0 16px;display:grid;grid-template-columns:1.2fr .8fr;gap:18px}
+    @media (max-width:980px){main{grid-template-columns:1fr}}
+    .card{background:var(--card);border-radius:var(--br);box-shadow:var(--shadow);padding:18px}
+    .hero h2{margin:0 0 6px;font-size:24px}
+    .hero p{margin:0;color:var(--muted)}
+    label{font-weight:600;display:block;margin:14px 0 6px}
+    .hint{color:var(--muted);font-size:13px;margin-top:4px}
+    textarea,input[type="text"]{width:100%;padding:12px;border:1px solid #e5e7eb;border-radius:12px;outline:none}
+    textarea{min-height:190px;resize:vertical}
+    .row{display:flex;gap:10px;flex-wrap:wrap}
+    .btn{background:var(--accent);color:#fff;border:0;padding:11px 14px;border-radius:12px;cursor:pointer;font-weight:600}
+    .btn.secondary{background:#e2e8f0;color:#0f172a}
+    .btn:disabled{opacity:.6;cursor:not-allowed}
+    .results{white-space:pre-wrap;background:#f8fafc;border:1px solid #e5e7eb;border-radius:12px;padding:14px;min-height:140px}
+    .badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .badge{background:#eef2ff;color:#1e40af;padding:6px 10px;border-radius:999px;font-size:12px}
+    .legal{font-size:13px;color:var(--muted)}
+    .ok{color:var(--ok)} .warn{color:var(--warn)}
+    footer{max-width:1100px;margin:24px auto 40px;padding:0 16px}
+    .ads{margin-top:16px;padding:10px;border:1px dashed #e2e8f0;border-radius:10px;background:#fafafa}
+    .ad-slot{min-height:280px}
+    .consent{position:fixed;bottom:12px;left:12px;right:12px;background:#111827;color:#fff;padding:14px;border-radius:12px;display:none;z-index:50}
+    .consent .row{justify-content:flex-end}
+  /* Collapsible labels auto-switch */
+#privacy-card .label-show { display:none; }
+#privacy-card[open] .label-hide { display:inline; }
+#privacy-card[open] .label-show { display:none; }
+#privacy-card:not([open]) .label-hide { display:none; }
+#privacy-card:not([open]) .label-show { display:inline; }
+
+/* Optional: nicer spacing */
+.privacy-summary { display:flex; justify-content:space-between; align-items:center; cursor:pointer; }
+.privacy-summary::-webkit-details-marker { display:none; }
+.privacy-content { padding-top:8px; }
+
+/* File input custom */
+.file-row{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-top:6px }
+.file-native{
+  position:absolute !important; left:-9999px; width:1px; height:1px; overflow:hidden;
+  /* accessible via <label for="file">, mais invisible */
+}
+/* Sidebar collapsible */
+.show-sidebar-btn{
+  position:fixed; right:16px; bottom:16px;
+  background:#111827; color:#fff; border:0; padding:10px 12px;
+  border-radius:999px; box-shadow:var(--shadow); z-index:60; cursor:pointer;
+}
+.show-sidebar-btn[hidden]{ display:none !important }
+
+/* Quand la sidebar est repliée : layout en 1 colonne + sidebar masquée */
+body.sidebar-collapsed main{ grid-template-columns:1fr !important; }
+body.sidebar-collapsed #sidebar{ display:none; }
+body.sidebar-collapsed .show-sidebar-btn{ display:inline-block; }
+/* privacy floating action button */
+.privacy-fab{
+  position: fixed;
+  right: 16px;   /* change en 16px left: si tu préfères en bas-gauche */
+  bottom: 16px;
+  z-index: 60;
+  background: #111827;
+  color: #fff;
+  border: 0;
+  padding: 10px 14px;
+  border-radius: 999px;
+  box-shadow: 0 10px 30px rgba(2,6,23,.18);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+}
+.privacy-fab:focus{ outline: 2px solid #2563eb; outline-offset: 2px; }
+
+/* sécurité si l’ancien panneau utilise .privacy-panel.collapsed */
+.privacy-collapsed { display: none !important; }
+
+/* when privacy is hidden, use single-column layout */
+main.no-privacy { grid-template-columns: 1fr !important; }
+/* floating action button for restoring privacy panel */
+.privacy-fab{
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 60;
+  background: #111827;
+  color: #fff;
+  border: 0;
+  padding: 10px 14px;
+  border-radius: 999px;
+  box-shadow: 0 10px 30px rgba(2,6,23,.18);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+}
+.privacy-fab:focus { outline: 2px solid #2563eb; outline-offset: 2px; }
+/* When privacy is hidden, make the grid single-column and expand the left card */
+main.no-privacy{
+  grid-template-columns: minmax(0,1fr) !important; /* full width, no second column */
+}
+main.no-privacy > #work-card{
+  grid-column: 1 / -1;      /* span all columns */
+  width: 100%;
+}
+main.no-privacy > #privacy-card{
+  display: none !important; /* ensure no ghost column */
+}
+
+
+/* When privacy is hidden, collapse to one column */
+main.no-privacy{
+  grid-template-columns: minmax(0,1fr) !important;
+  grid-auto-flow: row dense;
+}
+main.no-privacy > #privacy-card{ display:none !important; }
+
+/* Help card becomes full width and sits above the work card */
+main.no-privacy #help-card.fullwidth-help{
+  grid-column: 1 / -1;
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+/* Ensure the left card spans full width */
+main.no-privacy #work-card{
+  grid-column: 1 / -1;
+  width: 100%;
+}
+
+@media (max-width: 980px){
+  main{ grid-template-columns: 1fr; } /* explicit on mobile */
+}
+
+/* === layout-fix: privacy collapsed -> single column + help on top === */
+main.no-privacy { 
+  grid-template-columns: 1fr !important; 
+}
+
+#help-card.fullwidth-help { 
+  grid-column: 1 / -1 !important; 
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+/* OCR inline status under the upload button */
+.status.ocr-status{
+  display:flex; align-items:center; gap:8px;
+  font-size:13px; color: var(--muted);
+  margin:8px 0 4px;
+}
+.status.ocr-status.ok  { color: var(--ok); }
+.status.ocr-status.err { color: #b91c1c; }
+.status .spinner{
+  width:14px; height:14px; border-radius:50%;
+  border:2px solid #cbd5e1; border-top-color:#2563eb;
+  animation:spin .9s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg) } }
+
+</style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <a class="brand" href="#">
+        <div class="brand-logo">📄</div>
+        <div>
+          <h1>DocuMate</h1>
+          <p id="tagline">Understand your documents easily</p>
+        </div>
+      </a>
+      <div class="lang">
+        <label for="langSel" style="margin:0;font-weight:600;" id="label-language">Language</label>
+        <select id="langSel" aria-label="Language">
+          <option value="en">English</option><option value="fr">Français</option><option value="de">Deutsch</option>
+          <option value="es">Español</option><option value="it">Italiano</option><option value="zh">中文 (简体)</option>
+          <option value="hi">हिंदी</option><option value="ar">العربية</option><option value="pt">Português</option>
+          <option value="ru">Русский</option><option value="bn">বাংলা</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="card" id="work-card">
+      <div class="hero">
+        <h2 id="hero-title">Explain contracts, bills & official documents in plain language</h2>
+        <p id="hero-sub">Free, private, multilingual. Not legal advice.</p>
+      </div>      <!-- File input (customized & translatable) -->
+<div class="file-row">
+  <input type="file" id="file" accept=".pdf,.txt,.docx,.png,.jpg,.jpeg,.webp" class="file-native" />
+  <label for="file" class="btn" id="btnChooseFile">Choose a file</label>
+  <button type="button" class="btn secondary" id="btnUseCamera">Use camera</button>
+  <input type="file" id="camera" accept="image/*" capture="environment" class="file-native" />
+  <span id="fileName" class="hint">No file chosen</span>
+</div>
+<div id="ocr-status" class="status ocr-status" hidden aria-live="polite" aria-atomic="true"></div>
+
+      <label for="docText" id="label-paste">…or paste your text here</label>
+      <textarea id="docText" placeholder="Paste the content of your document…"></textarea>
+      <div class="hint" id="paste-hint">Your document stays on your device until you click an action below.</div>      </div>
+
+  <!-- Region / Country -->
+      <label for="region" style="margin-top:12px;" id="label-region">Region / Country (optional, for local rules)</label>
+      <input type="text" id="region" placeholder="e.g., United States / California" />
+
+      <div class="row" style="margin-top:10px;">
+        <button id="btnExplainAll" class="btn">Explain the whole document</button>
+        <button id="btnExplainSel" class="btn secondary">Explain selection only</button>
+        <button id="btnSave" class="btn secondary">Save locally</button>
+        <button id="btnLoad" class="btn secondary">Load last</button>
+      </div>
+
+      <label for="question" style="margin-top:16px;" id="label-ask">Ask a specific question about a passage (optional)</label>
+      <input type="text" id="question" placeholder="e.g. What does this clause mean? / Explain like I'm five"/>
+      <div class="row" style="margin-top:10px;">
+        <button id="btnAskSel" class="btn">Ask about selection</button>
+        <button id="btnAskAll" class="btn secondary">Ask about whole document</button>
+      </div>
+
+      <div class="badges">
+        <div class="badge" id="badge-no-store">No storage</div>
+        <div class="badge" id="badge-tls">Encrypted</div>
+        <div class="badge" id="badge-multi">Multilingual</div>
+      </div>
+
+      <h3 style="margin-top:18px;" id="result-title">Explanation / Answer</h3>
+      <div id="result" class="results" aria-live="polite"></div>
+
+      <div class="ads">
+  <!-- Ad slot (render only after consent + push) -->
+        <ins class="adsbygoogle ad-slot"
+             style="display:block"
+             data-ad-client="ca-pub-9411950027978678"
+             data-ad-slot="PASTE_YOUR_AD_SLOT_ID"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+  <script>
+          if (location.search.includes("adtest=1")) {
+            document.querySelectorAll("ins.adsbygoogle").forEach(i => i.setAttribute("data-adtest","on"));
+          }
+          if (localStorage.getItem("documate_ads_consent") === "allow") {
+            (adsbygoogle = window.adsbygoogle || []).push({});
+          }
+        </script>
+      </div>
+    </section>
+
+  <!-- Privacy & Trust (collapsible, accessible, no-JS needed) -->
+  <details id="privacy-card" class="card legal" open>
+    <summary class="privacy-summary" role="button">
+      <span class="privacy-title" id="privacy-title">Privacy & Trust</span>
+      <span class="privacy-toggle">
+        <span class="label-hide" id="privacy-hide-toggle">Hide</span>
+        <span class="label-show" id="privacy-show">Show</span>
+      </span>
+    </summary>
+
+    <div class="privacy-content" id="privacy-content">
+      <p class="legal" id="trust-1">Your text is only sent to our AI provider to generate the explanation. We do not keep your documents. We do not read them. Transmission uses HTTPS.</p>
+      <p class="legal" id="trust-2">By design, DocuMate does not create accounts and does not save your content on our servers. If you click “Save locally”, it stores only on your device (localStorage).</p>
+      <p class="legal" id="trust-3">Our AI provider states that data sent via API is not used to train models by default. Learn more in our Privacy Policy.</p>
+      <p class="legal" id="trust-4">This service offers explanations in plain language for better understanding. It is not legal advice.</p>
+      <p class="legal warn" id="trust-5">Important: AI can make mistakes; verify key details with official sources or a qualified professional.</p>
+
+      <details>
+        <summary><strong id="pp-title">Privacy Policy (short)</strong></summary>
+        <ul class="legal">
+          <li><span class="ok">✔</span> <span id="pp1">No server-side storage; in-memory processing then discarded.</span></li>
+          <li><span class="ok">✔</span> <span id="pp2">HTTPS-only; no analytics by default; ads only with consent.</span></li>
+          <li><span class="ok">✔</span> <span id="pp3">“Save locally” keeps text only in your browser.</span></li>
+          <li><span class="warn">⚠</span> <span id="pp4">Do not share highly sensitive personal data.</span></li>
+          <li><span class="warn">⚠</span> <span id="pp5">Informational, not legal advice.</span></li>
+        </ul>
+      </details>
+    </div>
+  </details>
+
+  <div style="grid-column:2;" id="help-card">
+    <h3 style="margin-top:18px;" id="seo-title">Documents we can help with</h3>
+    <p class="legal" id="seo-text">Contracts, rental agreements, utility bills, bank letters, insurance terms, general conditions, and more.</p>
+  </div>
+  <nav class="topics" id="topics-en" style="margin:10px 0;">
+    <a href="/explain/bill/">Explain a bill</a> ·
+    <a href="/explain/contract/">Explain a contract</a>
+  </nav>
+
+  <section class="card" id="faq-card">
+    <h3 id="faq-title">FAQ</h3>
+    <div id="faq"></div>
+  </section>
+</main>
+
+  <footer>
+    <p class="legal">
+      <strong>DocuMate</strong> — <span id="footer1">Free document explanations powered by AI</span> · 
+      <a href="#" id="openConsent"> <span id="footer-consent">Ad consent</span> </a> ·
+      <a href="#" id="clearLocal"><span id="footer-clear">Clear local data</span></a> ·
+      <a href="/privacy.html">Privacy / Confidentialité</a>
+    </p>
+  </footer>
+
+  <!-- Ads consent banner -->
+  <div class="consent" id="consentBox">
+    <div style="margin-bottom:6px;" id="consent-text">This site may show non-intrusive ads to stay free. Do you accept advertising cookies/scripts?</div>
+    <div class="row">
+      <button class="btn secondary" id="denyAds">Deny</button>
+      <button class="btn" id="allowAds">Allow</button>
+    </div>
+  </div>
+
+  <script>
+  function setText(id, txt){ var el=document.getElementById(id); if(el) el.textContent = txt; }
+  function setAttr(id, name, val){ var el=document.getElementById(id); if(el) el.setAttribute(name,val); }
+  </script>
+
+  <script>
+    // ----------------- Language / routing -----------------
+    const LANG_PATH = { en:'/', fr:'/fr/', de:'/de/', es:'/es/', it:'/it/', zh:'/zh/', hi:'/hi/', ar:'/ar/', pt:'/pt/', ru:'/ru/', bn:'/bn/' };
+    const DEFAULT_LANG = 'en';
+
+    function guessLangFromPath(){
+      const clean = (location.pathname || '/').replace(/\/+$/, '') || '/';
+      for (const [lg,p] of Object.entries(LANG_PATH)){
+        if ((p.replace(/\/+$/, '')||'/') === clean) return lg;
+      }
+      return null;
+    }
+    function guessLang(){
+      return guessLangFromPath() || (navigator.language || 'en').slice(0,2).toLowerCase();
+    }
+
+    // ----------------- I18N strings (essential UI only) -----------------
+    const I18N = {
+      en:{langName:"English", tagline:"Understand your documents easily", heroTitle:"Explain contracts, bills & official documents in plain language", heroSub:"Free, private, multilingual. Not legal advice.", uploadLabel:"Upload a document (PDF/TXT/DOCX/PNG/JPG/WEBP)", pasteLabel:"…or paste your text here", pasteHint:"Your document stays on your device until you click an action below.", regionLabel:"Region / Country (optional, for local rules)", phDocText:"Paste the content of your document…", phRegion:"e.g., United States / California", phQuestion:"e.g. What does this clause mean? / Explain like I'm five", btnExplainAll:"Explain the whole document", btnExplainSel:"Explain selection only", btnSave:"Save locally", btnLoad:"Load last", btnCamera:"Use camera",chooseFile:"Choose a file",useCamera:"Use camera",dropHint:"Drop an image here, or press Ctrl/Cmd+V to paste a screenshot.", askLabel:"Ask a specific question about a passage (optional)", btnAskSel:"Ask about selection", btnAskAll:"Ask about whole document", hideSidebar:"Hide",showPrivacy:"Show",hidePrivacy:"Hide", badgeNoStore:"No storage", badgeTLS:"Encrypted", badgeMulti:"Multilingual", resultTitle:"Explanation / Answer", trustTitle:"Privacy & Trust", trust1:"Your text is only sent to our AI provider to generate the explanation. We do not keep your documents. We do not read them. Transmission uses HTTPS.", trust2:"By design, DocuMate does not create accounts and does not save your content on our servers. If you click “Save locally”, it stores only on your device (localStorage).", trust3:"Our AI provider states that data sent via API is not used to train models by default. Learn more in our Privacy Policy.", trust4:"This service offers explanations in plain language for better understanding. It is not legal advice.", trust5:"Important: AI can make mistakes; verify key details with official sources or a qualified professional.", ppTitle:"Privacy Policy (short)", pp1:"No server-side storage; in-memory processing then discarded.", pp2:"HTTPS-only; no analytics by default; ads only with consent.", pp3:"“Save locally” keeps text only in your browser.", pp4:"Do not share highly sensitive personal data.", pp5:"Informational, not legal advice.", seoTitle:"Documents we can help with", seoText:"Contracts, rental agreements, utility bills, bank letters, insurance terms, general conditions, and more.", footer1:"Free document explanations powered by AI", footerConsent:"Ad consent", footerClear:"Clear local data", consentText:"This site may show non-intrusive ads to stay free. Do you accept advertising cookies/scripts?", deny:"Deny", allow:"Allow", loading:"Working…", nothingSel:"No selection: select text in the box first.", noText:"No text to process yet.", saved:"Saved locally.", loaded:"Loaded last document.", cleared:"Local data cleared.", htmlTitle:"DocuMate — Understand your documents easily", htmlDesc:"Paste or upload contracts, bills and official documents. Clear explanations, private, multilingual. OCR for images/PDF."},
+      fr:{langName:"Français", tagline:"Comprenez vos documents facilement", heroTitle:"Expliquez contrats, factures et documents officiels en langage simple", heroSub:"Gratuit, respectueux de la vie privée, multilingue. Pas un conseil juridique.", uploadLabel:"Importer un document (PDF/TXT/DOCX/PNG/JPG/WEBP)", pasteLabel:"…ou collez votre texte ici", pasteHint:"Votre document reste sur votre appareil tant que vous n’actionnez pas un bouton ci-dessous.", regionLabel:"Région / Pays (facultatif, règles locales)", phDocText:"Collez le contenu de votre document…", phRegion:"ex. France / Île-de-France", phQuestion:"ex. Que signifie cette clause ? / Explique comme si j'avais cinq ans", btnExplainAll:"Expliquer tout le document", btnExplainSel:"Expliquer la sélection seulement", btnSave:"Sauvegarder localement", btnLoad:"Recharger le dernier", btnCamera:"Use camera",chooseFile:"Choisir un fichier",useCamera:"Utiliser la caméra",dropHint:"Drop an image here, or press Ctrl/Cmd+V to paste a screenshot.", askLabel:"Poser une question sur un passage (facultatif)", btnAskSel:"Question sur la sélection", btnAskAll:"Question sur tout le document", hideSidebar:"Masquer",showPrivacy:"Afficher",hidePrivacy:"Masquer", badgeNoStore:"Sans stockage", badgeTLS:"Chiffré", badgeMulti:"Multilingue", resultTitle:"Explication / Réponse", trustTitle:"Confidentialité & Confiance", trust1:"Votre texte n’est envoyé qu’à notre fournisseur d’IA pour générer l’explication. Nous ne conservons pas vos documents. Transmission via HTTPS.", trust2:"DocuMate ne crée pas de compte et ne sauvegarde pas votre contenu sur nos serveurs.", trust3:"Les données envoyées via l’API ne sont pas utilisées pour l’entraînement par défaut.", trust4:"Service d’explication en langage simple, pas un avis juridique.", trust5:"Important : l’IA peut se tromper ; vérifiez les points clés.", ppTitle:"Politique de confidentialité (résumé)", pp1:"Pas de stockage serveur ; traitement en mémoire puis suppression.", pp2:"HTTPS ; pas d’analytics par défaut ; pub seulement avec consentement.", pp3:"« Sauvegarder localement » conserve le texte dans votre navigateur.", pp4:"N’envoyez pas de données très sensibles.", pp5:"Informations générales, pas un avis juridique.", seoTitle:"Documents pris en charge", seoText:"Contrats, baux, factures, courriers bancaires, conditions d’assurance, CGV, etc.", footer1:"Explications gratuites de documents par IA", footerConsent:"Consentement pubs", footerClear:"Effacer les données locales", consentText:"Ce site peut afficher des publicités discrètes pour rester gratuit. Acceptez-vous les cookies/scripts publicitaires ?", deny:"Refuser", allow:"Accepter", loading:"Traitement…", nothingSel:"Aucune sélection : sélectionnez du texte.", noText:"Aucun texte à traiter.", saved:"Sauvegardé localement.", loaded:"Dernier document rechargé.", cleared:"Données locales effacées.", htmlTitle:"DocuMate — Comprenez vos documents facilement", htmlDesc:"DocuMate explique contrats, factures et documents officiels en langage simple. Gratuit, privé, multilingue."},
+      de:{langName:"Deutsch", tagline:"Dokumente einfach verstehen", heroTitle:"Verträge, Rechnungen & amtliche Schreiben in einfacher Sprache erklären", heroSub:"Kostenlos, privat, mehrsprachig. Keine Rechtsberatung.", uploadLabel:"Dokument hochladen (PDF/TXT/DOCX/PNG/JPG/WEBP)", pasteLabel:"…oder Text hier einfügen", pasteHint:"Ihr Dokument bleibt auf Ihrem Gerät, bis Sie unten eine Aktion ausführen.", regionLabel:"Region / Land (optional, für lokale Regeln)", phDocText:"Inhalt Ihres Dokuments einfügen…", phRegion:"z. B. Deutschland / Bayern", phQuestion:"z. B. Was bedeutet diese Klausel? / Erklär es mir wie einem Fünfjährigen", btnExplainAll:"Ganzes Dokument erklären", btnExplainSel:"Nur Auswahl erklären", btnSave:"Lokal speichern", btnLoad:"Letztes laden", btnCamera:"Use camera",chooseFile:"Datei auswählen",useCamera:"Kamera verwenden",dropHint:"Drop an image here, or press Ctrl/Cmd+V to paste a screenshot.", askLabel:"Spezifische Frage zu einer Passage (optional)", btnAskSel:"Zur Auswahl fragen", btnAskAll:"Zum ganzen Dokument fragen", hideSidebar:"Ausblenden",showPrivacy:"Einblenden",hidePrivacy:"Ausblenden", badgeNoStore:"Kein Speicher", badgeTLS:"Verschlüsselt", badgeMulti:"Mehrsprachig", resultTitle:"Erklärung / Antwort", trustTitle:"Datenschutz & Vertrauen", trust1:"Ihr Text wird nur an unseren KI-Anbieter gesendet, um die Erklärung zu erzeugen. Wir speichern Ihre Dokumente nicht. Übertragung per HTTPS.", trust2:"DocuMate erstellt keine Konten und speichert keine Inhalte auf unseren Servern.", trust3:"Daten über die API werden standardmäßig nicht zum Training verwendet.", trust4:"Dies ist eine vereinfachte Erklärung, keine Rechtsberatung.", trust5:"Wichtig: KI kann Fehler machen; prüfen Sie wichtige Punkte.", ppTitle:"Datenschutz (Kurzfassung)", pp1:"Keine Serverspeicherung; Verarbeitung im Speicher, dann verworfen.", pp2:"Nur HTTPS; keine Analytics standardmäßig; Werbung nur mit Einwilligung.", pp3:"„Lokal speichern“ bewahrt Text nur in Ihrem Browser.", pp4:"Keine hochsensiblen Daten senden.", pp5:"Informationen, keine Rechtsberatung.", seoTitle:"Dokumentarten, bei denen wir helfen", seoText:"Verträge, Mietverträge, Nebenkostenabrechnungen, Bankschreiben, Versicherungsbedingungen u. v. m.", footer1:"Kostenlose Dokumenterklärungen mit KI", footerConsent:"Werbeeinwilligung", footerClear:"Lokale Daten löschen", consentText:"Diese Seite zeigt evtl. unaufdringliche Werbung. Stimmen Sie Werbe-Cookies/Skripten zu?", deny:"Ablehnen", allow:"Zustimmen", loading:"Wird verarbeitet…", nothingSel:"Keine Auswahl: Markieren Sie zuerst Text.", noText:"Kein Text vorhanden.", saved:"Lokal gespeichert.", loaded:"Letztes Dokument geladen.", cleared:"Lokale Daten gelöscht.", htmlTitle:"DocuMate — Dokumente einfach verstehen", htmlDesc:"DocuMate erklärt Verträge, Rechnungen und amtliche Schreiben in einfacher Sprache. Kostenlos, privat, mehrsprachig."},
+      es:{langName:"Español", tagline:"Entiende tus documentos fácilmente", heroTitle:"Explica contratos, facturas y documentos oficiales en lenguaje simple", heroSub:"Gratis, privado, multilingüe. No es asesoría legal.", uploadLabel:"Sube un documento (PDF/TXT/DOCX/PNG/JPG/WEBP)", pasteLabel:"…o pega tu texto aquí", pasteHint:"Tu documento permanece en tu dispositivo hasta que pulses una acción abajo.", regionLabel:"Región / País (opcional, reglas locales)", phDocText:"Pega el contenido de tu documento…", phRegion:"p. ej., España / Comunidad de Madrid", phQuestion:"p. ej., ¿Qué significa esta cláusula? / Explícalo como si tuviera cinco años", btnExplainAll:"Explicar todo el documento", btnExplainSel:"Explicar solo la selección", btnSave:"Guardar localmente", btnLoad:"Cargar el último", btnCamera:"Use camera",chooseFile:"Elegir un archivo",useCamera:"Usar cámara",dropHint:"Drop an image here, or press Ctrl/Cmd+V to paste a screenshot.", askLabel:"Haz una pregunta específica sobre un pasaje (opcional)", btnAskSel:"Preguntar sobre la selección", btnAskAll:"Preguntar sobre todo el documento", hideSidebar:"Ocultar",showPrivacy:"Mostrar",hidePrivacy:"Ocultar", badgeNoStore:"Sin almacenamiento", badgeTLS:"Cifrado", badgeMulti:"Multilingüe", resultTitle:"Explicación / Respuesta", trustTitle:"Privacidad y confianza", trust1:"Tu texto se envía solo a nuestro proveedor de IA para generar la explicación. No guardamos tus documentos. Transmisión por HTTPS.", trust2:"DocuMate no crea cuentas ni guarda tu contenido en nuestros servidores.", trust3:"Los datos enviados por API no se usan para entrenar por defecto.", trust4:"Servicio informativo en lenguaje simple; no es asesoría legal.", trust5:"Importante: la IA puede cometer errores; verifica los puntos clave.", ppTitle:"Política de privacidad (resumen)", pp1:"Sin almacenamiento en servidor; procesamiento en memoria y descarte.", pp2:"Solo HTTPS; sin analíticas por defecto; anuncios solo con consentimiento.", pp3:"«Guardar localmente» mantiene el texto solo en tu navegador.", pp4:"No envíes datos muy sensibles.", pp5:"Información general; no es asesoría legal.", seoTitle:"Documentos que podemos ayudar", seoText:"Contratos, alquileres, facturas de servicios, cartas bancarias, pólizas de seguros y más.", footer1:"Explicaciones gratuitas de documentos con IA", footerConsent:"Consentimiento de anuncios", footerClear:"Borrar datos locales", consentText:"Este sitio puede mostrar anuncios discretos. ¿Aceptas cookies/scripts de publicidad?", deny:"Rechazar", allow:"Aceptar", loading:"Trabajando…", nothingSel:"Sin selección: selecciona texto primero.", noText:"No hay texto para procesar.", saved:"Guardado localmente.", loaded:"Último documento cargado.", cleared:"Datos locales borrados.", htmlTitle:"DocuMate — Entiende tus documentos fácilmente", htmlDesc:"DocuMate explica contratos, facturas y documentos oficiales en lenguaje simple. Gratis, privado, multilingüe."},
+      it:{langName:"Italiano", tagline:"Comprendi i tuoi documenti facilmente", heroTitle:"Spiega contratti, bollette e atti ufficiali in linguaggio semplice", heroSub:"Gratuito, privato, multilingue. Non è consulenza legale.", uploadLabel:"Carica un documento (PDF/TXT/DOCX/PNG/JPG/WEBP)", pasteLabel:"…oppure incolla qui il testo", pasteHint:"Il documento resta sul tuo dispositivo finché non clicchi un’azione sotto.", regionLabel:"Regione / Paese (opzionale, regole locali)", phDocText:"Incolla il contenuto del documento…", phRegion:"es.: Italia / Lombardia", phQuestion:"es.: Cosa significa questa clausola? / Spiegamelo come se avessi cinque anni", btnExplainAll:"Spiega tutto il documento", btnExplainSel:"Spiega solo la selezione", btnSave:"Salva in locale", btnLoad:"Carica l’ultimo", btnCamera:"Use camera",chooseFile:"Scegli un file",useCamera:"Usa la fotocamera",dropHint:"Drop an image here, or press Ctrl/Cmd+V to paste a screenshot.", askLabel:"Fai una domanda specifica su un passaggio (opzionale)", btnAskSel:"Domanda sulla selezione", btnAskAll:"Domanda su tutto il documento", hideSidebar:"Nascondi",showPrivacy:"Mostra",hidePrivacy:"Nascondi", badgeNoStore:"Nessun salvataggio", badgeTLS:"Crittografato", badgeMulti:"Multilingue", resultTitle:"Spiegazione / Risposta", trustTitle:"Privacy & Fiducia", trust1:"Il tuo testo è inviato solo al nostro provider di IA per generare la spiegazione. Non conserviamo i documenti. Trasmissione HTTPS.", trust2:"DocuMate non crea account e non salva i tuoi contenuti sui nostri server.", trust3:"I dati via API non sono usati per l’addestramento per impostazione predefinita.", trust4:"Servizio informativo in linguaggio semplice; non consulenza legale.", trust5:"Importante: l’IA può sbagliare; verifica i punti chiave.", ppTitle:"Informativa privacy (breve)", pp1:"Nessun salvataggio server; elaborazione in memoria e scarto.", pp2:"Solo HTTPS; niente analytics di default; annunci solo con consenso.", pp3:"“Salva in locale” mantiene il testo nel tuo browser.", pp4:"Non inviare dati altamente sensibili.", pp5:"Informazioni generali; non consulenza legale.", seoTitle:"Documenti con cui possiamo aiutare", seoText:"Contratti, contratti d’affitto, bollette, lettere bancarie, condizioni assicurative e altro.", footer1:"Spiegazioni gratuite dei documenti con IA", footerConsent:"Consenso annunci", footerClear:"Cancella dati locali", consentText:"Questo sito può mostrare annunci non invasivi. Accetti cookie/script pubblicitari?", deny:"Nega", allow:"Consenti", loading:"Elaborazione…", nothingSel:"Nessuna selezione: seleziona del testo.", noText:"Nessun testo da elaborare.", saved:"Salvato in locale.", loaded:"Ultimo documento caricato.", cleared:"Dati locali cancellati.", htmlTitle:"DocuMate — Comprendi i tuoi documenti facilmente", htmlDesc:"DocuMate spiega contratti, bollette e documenti ufficiali in linguaggio semplice. Gratuito, privato, multilingue."},
+      zh:{langName:"中文", tagline:"轻松理解您的文档", heroTitle:"用通俗语言解释合同、账单和官方文件", heroSub:"免费、私密、多语言。非法律建议。", uploadLabel:"上传文档（PDF/TXT/DOCX/PNG/JPG/WEBP）", pasteLabel:"…或将文本粘贴到这里", pasteHint:"在您点击下面的操作之前，文档一直保留在您的设备上。", regionLabel:"地区/国家（可选，用于本地规则）", phDocText:"粘贴您的文档内容…", phRegion:"例如：中国 / 北京市", phQuestion:"例如：这条款是什么意思？ / 像我五岁一样解释", btnExplainAll:"解释整份文档", btnExplainSel:"仅解释所选部分", btnSave:"本地保存", btnLoad:"加载上次", btnCamera:"Use camera",chooseFile:"选择文件",useCamera:"使用相机",dropHint:"Drop an image here, or press Ctrl/Cmd+V to paste a screenshot.", askLabel:"针对段落提问（可选）", btnAskSel:"询问所选部分", btnAskAll:"询问整份文档", hideSidebar:"隐藏",showPrivacy:"显示",hidePrivacy:"隐藏", badgeNoStore:"不存储", badgeTLS:"加密", badgeMulti:"多语言", resultTitle:"解释 / 答复", trustTitle:"隐私与信任", trust1:"您的文本仅发送给我们的 AI 提供商以生成解释。我们不保存也不阅读您的文档。通过 HTTPS 传输。", trust2:"DocuMate 不创建账户，也不在服务器上保存您的内容。", trust3:"通过 API 发送的数据默认不用于训练模型。", trust4:"这是通俗解释，不构成法律建议。", trust5:"重要：AI 可能出错；请核对关键信息。", ppTitle:"隐私政策（简要）", pp1:"不进行服务器存储；内存处理后即丢弃。", pp2:"仅 HTTPS；默认无分析；仅在同意后展示广告。", pp3:"“本地保存”只保存在您的浏览器中。", pp4:"请勿提供高度敏感的个人数据。", pp5:"仅供参考，不是法律建议。", seoTitle:"我们能帮助的文档", seoText:"合同、租赁协议、水电账单、银行函件、保险条款、通用条款等。", footer1:"免费 AI 文档解释", footerConsent:"广告同意", footerClear:"清除本地数据", consentText:"本站可能展示不打扰的广告以保持免费。是否接受广告 Cookie/脚本？", deny:"拒绝", allow:"允许", loading:"处理中…", nothingSel:"没有选择：请先选择文本。", noText:"暂时没有文本。", saved:"已本地保存。", loaded:"已加载上次文档。", cleared:"已清除本地数据。", htmlTitle:"DocuMate — 轻松理解您的文档", htmlDesc:"DocuMate 用通俗语言解释合同、账单和官方文件。免费、私密、多语言。"},
+      hi:{langName:"हिंदी", tagline:"अपने दस्तावेज़ आसानी से समझें", heroTitle:"सरल भाषा में अनुबंध, बिल और आधिकारिक दस्तावेज़ समझाएँ", heroSub:"नि:शुल्क, निजी, बहुभाषी। कानूनी सलाह नहीं।", uploadLabel:"दस्तावेज़ अपलोड करें (PDF/TXT/DOCX/PNG/JPG/WEBP)", pasteLabel:"…या यहाँ पाठ चिपकाएँ", pasteHint:"नीचे कोई क्रिया करने तक आपका दस्तावेज़ आपके डिवाइस पर ही रहता है।", regionLabel:"क्षेत्र / देश (वैकल्पिक, स्थानीय नियम)", phDocText:"अपने दस्तावेज़ की सामग्री चिपकाएँ…", phRegion:"उदा. भारत / दिल्ली", phQuestion:"उदा. यह धारा क्या मतलब है? / ऐसे समझाओ जैसे मैं पाँच साल का हूँ", btnExplainAll:"पूरा दस्तावेज़ समझाएँ", btnExplainSel:"केवल चयन समझाएँ", btnSave:"लोकल सेव", btnLoad:"आखिरी लोड करें", btnCamera:"Use camera",chooseFile:"फ़ाइल चुनें",useCamera:"कैमरा उपयोग करें",dropHint:"Drop an image here, or press Ctrl/Cmd+V to paste a screenshot.", askLabel:"किसी अनुच्छेद पर विशेष प्रश्न (वैकल्पिक)", btnAskSel:"चयन पर पूछें", btnAskAll:"पूरे दस्तावेज़ पर पूछें", hideSidebar:"छिपाएँ",showPrivacy:"दिखाएं",hidePrivacy:"छिपाएं", badgeNoStore:"भंडारण नहीं", badgeTLS:"एन्क्रिप्टेड", badgeMulti:"बहुभाषी", resultTitle:"व्याख्या / उत्तर", trustTitle:"गोपनीयता और भरोसा", trust1:"आपका पाठ केवल व्याख्या बनाने के लिए हमारे AI प्रदाता को भेजा जाता है। हम आपके दस्तावेज़ नहीं रखते। HTTPS द्वारा संचार।", trust2:"DocuMate खाते नहीं बनाता और आपके कंटेंट को सर्वर पर सहेजता नहीं है।", trust3:"API के माध्यम से भेजे गए डेटा का उपयोग डिफ़ॉल्ट रूप से प्रशिक्षण के लिए नहीं होता।", trust4:"यह सरल भाषा में जानकारी है; कानूनी सलाह नहीं।", trust5:"महत्वपूर्ण: AI गलतियाँ कर सकता है; महत्वपूर्ण बिंदु जाँचें।", ppTitle:"गोपनीयता नीति (संक्षेप)", pp1:"सर्वर-साइड भंडारण नहीं; मेमोरी में संसाधित कर हटाया जाता है।", pp2:"केवल HTTPS; डिफ़ॉल्ट रूप से कोई एनालिटिक्स नहीं; विज्ञापन केवल सहमति पर।", pp3:"“लोकल सेव” केवल आपके ब्राउज़र में सहेजता है।", pp4:"अत्यधिक संवेदनशील डेटा न भेजें।", pp5:"सामान्य जानकारी; कानूनी सलाह नहीं।", seoTitle:"जिन दस्तावेज़ों में हम मदद करते हैं", seoText:"अनुबंध, किराये के समझौते, यूटिलिटी बिल, बैंक पत्र, बीमा शर्तें आदि।", footer1:"AI-संचालित निःशुल्क दस्तावेज़ व्याख्याएँ", footerConsent:"विज्ञापन सहमति", footerClear:"लोकल डेटा साफ़ करें", consentText:"यह साइट मुफ्त रहने के लिए सरल विज्ञापन दिखा सकती है। क्या आप विज्ञापन कुकी/स्क्रिप्ट स्वीकार करते हैं?", deny:"इन्कार", allow:"अनुमति", loading:"कार्य जारी…", nothingSel:"कोई चयन नहीं: पहले पाठ चुनें।", noText:"प्रक्रिया करने के लिए कोई पाठ नहीं।", saved:"लोकल रूप से सहेजा गया।", loaded:"आखिरी दस्तावेज़ लोड किया।", cleared:"लोकल डेटा साफ़ किया।", htmlTitle:"DocuMate — अपने दस्तावेज़ आसानी से समझें", htmlDesc:"DocuMate सरल भाषा में अनुबंध, बिल और आधिकारिक दस्तावेज़ समझाता है।"},
+      ar:{langName:"العربية", tagline:"افهم مستنداتك بسهولة", heroTitle:"اشرح العقود والفواتير والمستندات الرسمية بلغة مبسطة", heroSub:"مجاني، خاص، متعدد اللغات. ليس استشارة قانونية.", uploadLabel:"ارفع مستندًا (PDF/TXT/DOCX/PNG/JPG/WEBP)", pasteLabel:"…أو الصق نصك هنا", pasteHint:"يبقى مستندك على جهازك حتى تختار إجراءً أدناه.", regionLabel:"المنطقة/البلد (اختياري، للقواعد المحلية)", phDocText:"الصق محتوى مستندك…", phRegion:"مثال: مصر / القاهرة", phQuestion:"مثال: ما معنى هذا البند؟ / اشرح كأن عمري خمس سنوات", btnExplainAll:"اشرح المستند كاملًا", btnExplainSel:"اشرح الجزء المحدد فقط", btnSave:"احفظ محليًا", btnLoad:"حمّل الأخير", btnCamera:"Use camera",chooseFile:"اختر ملفًا",useCamera:"استخدم الكاميرا",dropHint:"Drop an image here, or press Ctrl/Cmd+V to paste a screenshot.", askLabel:"اطرح سؤالًا محددًا حول مقطع (اختياري)", btnAskSel:"اسأل عن التحديد", btnAskAll:"اسأل عن المستند كاملًا", hideSidebar:"إخفاء",showPrivacy:"إظهار",hidePrivacy:"إخفاء", badgeNoStore:"دون تخزين", badgeTLS:"مشفّر", badgeMulti:"متعدد اللغات", resultTitle:"الشرح / الإجابة", trustTitle:"الخصوصية والثقة", trust1:"يُرسل نصك فقط إلى مزوّد الذكاء الاصطناعي لتوليد الشرح. لا نحتفظ بمستنداتك ولا نقرأها. النقل عبر HTTPS.", trust2:"لا ينشئ DocuMate حسابات ولا يحفظ محتواك على خوادمنا.", trust3:"البيانات المرسلة عبر الواجهة البرمجية لا تُستخدم افتراضيًا لتدريب النماذج.", trust4:"الخدمة للمعلومات بلغة مبسطة، وليست استشارة قانونية.", trust5:"مهم: قد يخطئ الذكاء الاصطناعي؛ تحقّق من التفاصيل المهمة.", ppTitle:"سياسة الخصوصية (مختصر)", pp1:"لا تخزين على الخادم؛ معالجة في الذاكرة ثم حذف.", pp2:"HTTPS فقط؛ دون تحليلات افتراضيًا؛ إعلانات بموافقتك فقط.", pp3:"“الحفظ محليًا” يبقي النص في متصفحك فقط.", pp4:"لا تشارك بيانات شخصية شديدة الحساسية.", pp5:"معلومات عامة وليست نصيحة قانونية.", seoTitle:"المستندات التي نساعد بها", seoText:"العقود، عقود الإيجار، فواتير الخدمات، رسائل البنوك، شروط التأمين وغير ذلك.", footer1:"شروحات مستندات مجانية مدعومة بالذكاء الاصطناعي", footerConsent:"إعدادات الإعلانات", footerClear:"مسح البيانات المحلية", consentText:"قد يعرض هذا الموقع إعلانات غير متطفلة للبقاء مجانيًا. هل تقبل ملفات تعريف الارتباط/البرمجيات الإعلانية؟", deny:"رفض", allow:"سماح", loading:"جارٍ العمل…", nothingSel:"لا تحديد: حدّد نصًا أولًا.", noText:"لا نص للمعالجة بعد.", saved:"تم الحفظ محليًا.", loaded:"تم تحميل آخر مستند.", cleared:"تم مسح البيانات المحلية.", htmlTitle:"DocuMate — افهم مستنداتك بسهولة", htmlDesc:"DocuMate يشرح العقود والفواتير والمستندات الرسمية بلغة مبسطة."},
+      pt:{langName:"Português", tagline:"Entenda seus documentos facilmente", heroTitle:"Explique contratos, contas e documentos oficiais em linguagem simples", heroSub:"Gratuito, privado, multilíngue. Não é aconselhamento jurídico.", uploadLabel:"Enviar um documento (PDF/TXT/DOCX/PNG/JPG/WEBP)", pasteLabel:"…ou cole seu texto aqui", pasteHint:"Seu documento fica no seu dispositivo até você clicar em uma ação abaixo.", regionLabel:"Região / País (opcional, regras locais)", phDocText:"Cole o conteúdo do seu documento…", phRegion:"ex.: Brasil / São Paulo", phQuestion:"ex.: O que esta cláusula significa? / Explique como se eu tivesse cinco anos", btnExplainAll:"Explicar o documento inteiro", btnExplainSel:"Explicar apenas a seleção", btnSave:"Salvar localmente", btnLoad:"Carregar o último", btnCamera:"Use camera",chooseFile:"Escolher um arquivo",useCamera:"Usar câmera",dropHint:"Drop an image here, or press Ctrl/Cmd+V to paste a screenshot.", askLabel:"Faça uma pergunta específica sobre um trecho (opcional)", btnAskSel:"Perguntar sobre a seleção", btnAskAll:"Perguntar sobre todo o documento", hideSidebar:"Ocultar",showPrivacy:"Mostrar",hidePrivacy:"Ocultar", badgeNoStore:"Sem armazenamento", badgeTLS:"Criptografado", badgeMulti:"Multilíngue", resultTitle:"Explicação / Resposta", trustTitle:"Privacidade & Confiança", trust1:"Seu texto é enviado apenas ao provedor de IA para gerar a explicação. Não guardamos seus documentos. Transmissão via HTTPS.", trust2:"O DocuMate não cria contas nem salva seu conteúdo em nossos servidores.", trust3:"Dados enviados via API não são usados para treinar por padrão.", trust4:"Serviço informativo em linguagem simples; não é aconselhamento jurídico.", trust5:"Importante: a IA pode errar; verifique pontos-chave.", ppTitle:"Política de Privacidade (resumo)", pp1:"Sem armazenamento no servidor; processamento em memória e descarte.", pp2:"Apenas HTTPS; sem analytics por padrão; anúncios só com consentimento.", pp3:"“Salvar localmente” mantém o texto apenas no seu navegador.", pp4:"Não compartilhe dados muito sensíveis.", pp5:"Informativo, não é aconselhamento jurídico.", seoTitle:"Documentos com que ajudamos", seoText:"Contratos, alugueis, contas de serviços, cartas bancárias, termos de seguro e mais.", footer1:"Explicações gratuitas de documentos com IA", footerConsent:"Consentimento de anúncios", footerClear:"Limpar dados locais", consentText:"Este site pode mostrar anúncios discretos para se manter gratuito. Aceita cookies/scripts de publicidade?", deny:"Negar", allow:"Permitir", loading:"Processando…", nothingSel:"Nenhuma seleção: selecione texto primeiro.", noText:"Sem texto para processar.", saved:"Salvo localmente.", loaded:"Último documento carregado.", cleared:"Dados locais limpos.", htmlTitle:"DocuMate — Entenda seus documentos facilmente", htmlDesc:"DocuMate explica contratos, contas e documentos oficiais em linguagem simples."},
+      ru:{langName:"Русский", tagline:"Понимайте документы легко", heroTitle:"Поясняем договоры, счета и официальные письма простым языком", heroSub:"Бесплатно, приватно, многоязычно. Не юридическая консультация.", uploadLabel:"Загрузите документ (PDF/TXT/DOCX/PNG/JPG/WEBP)", pasteLabel:"…или вставьте текст сюда", pasteHint:"Ваш документ остаётся на устройстве, пока вы не выберете действие ниже.", regionLabel:"Регион / Страна (необязательно, для местных правил)", phDocText:"Вставьте содержимое документа…", phRegion:"напр., Россия / Москва", phQuestion:"напр., Что означает этот пункт? / Объясните, как будто мне пять лет", btnExplainAll:"Объяснить весь документ", btnExplainSel:"Объяснить только выделенное", btnSave:"Сохранить локально", btnLoad:"Загрузить последнее", btnCamera:"Use camera",chooseFile:"Выбрать файл",useCamera:"Использовать камеру",dropHint:"Drop an image here, or press Ctrl/Cmd+V to paste a screenshot.", askLabel:"Задать вопрос по фрагменту (необязательно)", btnAskSel:"Спросить о выделенном", btnAskAll:"Спросить о всём документе", hideSidebar:"Скрыть",showPrivacy:"Показать",hidePrivacy:"Скрыть", badgeNoStore:"Без хранения", badgeTLS:"Шифрование", badgeMulti:"Многоязычно", resultTitle:"Пояснение / Ответ", trustTitle:"Конфиденциальность и доверие", trust1:"Ваш текст отправляется только провайдеру ИИ для генерации пояснений. Мы не храним документы. Передача по HTTPS.", trust2:"DocuMate не создаёт аккаунты и не хранит ваш контент на серверах.", trust3:"Данные, отправленные через API, по умолчанию не используются для обучения.", trust4:"Сервис предоставляет информацию простым языком, это не юрконсультация.", trust5:"Важно: ИИ может ошибаться; проверяйте ключевые детали.", ppTitle:"Политика конфиденциальности (кратко)", pp1:"Нет серверного хранения; обработка в памяти и удаление.", pp2:"Только HTTPS; без аналитики по умолчанию; реклама только с согласия.", pp3:"«Сохранить локально» хранит текст только в вашем браузере.", pp4:"Не отправляйте особо чувствительные данные.", pp5:"Информация, не юридическая консультация.", seoTitle:"С какими документами помогаем", seoText:"Договоры, аренда, коммунальные счета, письма банка, условия страховки и др.", footer1:"Бесплатные пояснения документов на ИИ", footerConsent:"Настройки рекламы", footerClear:"Очистить локальные данные", consentText:"Сайт может показывать ненавязчивую рекламу. Принять рекламные cookies/скрипты?", deny:"Отклонить", allow:"Разрешить", loading:"Идёт обработка…", nothingSel:"Нет выделения: выделите текст.", noText:"Нет текста для обработки.", saved:"Сохранено локально.", loaded:"Последний документ загружен.", cleared:"Локальные данные очищены.", htmlTitle:"DocuMate — Понимайте документы легко", htmlDesc:"DocuMate объясняет договоры, счета и официальные письма простым языком."},
+      bn:{langName:"বাংলা", tagline:"সহজে আপনার নথি বুঝুন", heroTitle:"চুক্তি, বিল ও সরকারি নথি সাধারণ ভাষায় ব্যাখ্যা করুন", heroSub:"ফ্রি, ব্যক্তিগত, বহু-ভাষিক। আইনি পরামর্শ নয়।", uploadLabel:"ডকুমেন্ট আপলোড করুন (PDF/TXT/DOCX/PNG/JPG/WEBP)", pasteLabel:"…অথবা এখানে টেক্সট পেস্ট করুন", pasteHint:"নীচের বোতাম ক্লিক না করা পর্যন্ত আপনার নথি আপনার ডিভাইসেই থাকে।", regionLabel:"অঞ্চল / দেশ (ঐচ্ছিক, স্থানীয় নিয়ম)", phDocText:"আপনার নথির বিষয়বস্তু পেস্ট করুন…", phRegion:"যেমন: বাংলাদেশ / ঢাকা", phQuestion:"যেমন: এই ধারার অর্থ কী? / আমাকে পাঁচ বছরের শিশুর মতো বুঝিয়ে বলুন", btnExplainAll:"পুরো ডকুমেন্ট ব্যাখ্যা করুন", btnExplainSel:"শুধু নির্বাচিত অংশ ব্যাখ্যা করুন", btnSave:"লোকালি সেভ", btnLoad:"শেষটি লোড করুন", btnCamera:"Use camera",chooseFile:"ফাইল বাছাই করুন",useCamera:"ক্যামেরা ব্যবহার করুন",dropHint:"Drop an image here, or press Ctrl/Cmd+V to paste a screenshot.", askLabel:"কোনো অংশ নিয়ে নির্দিষ্ট প্রশ্ন (ঐচ্ছিক)", btnAskSel:"নির্বাচিত অংশ নিয়ে প্রশ্ন", btnAskAll:"পুরো ডকুমেন্ট নিয়ে প্রশ্ন", hideSidebar:"লুকান",showPrivacy:"দেখান",hidePrivacy:"লুকান", badgeNoStore:"সংরক্ষণ নয়", badgeTLS:"এনক্রিপ্টেড", badgeMulti:"বহুভাষিক", resultTitle:"ব্যাখ্যা / উত্তর", trustTitle:"গোপনীয়তা ও বিশ্বাস", trust1:"আপনার টেক্সট কেবল ব্যাখ্যার জন্য আমাদের AI প্রোভাইডারের কাছে পাঠানো হয়। আমরা নথি রাখি না। HTTPS দ্বারা পরিবহন।", trust2:"DocuMate অ্যাকাউন্ট তৈরি করে না এবং সার্ভারে আপনার কন্টেন্ট সংরক্ষণ করে না।", trust3:"API দিয়ে পাঠানো ডেটা ডিফল্টে মডেল ট্রেনিংয়ে ব্যবহৃত হয় না।", trust4:"এটি সাধারণ ভাষায় ব্যাখ্যা; আইনি পরামর্শ নয়।", trust5:"গুরুত্বপূর্ণ: AI ভুল করতে পারে; গুরুত্বপূর্ণ বিষয় যাচাই করুন।", ppTitle:"গোপনীয়তা নীতি (সংক্ষিপ্ত)", pp1:"সার্ভারে সংরক্ষণ নয়; মেমোরিতে প্রক্রিয়া করে বাদ দেওয়া হয়।", pp2:"শুধু HTTPS; ডিফল্টে কোনো অ্যানালিটিক্স নয়; বিজ্ঞাপন কেবল সম্মতিতে।", pp3:"“লোকালি সেভ” কেবল আপনার ব্রাউজারে টেক্সট রাখে।", pp4:"অত্যন্ত সংবেদনশীল ডেটা পাঠাবেন না।", pp5:"তথ্যগত, আইনি পরামর্শ নয়।", seoTitle:"যে নথিতে আমরা সাহায্য করি", seoText:"চুক্তি, ভাড়ার চুক্তি, ইউটিলিটি বিল, ব্যাংকের চিঠি, বীমা শর্তাদি ইত্যাদি।", footer1:"AI-চালিত ফ্রি ডকুমেন্ট ব্যাখ্যা", footerConsent:"বিজ্ঞাপনের সম্মতি", footerClear:"লোকাল ডেটা মুছুন", consentText:"বিনামূল্যে রাখতে এই সাইটে সাদামাটা বিজ্ঞাপন দেখানো হতে পারে। আপনি কি বিজ্ঞাপনের কুকি/স্ক্রিপ্ট গ্রহণ করবেন?", deny:"না", allow:"হ্যাঁ", loading:"চলছে…", nothingSel:"কোনো নির্বাচন নেই: আগে টেক্সট নির্বাচন করুন।", noText:"প্রসেস করার মতো টেক্সট নেই।", saved:"লোকালি সেভ করা হয়েছে।", loaded:"শেষ ডকুমেন্ট লোড হয়েছে।", cleared:"লোকাল ডেটা মুছে ফেলা হয়েছে।", htmlTitle:"DocuMate — সহজে আপনার নথি বুঝুন", htmlDesc:"DocuMate সাধারণ ভাষায় চুক্তি, বিল ও সরকারি নথি ব্যাখ্যা করে।"}
+    };
+
+    // Apply I18N to UI and SEO meta
+    const $ = sel => document.querySelector(sel);
+    const byId = id => document.getElementById(id);
+    function applyI18n(lang){
+      var T = I18N[lang] || I18N.en;
+      var isRTL = (lang === 'ar');
+      document.documentElement.lang = lang;
+      document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
+
+      setText('tagline', T.tagline);
+      var labelLang = (lang==='ar'?'اللغة':lang==='hi'?'भाषा':lang==='zh'?'语言':lang==='de'?'Sprache':lang==='fr'?'Langue':lang==='es'?'Idioma':lang==='it'?'Lingua':lang==='pt'?'Idioma':'Language');
+      setText('label-language', labelLang);
+      setText('hero-title', T.heroTitle);
+      setText('hero-sub', T.heroSub);
+      setText('label-paste', T.pasteLabel);
+      setText('paste-hint', T.pasteHint);
+      setText('label-region', T.regionLabel);
+      setAttr('docText','placeholder',T.phDocText);
+      setAttr('region','placeholder',T.phRegion);
+      setText('btnExplainAll', T.btnExplainAll);
+      setText('btnExplainSel', T.btnExplainSel);
+      setText('btnSave', T.btnSave);
+      setText('btnLoad', T.btnLoad);
+      setText('btnChooseFile', T.chooseFile);
+      setText('btnUseCamera', T.useCamera);
+      setText('label-ask', T.askLabel);
+      setAttr('question','placeholder',T.phQuestion);
+      setText('btnAskSel', T.btnAskSel);
+      setText('btnAskAll', T.btnAskAll);
+      setText('badge-no-store', T.badgeNoStore);
+      setText('badge-tls', T.badgeTLS);
+      setText('badge-multi', T.badgeMulti);
+      setText('result-title', T.resultTitle);
+      setText('privacy-title', T.trustTitle);
+      var sh = document.getElementById('privacy-show');
+      var hd = document.getElementById('privacy-hide-toggle');
+      if (sh) sh.textContent = T.showPrivacy || 'Show';
+      if (hd) hd.textContent = T.hidePrivacy || 'Hide';
+      setText('trust-1', T.trust1);
+      setText('trust-2', T.trust2);
+      setText('trust-3', T.trust3);
+      setText('trust-4', T.trust4);
+      setText('trust-5', T.trust5);
+      setText('pp-title', T.ppTitle);
+      setText('pp1', T.pp1);
+      setText('pp2', T.pp2);
+      setText('pp3', T.pp3);
+      setText('pp4', T.pp4);
+      setText('pp5', T.pp5);
+      setText('seo-title', T.seoTitle);
+      setText('seo-text', T.seoText);
+      setText('footer1', T.footer1);
+      setText('footer-consent', T.footerConsent);
+      setText('footer-clear', T.footerClear);
+      setText('consent-text', T.consentText);
+      setText('denyAds', T.deny);
+      setText('allowAds', T.allow);
+
+      var base = 'https://documate.work';
+      var path = LANG_PATH[lang] || '/';
+      setAttr('canonical-link','href', base + path);
+      setAttr('og-url','content', base + path);
+      setAttr('og-title','content', T.htmlTitle);
+      setAttr('og-desc','content', T.htmlDesc);
+      setAttr('tw-title','content', T.htmlTitle);
+      setAttr('tw-desc','content', T.htmlDesc);
+
+      var mt=document.getElementById('meta-title'); if(mt && T.htmlTitle){ document.title = mt.textContent = T.htmlTitle; }
+      var md=document.getElementById('meta-desc'); if(md && T.htmlDesc){ md.setAttribute('content', T.htmlDesc); }
+
+      var ld={'@context':'https://schema.org','@type':'WebSite','name':'DocuMate','url':'https://documate.work/','inLanguage':lang,'description':T.htmlDesc};
+      setText('jsonld-website', JSON.stringify(ld));
+
+      var sel = document.getElementById('langSel'); if (sel) sel.value = lang;
+
+      window.STR = {
+        loading: T.loading, nothingSel:T.nothingSel, noText:T.noText,
+        saved:T.saved, loaded:T.loaded, cleared:T.cleared
+      };
+    }
+    // Determine current language
+    let currentLang;
+    (function(){
+      var initial = (document.documentElement.lang || 'en').toLowerCase();
+      currentLang = initial;
+      document.addEventListener('DOMContentLoaded', function(){ applyI18n(initial); });
+    })();
+    // Handle language selector: instant update + optional redirect for SEO-friendly URLs
+    const langSel = document.getElementById('langSel');
+    langSel && langSel.addEventListener('change', e => {
+      const lg = e.target.value; applyI18n(lg);
+      // Redirect to language path so the URL reflects it (good for SEO and sharing)
+      if (LANG_PATH[lg]) location.href = LANG_PATH[lg];
+    });
+
+    // ----------------- Elements -----------------
+    const docText = document.getElementById('docText');
+    const result = document.getElementById('result');
+    const region = document.getElementById('region');
+
+    // ----------------- Helpers + API call -----------------
+    function getSelectionTextFromTextarea(txtEl){
+      const start = txtEl.selectionStart, end = txtEl.selectionEnd;
+      if (start === end) return '';
+      return txtEl.value.slice(start, end);
+    }
+    function setLoading(on){
+      ['#btnExplainAll','#btnExplainSel','#btnAskSel','#btnAskAll'].forEach(id=>{
+        const b = document.querySelector(id); if(b) b.disabled = on;
+      });
+      result.textContent = on ? (window.STR?.loading || 'Working…') : result.textContent;
+    }
+    async function callExplain({ text, question=null }){
+      const payload = { text, question, lang: currentLang, region: region.value.trim() || null };
+      const res = await fetch('/api/explain', {
+        method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)
+      });
+      if(!res.ok){ throw new Error('Server error');}
+      const data = await res.json();
+      return data.answer || '(no answer)';
+    }
+
+    // ----------------- Buttons -----------------
+    document.getElementById('btnExplainAll').addEventListener('click', async () => {
+      const all = docText.value.trim();
+      if (!all){ alert(window.STR?.noText || 'No text to process yet.'); return; }
+      setLoading(true);
+      try { result.textContent = await callExplain({ text: all }); }
+      catch(e){ result.textContent = 'Error: '+e.message; }
+      finally { setLoading(false); }
+    });
+    document.getElementById('btnExplainSel').addEventListener('click', async () => {
+      const sel = getSelectionTextFromTextarea(docText);
+      if (!sel){ alert(window.STR?.nothingSel || 'No selection'); return; }
+      setLoading(true);
+      try { result.textContent = await callExplain({ text: sel }); }
+      catch(e){ result.textContent = 'Error: '+e.message; }
+      finally { setLoading(false); }
+    });
+    document.getElementById('btnAskSel').addEventListener('click', async () => {
+      const sel = getSelectionTextFromTextarea(docText);
+      if (!sel){ alert(window.STR?.nothingSel || 'No selection'); return; }
+      const q = document.getElementById('question').value.trim() || null;
+      setLoading(true);
+      try { result.textContent = await callExplain({ text: sel, question: q }); }
+      catch(e){ result.textContent = 'Error: '+e.message; }
+      finally { setLoading(false); }
+    });
+    document.getElementById('btnAskAll').addEventListener('click', async () => {
+      const all = docText.value.trim();
+      if (!all){ alert(window.STR?.noText || 'No text to process yet.'); return; }
+      const q = document.getElementById('question').value.trim() || null;
+      setLoading(true);
+      try { result.textContent = await callExplain({ text: all, question: q }); }
+      catch(e){ result.textContent = 'Error: '+e.message; }
+      finally { setLoading(false); }
+    });
+    document.getElementById('btnSave').addEventListener('click', () => {
+      localStorage.setItem('documate_last_doc', docText.value || '');
+      localStorage.setItem('documate_last_region', region.value || '');
+      alert(window.STR?.saved || 'Saved locally.');
+    });
+    document.getElementById('btnLoad').addEventListener('click', () => {
+      const v = localStorage.getItem('documate_last_doc') || '';
+      const r = localStorage.getItem('documate_last_region') || '';
+      docText.value = v; region.value = r;
+      alert(window.STR?.loaded || 'Loaded last document.');
+    });
+    document.getElementById('clearLocal').addEventListener('click', e => {
+      e.preventDefault();
+      localStorage.removeItem('documate_last_doc');
+      localStorage.removeItem('documate_last_region');
+      alert(window.STR?.cleared || 'Local data cleared.');
+    });
+
+    // ----------------- Consent + Ad render -----------------
+    function getConsent(){ return localStorage.getItem('documate_ads_consent'); }
+    function setConsent(v){ localStorage.setItem('documate_ads_consent', v); }
+        function renderAdsIfAllowed(){
+      if (getConsent()==="allow") {
+        if (location.search.includes("adtest=1")) {
+          document.querySelectorAll("ins.adsbygoogle").forEach(i => i.setAttribute("data-adtest","on"));
+        }
+        try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
+      }
+    }
+
+    const consentBox = document.getElementById('consentBox');
+    if(!getConsent()) consentBox.style.display='block';
+    document.getElementById('allowAds').addEventListener('click', ()=>{ setConsent('allow'); consentBox.style.display='none'; renderAdsIfAllowed(); });
+    document.getElementById('denyAds').addEventListener('click', ()=>{ setConsent('deny'); consentBox.style.display='none'; });
+    document.getElementById('openConsent').addEventListener('click', e=>{ e.preventDefault(); consentBox.style.display='block'; });
+  </script>
+
+<script>
+(function(){
+  if (window.__documateImagePipelineV2) return;
+  window.__documateImagePipelineV2 = true;
+
+  const fileInput = document.getElementById('file');
+  const camInput  = document.getElementById('camera');
+  const docText   = document.getElementById('docText');
+  const btnUseCamera = document.getElementById('btnUseCamera');
+
+  // Langue → Tesseract
+  const TESS_LANG_MAP = { en:'eng', fr:'fra', de:'deu', es:'spa', it:'ita', pt:'por', ru:'rus', bn:'ben', hi:'hin', ar:'ara', zh:'chi_sim' };
+  const currentLang = ()=> (document.documentElement.lang || 'en').toLowerCase();
+  const tessLangFor = lg => TESS_LANG_MAP[lg] || 'eng';
+  function ocrSet(msg, cls){
+    const el = document.getElementById('ocr-status'); if(!el) return;
+    el.hidden = false;
+    el.classList.remove('ok','err');
+    if (cls) el.classList.add(cls);
+    el.innerHTML = '<span class="spinner" aria-hidden="true"></span>' + (msg || '');
+  }
+  function ocrOK(msg){
+    const el = document.getElementById('ocr-status'); if(!el) return;
+    el.hidden = false; el.classList.remove('err'); el.classList.add('ok');
+    el.innerHTML = (msg || '');
+  }
+  function ocrError(msg){
+    const el = document.getElementById('ocr-status'); if(!el) return;
+    el.hidden = false; el.classList.remove('ok'); el.classList.add('err');
+    el.innerHTML = (msg || 'Could not read this file');
+  }
+  function ocrClear(){
+    const el = document.getElementById('ocr-status'); if(!el) return;
+    el.hidden = true; el.classList.remove('ok','err'); el.textContent = '';
+  }
+
+  // i18n helpers (fallbacks):
+  function T(key, fallback){
+    try {
+      var lang = (document.documentElement.lang||'en').toLowerCase();
+      return (window.I18N && I18N[lang] && I18N[lang][key]) || fallback;
+    } catch(e){ return fallback; }
+  }
+
+
+  // Nettoyage texte (fix regex)
+  function postProcess(s){
+    return s.replace(/\u00AD/g,'').replace(/[ \t]{2,}/g,' ').replace(/\n{3,}/g,'\n\n');
+  }
+  function isLikelyXML(s){
+    const tagsLen = (s.match(/<[^>]+>/g) || []).join('').length;
+    return s.length>0 && (tagsLen/s.length) > 0.15;
+  }
+  function stripXML(s){ return s.replace(/<[^>]+>/g,' ').replace(/\s{2,}/g,' ').trim(); }
+
+  // Prétraitement image (contraste + N&B)
+  function enhanceOnCanvas(canvas){
+    const ctx = canvas.getContext('2d', { willReadFrequently:true });
+    const img = ctx.getImageData(0,0,canvas.width,canvas.height);
+    const d = img.data;
+    const contrast = 1.2, mid = 128;
+    for (let i=0;i<d.length;i+=4){
+      const g = 0.299*d[i] + 0.587*d[i+1] + 0.114*d[i+2];
+      let v = (g - mid)*contrast + mid; if (v<0) v=0; if (v>255) v=255;
+      d[i]=d[i+1]=d[i+2]=v;
+    }
+    let sum=0,cnt=0; for (let i=0;i<d.length;i+=32){ sum+=d[i]; cnt++; }
+    const th = Math.max(100, Math.min(170, sum/Math.max(1,cnt)));
+    for (let i=0;i<d.length;i+=4){ const v = d[i] >= th ? 255 : 0; d[i]=d[i+1]=d[i+2]=v; }
+    ctx.putImageData(img,0,0);
+    return canvas;
+  }
+
+  async function detectOrientationAndFix(canvas){
+    try{
+      const det = await Tesseract.detect(canvas);
+      const angle = Math.round(det?.data?.angle || 0);
+      if (angle % 360 !== 0){
+        const src = canvas, rad = angle*Math.PI/180;
+        const w = src.width, h = src.height;
+        const sin = Math.abs(Math.sin(rad)), cos = Math.abs(Math.cos(rad));
+        const out = document.createElement('canvas');
+        out.width  = Math.round(w*cos + h*sin);
+        out.height = Math.round(w*sin + h*cos);
+        const ctx = out.getContext('2d', { willReadFrequently:true });
+        ctx.translate(out.width/2, out.height/2); ctx.rotate(rad);
+        ctx.drawImage(src, -w/2, -h/2);
+        return out;
+      }
+    }catch(e){}
+    return canvas;
+  }
+
+  async function ocrImageFile(file, lang, onProgress){
+    let bitmap;
+    try{ bitmap = await createImageBitmap(file, { imageOrientation:'from-image' }); }
+    catch{ const img = await blobToImage(file); bitmap = await createImageBitmap(img); }
+
+    const maxDim = 2500;
+    const scale = Math.min(1, maxDim / Math.max(bitmap.width, bitmap.height));
+    const w = Math.max(1, Math.round(bitmap.width*scale));
+    const h = Math.max(1, Math.round(bitmap.height*scale));
+
+    let canvas = document.createElement('canvas');
+    canvas.width = w; canvas.height = h;
+    let ctx = canvas.getContext('2d', { willReadFrequently:true });
+    ctx.drawImage(bitmap, 0, 0, w, h);
+
+    canvas = await detectOrientationAndFix(canvas);
+    enhanceOnCanvas(canvas);
+
+    const { data:{ text } } = await Tesseract.recognize(canvas, lang, {
+      logger: m => { if (onProgress && typeof m.progress==='number') onProgress(Math.round(m.progress*100)); }
+    });
+    return postProcess(text || '');
+  }
+
+  function blobToImage(blob){
+    return new Promise((resolve,reject)=>{
+      const img = new Image();
+      img.onload = ()=> resolve(img);
+      img.onerror = reject;
+      img.decoding = 'async';
+      img.src = URL.createObjectURL(blob);
+    });
+  }
+
+  async function ocrPdfWithTesseract(pdf, lang, onProgress){
+    let all=''; const total=pdf.numPages; const scale=2;
+    const canvas=document.createElement('canvas');
+    const ctx=canvas.getContext('2d',{ willReadFrequently:true });
+    for(let p=1;p<=total;p++){
+      onProgress && onProgress(p,total);
+      const page=await pdf.getPage(p);
+      const vp=page.getViewport({ scale });
+      canvas.width=Math.ceil(vp.width); canvas.height=Math.ceil(vp.height);
+      await page.render({ canvasContext:ctx, viewport:vp }).promise;
+      enhanceOnCanvas(canvas);
+      const { data:{ text } } = await Tesseract.recognize(canvas, lang);
+      all += (text||'') + '\n\n';
+      await new Promise(r=>setTimeout(r,0));
+    }
+    return postProcess(all || '');
+  }
+
+  const isImgName = name => /\.(png|jpe?g|webp)$/i.test(name||'');
+
+  async function processFile(file){
+    if (!file || !docText) return;
+    await ensureHeavyLibs();
+        try{
+      const name = (file.name||'').toLowerCase();
+      const buf  = await file.arrayBuffer();
+
+      // PDF
+      if (name.endsWith('.pdf')){
+        const task = pdfjsLib.getDocument({ data:new Uint8Array(buf) });
+        task.onProgress = function(p){
+          if (p && p.total){
+            var pct = Math.round((p.loaded / p.total) * 100);
+            ocrSet(T('ocrExtracting','Extracting text… ') + pct + '%');
+          } else {
+            ocrSet(T('ocrExtracting','Extracting text…'));
+          }
+        };
+        const pdf = await task.promise;
+        let out = '';
+        for (let p=1;p<=pdf.numPages;p++){
+          const page=await pdf.getPage(p);
+          const tc=await page.getTextContent();
+          out += tc.items.map(i=>i.str).join(' ') + '\n\n';
+        }
+        out = postProcess(out);
+        if (isLikelyXML(out)) out = stripXML(out);
+        if (!out || out.trim().length<20){
+          const lang = tessLangFor(currentLang());
+          out = await ocrPdfWithTesseract(pdf, lang, (d,t)=>ocrSet(T('ocrExtracting','Extracting text… ') + Math.round((d/t)*100) + '%'));
+        }
+        docText.value = out.trim() || '[No selectable text found in this PDF]';
+        ocrOK(T('ocrDone','Text extracted.')); setTimeout(ocrClear, 1000);
+        return;
+      }
+
+      // IMAGE
+      if (isImgName(name) || (file.type && file.type.startsWith('image/'))){
+        ocrSet(T('ocrRecognizing','Recognizing text…'));
+        const langLocal = tessLangFor(currentLang());
+        const lang = (langLocal==='eng') ? 'eng' : `eng+${langLocal}`; // mix utile
+        const txt = await ocrImageFile(file, lang, p=>ocrSet(T('ocrRecognizing','Recognizing text… ') + p + '%'));
+        docText.value = txt || '[No text recognized in this image]';
+        ocrOK(T('ocrDone','Text extracted.')); setTimeout(ocrClear, 1000);
+        return;
+      }
+
+      // DOCX
+      if (name.endsWith('.docx')){
+        ocrSet(T('ocrConverting','Converting document…'));
+        const res = await window.mammoth.extractRawText({ arrayBuffer: buf });
+        docText.value = (res.value||'').trim();
+        ocrOK(T('ocrDone','Text extracted.')); setTimeout(ocrClear, 1000);
+        return;
+      }
+
+      // TXT / inconnu
+      const txt = await (new Response(new Blob([buf]))).text();
+      docText.value = txt;
+      ocrOK(T('ocrDone','Text extracted.')); setTimeout(ocrClear, 1000);
+
+    }catch(err){
+      console.error(err);
+      ocrError(T('ocrFail','Could not read this file.'));
+      docText.value = 'Could not read file. Try a clearer image (good light, flat), or export to PDF/DOCX.';
+    }
+  }
+
+  // Upload fichier + caméra
+  fileInput && fileInput.addEventListener('change', e => { ocrSet(T('ocrReading','Reading file…')); processFile(e.target.files?.[0]); });
+  camInput  && camInput.addEventListener('change',  e => { ocrSet(T('ocrReading','Reading file…')); processFile(e.target.files?.[0]); });
+  btnUseCamera && btnUseCamera.addEventListener('click', () => camInput?.click());
+
+  // Coller une capture DANS le textarea
+  if (docText){
+    docText.addEventListener('paste', (e)=>{
+      const items = (e.clipboardData && e.clipboardData.items) || [];
+      for (const it of items){
+        if (it.type && it.type.startsWith('image/')){
+          e.preventDefault();
+          ocrSet(T('ocrReading','Reading file…'));
+          return processFile(it.getAsFile());
+        }
+      }
+      // sinon collage texte normal
+    });
+    // Drag&drop DANS le textarea
+    ['dragenter','dragover'].forEach(ev => docText.addEventListener(ev, e=>{ e.preventDefault(); }));
+    docText.addEventListener('drop', e=>{
+      e.preventDefault();
+      const f = e.dataTransfer?.files?.[0];
+      if (f){ ocrSet(T('ocrReading','Reading file…')); processFile(f); }
+    });
+  }
+})();
+
+</script>
+<script>
+async function loadLib(src){return new Promise(r=>{const s=document.createElement('script');s.src=src;s.async=true;s.onload=r;document.head.appendChild(s);});}
+let __heavyLoaded=false;
+async function ensureHeavyLibs(){
+  if(__heavyLoaded) return;
+  await loadLib("https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js");
+  pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+  await loadLib("https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js");
+  __heavyLoaded=true;
+}
+</script>
+<script>
+(function(){
+  var box = document.getElementById('privacy-card');
+  if (!box) return;
+
+  // Persist state
+  try {
+    var saved = localStorage.getItem('privacy-open');
+    if (saved === '0') box.removeAttribute('open');
+  } catch(e){}
+
+  box.addEventListener('toggle', function(){
+    try { localStorage.setItem('privacy-open', box.open ? '1' : '0'); } catch(e){}
+  });
+
+  // <details> polyfill (very small): if not supported, emulate toggle
+  var supported = 'open' in document.createElement('details');
+  if (!supported) {
+    var summary = box.querySelector('summary');
+    var content = box.querySelector('.privacy-content');
+    if (summary && content) {
+      function set(open){ content.style.display = open ? '' : 'none'; }
+      set(box.hasAttribute('open'));
+      summary.addEventListener('click', function(e){
+        e.preventDefault();
+        var open = !box.hasAttribute('open');
+        if (open) box.setAttribute('open',''); else box.removeAttribute('open');
+        set(open);
+        try { localStorage.setItem('privacy-open', open ? '1':'0'); } catch(e){}
+      });
+    }
+  }
+})();
+</script>
+<script defer src="/scripts/lang-switch.js"></script>
+<script defer src="/scripts/privacy-fab.js"></script>
+<script>
+/* === layout-fix: collapse privacy -> make left area full width, move help on top === */
+(function () {
+  var main    = document.querySelector('main');
+  var privacy = document.getElementById('privacy-card');  // <details>
+  var help    = document.getElementById('help-card');      // right column block
+  var work    = document.getElementById('work-card');      // left form card
+  if (!main || !privacy || !help || !work) return;
+
+  function applyLayout() {
+    var hidden = !privacy.open; // <details> closed => hidden
+    if (hidden) {
+      // single column
+      main.classList.add('no-privacy');
+
+      // help full width above the form
+      help.classList.add('fullwidth-help');
+      help.style.gridColumn = '1 / -1';
+
+      // move help-card before work-card to ensure it appears on top
+      if (help !== main.firstElementChild) {
+        try { main.insertBefore(help, main.firstElementChild); } catch (e) {}
+      }
+    } else {
+      // restore two columns
+      main.classList.remove('no-privacy');
+
+      // restore help to the right column (grid column 2)
+      help.classList.remove('fullwidth-help');
+      help.style.gridColumn = '2';
+
+      // put help-card after privacy (or at the end) so it stays in right side
+      try { main.appendChild(help); } catch (e) {}
+    }
+  }
+
+  // initial state on load
+  applyLayout();
+
+  // react when user opens/closes the <details>
+  privacy.addEventListener('toggle', applyLayout);
+})();
+</script>
+
+<script>
+(function () {
+  const lang = (document.documentElement.lang || 'en').slice(0,2);
+
+  // Map path -> canonical + FAQ per language (minimal content is enough for SEO audit)
+  const TOPICS = {
+    '/explain/bill/': {
+      en: { canonical: '/explain/bill/',    faq:[{q:'How do I understand a utility bill?', a:'Upload or paste it. DocuMate highlights the key parts and explains them in plain English.'}] },
+      fr: { canonical: '/fr/expliquer/facture/', faq:[{q:'Comment comprendre une facture ?', a:'Collez ou uploadez le document. DocuMate explique les éléments importants en langage simple.'}] }
+    },
+    '/explain/contract/': {
+      en: { canonical: '/explain/contract/',    faq:[{q:'How to read a contract?', a:'Paste the contract. DocuMate extracts clauses and explains them in plain language.'}] },
+      fr: { canonical: '/fr/expliquer/contrat/', faq:[{q:'Comment lire un contrat ?', a:'Collez le contrat. DocuMate résume les clauses et les explique simplement.'}] }
+    },
+    '/fr/expliquer/facture/':   null, // will be handled when FR page loads
+    '/fr/expliquer/contrat/':   null
+  };
+
+  // Detect topic from current path (normalize trailing slash)
+  const p = location.pathname.endsWith('/') ? location.pathname : location.pathname + '/';
+  let conf = TOPICS[p];
+  if (!conf) {
+    // if we are on FR topic but running EN file, map back
+    if (p === '/fr/expliquer/facture/' ) conf = TOPICS['/explain/bill/'];
+    if (p === '/fr/expliquer/contrat/' ) conf = TOPICS['/explain/contract/'];
+  }
+  if (!conf) return; // not a topic page
+
+  const data = conf[lang] || conf.en;
+  const absolute = location.origin + data.canonical;
+
+  // --- set canonical
+  const link = document.getElementById('canonical-link') || document.querySelector('link[rel="canonical"]');
+  if (link) link.href = absolute;
+
+  // --- JSON-LD FAQ (idempotent)
+  if (!document.getElementById('ld-faq')) {
+    const faq = {
+      "@context":"https://schema.org",
+      "@type":"FAQPage",
+      "mainEntity": data.faq.map(x => ({
+        "@type":"Question",
+        "name": x.q,
+        "acceptedAnswer": { "@type":"Answer", "text": x.a }
+      }))
+    };
+    const s = document.createElement('script');
+    s.type = 'application/ld+json';
+    s.id = 'ld-faq';
+    s.textContent = JSON.stringify(faq);
+    document.head.appendChild(s);
+  }
+})();
+</script>
+
+<script defer src="/scripts/topics-router.js"></script>
+</body>
+</html>

@@ -1,5 +1,10 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
+
+  "framework": null,
+  "outputDirectory": "public",
+
   "trailingSlash": true,
   "cleanUrls": true,
 
@@ -9,22 +14,16 @@
   ],
 
   "rewrites": [
+    /* Laisse passer les assets tels quels */
+    { "source": "/(robots\\.txt|sitemap\\.xml|favicon\\.ico|site\\.webmanifest|icon-192\\.png|icon-512\\.png|apple-touch-icon\\.png|og\\.jpg)", "destination": "/$1" },
+    { "source": "/(.*\\.(?:js|css|png|jpg|jpeg|gif|svg|webp|ico|json|txt|woff|woff2|map))", "destination": "/$1" },
+
+    /* Homes (en + fr) */
     { "source": "/", "destination": "/index.html" },
-    { "source": "/fr/", "destination": "/fr/index.html" },
+    { "source": "/fr/", "destination": "/fr/index.html" }
 
-    { "source": "/robots.txt", "destination": "/robots.txt" },
-    { "source": "/sitemap.xml", "destination": "/sitemap.xml" },
-    { "source": "/favicon.ico", "destination": "/favicon.ico" },
-    { "source": "/site.webmanifest", "destination": "/site.webmanifest" },
-    { "source": "/icon-192.png", "destination": "/icon-192.png" },
-    { "source": "/icon-512.png", "destination": "/icon-512.png" },
-    { "source": "/apple-touch-icon.png", "destination": "/apple-touch-icon.png" },
-    { "source": "/og.jpg", "destination": "/og.jpg" },
-
-    { "source": "/(.*\\.(?:js|css|png|jpg|jpeg|gif|svg|webp|ico|json|txt|woff|woff2|map))", "destination": "/$1" }
-
-    /* ⚠️ Pas de rewrite "/explain/:topic/" → index.html.
-       Les pages statiques explain/* et fr/expliquer/* seront donc servies telles quelles. */
+    /* Surtout PAS de rewrite /explain/:topic/ -> index.html :
+       on veut que Vercel serve les mini-pages statiques ci-dessous. */
   ],
 
   "headers": [
