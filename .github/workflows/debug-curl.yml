@@ -1,0 +1,40 @@
+name: Debug curl
+on:
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: "Base URL à tester (ex: https://documate.work/ ou l’URL preview Vercel)"
+        required: false
+        default: "https://documate.work/"
+
+jobs:
+  debug:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo target
+        run: |
+          BASE="${{ github.event.inputs.base_url }}"
+          BASE="${BASE%/}/"
+          echo "BASE=$BASE" | tee -a $GITHUB_STEP_SUMMARY
+          echo "::set-output name=BASE::$BASE"
+        id: prep
+      - name: HEAD / et /explain/bill/
+        run: |
+          set -euxo pipefail
+          BASE="${{ steps.prep.outputs.BASE }}"
+          echo "### HEAD $BASE" | tee -a $GITHUB_STEP_SUMMARY
+          curl -I "$BASE" | tee -a $GITHUB_STEP_SUMMARY
+          echo -e "\n### HEAD ${BASE}explain/bill/" | tee -a $GITHUB_STEP_SUMMARY
+          curl -I "${BASE}explain/bill/" | tee -a $GITHUB_STEP_SUMMARY
+      - name: Dump <head> de index.html?topic=bill
+        run: |
+          set -euxo pipefail
+          BASE="${{ steps.prep.outputs.BASE }}"
+          echo -e "\n### <head> de ${BASE}index.html?topic=bill (120 lignes)\n" | tee -a $GITHUB_STEP_SUMMARY
+          curl -sS "${BASE}index.html?topic=bill" | sed -n '1,120p' | tee -a $GITHUB_STEP_SUMMARY
+      - name: Canonical lines
+        run: |
+          set -euxo pipefail
+          BASE="${{ steps.prep.outputs.BASE }}"
+          echo -e "\n### Canonical trouvées\n" | tee -a $GITHUB_STEP_SUMMARY
+          curl -sS "${BASE}index.html?topic=bill" | grep -ni 'rel="canonical"' || true | tee -a $GITHUB_STEP_SUMMARY
