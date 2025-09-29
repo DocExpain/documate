@@ -2,14 +2,21 @@
   "version": 2,
   "trailingSlash": true,
   "cleanUrls": true,
+
   "redirects": [
     { "source": "/explain/:topic", "destination": "/explain/:topic/", "permanent": true },
     { "source": "/fr/expliquer/:topic", "destination": "/fr/expliquer/:topic/", "permanent": true }
   ],
+
   "rewrites": [
     { "source": "/", "destination": "/index.html" },
-    { "source": "/fr/", "destination": "/fr/index.html" }
+    { "source": "/fr/", "destination": "/fr/index.html" },
+
+    // ✅ SPA fallback pour les pages "explain"
+    { "source": "/explain/:topic/", "destination": "/index.html" },
+    { "source": "/fr/expliquer/:topic/", "destination": "/fr/index.html" }
   ],
+
   "headers": [
     {
       "source": "/(.*)",
