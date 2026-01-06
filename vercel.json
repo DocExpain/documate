@@ -1,11 +1,7 @@
 {
   "version": 2,
-  "trailingSlash": true,
+  "trailingSlash": false,
   "cleanUrls": true,
-  "redirects": [
-    { "source": "/explain/:topic", "destination": "/explain/:topic/", "permanent": true },
-    { "source": "/fr/expliquer/:topic", "destination": "/fr/expliquer/:topic/", "permanent": true }
-  ],
   "rewrites": [
     { "source": "/", "destination": "/index.html" },
     { "source": "/fr/", "destination": "/fr/index.html" }
