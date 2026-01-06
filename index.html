@@ -1,5 +1,4 @@
 <!doctype html>
-<!-- SPDX-License-Identifier: LicenseRef-SA-NC-1.0 -->
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -7,8 +6,11 @@
   (function () {
     try {
       var ORIGIN = location.origin;
-      var PATH = (location.pathname.replace(/\/+$/, '/') || '/');
-      var LANG = PATH.startsWith('/fr/') ? 'fr' : 'en';
+      // CORRECTION : On retire le slash final de PATH s'il existe
+      var rawPath = location.pathname;
+      var PATH = (rawPath.length > 1 && rawPath.endsWith('/')) ? rawPath.slice(0, -1) : rawPath;
+      
+      var LANG = PATH.startsWith('/fr') ? 'fr' : 'en'; // simple check
       var params = new URLSearchParams(location.search);
 
       function keyFromQuery() {
@@ -16,27 +18,30 @@
         return (t==='bill'||t==='contract') ? t : null;
       }
       function keyFromPath() {
-        var m = PATH.match(/^\/explain\/([^/]+)\/$/);
+        // Regex adaptée pour ne pas exiger le slash final
+        var m = PATH.match(/^\/explain\/([^/]+)/);
         if (m) { var en=m[1].toLowerCase(); if (en==='bill'||en==='contract') return en; }
-        m = PATH.match(/^\/fr\/expliquer\/([^/]+)\/$/);
+        m = PATH.match(/^\/fr\/expliquer\/([^/]+)/);
         if (m) { var fr=m[1].toLowerCase(); if (fr==='facture') return 'bill'; if (fr==='contrat') return 'contract'; }
         return null;
       }
 
       var key = keyFromQuery() || keyFromPath();
       var canonicalAbs;
+      
+      // CORRECTION : Génération des URLs SANS slash final (sauf racine)
       if (!key) {
-        canonicalAbs = ORIGIN + (LANG==='fr'?'/fr/':'/');
+        canonicalAbs = ORIGIN + (LANG==='fr'?'/fr':'/');
       } else {
         canonicalAbs = (LANG==='fr')
-          ? ORIGIN + '/fr/expliquer/' + (key==='bill'?'facture':'contrat') + '/'
-          : ORIGIN + '/explain/' + key + '/';
+          ? ORIGIN + '/fr/expliquer/' + (key==='bill'?'facture':'contrat')
+          : ORIGIN + '/explain/' + key;
       }
 
       // retire toutes les canonicals existantes
       document.querySelectorAll('link[rel="canonical"]').forEach(function(n){ n.remove(); });
 
-      // crée UNE seule canonique, tout en haut du <head>
+      // crée UNE seule canonique
       var link=document.createElement('link');
       link.rel='canonical'; link.href=canonicalAbs; link.id='canonical-link';
       document.head.insertBefore(link, document.head.firstChild);
@@ -61,10 +66,8 @@
   <meta name="robots" content="index,follow">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- Google Search Console -->
   <meta name="google-site-verification" content="7fba15cbdb4cbaf7" />
 
-  <!-- AdSense global (keep once per page) -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9411950027978678" crossorigin="anonymous"></script>
 
   <title id="meta-title">DocuMate — Understand your documents easily</title>
@@ -75,20 +78,19 @@
   <link rel="preconnect" href="https://googleads.g.doubleclick.net" crossorigin>
 
 
-<!-- Hreflang (static full set) -->
 <link rel="alternate" hreflang="x-default" href="https://documate.work/">
 <link rel="alternate" hreflang="en" href="https://documate.work/">
-<link rel="alternate" hreflang="fr" href="https://documate.work/fr/">
-<link rel="alternate" hreflang="de" href="https://documate.work/de/">
-<link rel="alternate" hreflang="es" href="https://documate.work/es/">
-<link rel="alternate" hreflang="it" href="https://documate.work/it/">
-<link rel="alternate" hreflang="pt" href="https://documate.work/pt/">
-<link rel="alternate" hreflang="zh" href="https://documate.work/zh/">
-<link rel="alternate" hreflang="hi" href="https://documate.work/hi/">
-<link rel="alternate" hreflang="ar" href="https://documate.work/ar/">
-<link rel="alternate" hreflang="ru" href="https://documate.work/ru/">
-<link rel="alternate" hreflang="bn" href="https://documate.work/bn/">
-  <!-- Open Graph / Twitter, will be rewritten by JS on load -->
+<link rel="alternate" hreflang="fr" href="https://documate.work/fr">
+<link rel="alternate" hreflang="de" href="https://documate.work/de">
+<link rel="alternate" hreflang="es" href="https://documate.work/es">
+<link rel="alternate" hreflang="it" href="https://documate.work/it">
+<link rel="alternate" hreflang="pt" href="https://documate.work/pt">
+<link rel="alternate" hreflang="zh" href="https://documate.work/zh">
+<link rel="alternate" hreflang="hi" href="https://documate.work/hi">
+<link rel="alternate" hreflang="ar" href="https://documate.work/ar">
+<link rel="alternate" hreflang="ru" href="https://documate.work/ru">
+<link rel="alternate" hreflang="bn" href="https://documate.work/bn">
+
   <meta property="og:type" content="website">
   <meta id="og-url" property="og:url" content="https://documate.work/">
   <meta id="og-title" property="og:title" content="DocuMate — Understand your documents easily">
@@ -99,7 +101,6 @@
   <meta id="tw-desc" name="twitter:description" content="Paste or upload contracts, bills and official documents. Clear explanations, private, multilingual. OCR for images/PDF.">
   <meta name="twitter:image" content="https://documate.work/og.jpg">
 
-  <!-- Favicon & app icons -->
   <link rel="icon" href="/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
   <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
@@ -107,7 +108,6 @@
   <link rel="manifest" href="/site.webmanifest">
   <meta name="theme-color" content="#2563eb">
 
-  <!-- JSON-LD structured data -->
   <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Organization","name":"DocuMate","url":"https://documate.work/","logo":"https://documate.work/icon-192.png"}
 </script>
@@ -119,7 +119,6 @@
 </script>
   <script id="jsonld-faq" type="application/ld+json"></script>
 
-  <!-- Mammoth.js (DOCX) -->
   <script defer src="https://unpkg.com/mammoth@1.6.0/mammoth.browser.min.js"></script>
 
   <style>
@@ -319,8 +318,7 @@ main.no-privacy {
       <div class="hero">
         <h2 id="hero-title">Explain contracts, bills & official documents in plain language</h2>
         <p id="hero-sub">Free, private, multilingual. Not legal advice.</p>
-      </div>      <!-- File input (customized & translatable) -->
-<div class="file-row">
+      </div>      <div class="file-row">
   <input type="file" id="file" accept=".pdf,.txt,.docx,.png,.jpg,.jpeg,.webp" class="file-native" />
   <label for="file" class="btn" id="btnChooseFile">Choose a file</label>
   <button type="button" class="btn secondary" id="btnUseCamera">Use camera</button>
@@ -333,8 +331,7 @@ main.no-privacy {
       <textarea id="docText" placeholder="Paste the content of your document…"></textarea>
       <div class="hint" id="paste-hint">Your document stays on your device until you click an action below.</div>      </div>
 
-  <!-- Region / Country -->
-      <label for="region" style="margin-top:12px;" id="label-region">Region / Country (optional, for local rules)</label>
+  <label for="region" style="margin-top:12px;" id="label-region">Region / Country (optional, for local rules)</label>
       <input type="text" id="region" placeholder="e.g., United States / California" />
 
       <div class="row" style="margin-top:10px;">
@@ -361,8 +358,7 @@ main.no-privacy {
       <div id="result" class="results" aria-live="polite"></div>
 
       <div class="ads">
-  <!-- Ad slot (render only after consent + push) -->
-        <ins class="adsbygoogle ad-slot"
+  <ins class="adsbygoogle ad-slot"
              style="display:block"
              data-ad-client="ca-pub-9411950027978678"
              data-ad-slot="PASTE_YOUR_AD_SLOT_ID"
@@ -379,7 +375,6 @@ main.no-privacy {
       </div>
     </section>
 
-  <!-- Privacy & Trust (collapsible, accessible, no-JS needed) -->
   <details id="privacy-card" class="card legal" open>
     <summary class="privacy-summary" role="button">
       <span class="privacy-title" id="privacy-title">Privacy & Trust</span>
@@ -414,8 +409,8 @@ main.no-privacy {
     <p class="legal" id="seo-text">Contracts, rental agreements, utility bills, bank letters, insurance terms, general conditions, and more.</p>
   </div>
   <nav class="topics" id="topics-en" style="margin:10px 0;">
-    <a href="/explain/bill/">Explain a bill</a> ·
-    <a href="/explain/contract/">Explain a contract</a>
+    <a href="/explain/bill">Explain a bill</a> ·
+    <a href="/explain/contract">Explain a contract</a>
   </nav>
 
   <section class="card" id="faq-card">
@@ -429,11 +424,10 @@ main.no-privacy {
       <strong>DocuMate</strong> — <span id="footer1">Free document explanations powered by AI</span> · 
       <a href="#" id="openConsent"> <span id="footer-consent">Ad consent</span> </a> ·
       <a href="#" id="clearLocal"><span id="footer-clear">Clear local data</span></a> ·
-      <a href="/privacy.html">Privacy / Confidentialité</a>
+      <a href="/privacy">Privacy / Confidentialité</a>
     </p>
   </footer>
 
-  <!-- Ads consent banner -->
   <div class="consent" id="consentBox">
     <div style="margin-bottom:6px;" id="consent-text">This site may show non-intrusive ads to stay free. Do you accept advertising cookies/scripts?</div>
     <div class="row">
@@ -449,7 +443,7 @@ main.no-privacy {
 
   <script>
     // ----------------- Language / routing -----------------
-    const LANG_PATH = { en:'/', fr:'/fr/', de:'/de/', es:'/es/', it:'/it/', zh:'/zh/', hi:'/hi/', ar:'/ar/', pt:'/pt/', ru:'/ru/', bn:'/bn/' };
+    const LANG_PATH = { en:'/', fr:'/fr', de:'/de', es:'/es', it:'/it', zh:'/zh', hi:'/hi', ar:'/ar', pt:'/pt', ru:'/ru', bn:'/bn' };
     const DEFAULT_LANG = 'en';
 
     function guessLangFromPath(){
@@ -475,7 +469,7 @@ main.no-privacy {
       ar:{langName:"العربية", tagline:"افهم مستنداتك بسهولة", heroTitle:"اشرح العقود والفواتير والمستندات الرسمية بلغة مبسطة", heroSub:"مجاني، خاص، متعدد اللغات. ليس استشارة قانونية.", uploadLabel:"ارفع مستندًا (PDF/TXT/DOCX/PNG/JPG/WEBP)", pasteLabel:"…أو الصق نصك هنا", pasteHint:"يبقى مستندك على جهازك حتى تختار إجراءً أدناه.", regionLabel:"المنطقة/البلد (اختياري، للقواعد المحلية)", phDocText:"الصق محتوى مستندك…", phRegion:"مثال: مصر / القاهرة", phQuestion:"مثال: ما معنى هذا البند؟ / اشرح كأن عمري خمس سنوات", btnExplainAll:"اشرح المستند كاملًا", btnExplainSel:"اشرح الجزء المحدد فقط", btnSave:"احفظ محليًا", btnLoad:"حمّل الأخير", btnCamera:"Use camera",chooseFile:"اختر ملفًا",useCamera:"استخدم الكاميرا",dropHint:"Drop an image here, or press Ctrl/Cmd+V to paste a screenshot.", askLabel:"اطرح سؤالًا محددًا حول مقطع (اختياري)", btnAskSel:"اسأل عن التحديد", btnAskAll:"اسأل عن المستند كاملًا", hideSidebar:"إخفاء",showPrivacy:"إظهار",hidePrivacy:"إخفاء", badgeNoStore:"دون تخزين", badgeTLS:"مشفّر", badgeMulti:"متعدد اللغات", resultTitle:"الشرح / الإجابة", trustTitle:"الخصوصية والثقة", trust1:"يُرسل نصك فقط إلى مزوّد الذكاء الاصطناعي لتوليد الشرح. لا نحتفظ بمستنداتك ولا نقرأها. النقل عبر HTTPS.", trust2:"لا ينشئ DocuMate حسابات ولا يحفظ محتواك على خوادمنا.", trust3:"البيانات المرسلة عبر الواجهة البرمجية لا تُستخدم افتراضيًا لتدريب النماذج.", trust4:"الخدمة للمعلومات بلغة مبسطة، وليست استشارة قانونية.", trust5:"مهم: قد يخطئ الذكاء الاصطناعي؛ تحقّق من التفاصيل المهمة.", ppTitle:"سياسة الخصوصية (مختصر)", pp1:"لا تخزين على الخادم؛ معالجة في الذاكرة ثم حذف.", pp2:"HTTPS فقط؛ دون تحليلات افتراضيًا؛ إعلانات بموافقتك فقط.", pp3:"“الحفظ محليًا” يبقي النص في متصفحك فقط.", pp4:"لا تشارك بيانات شخصية شديدة الحساسية.", pp5:"معلومات عامة وليست نصيحة قانونية.", seoTitle:"المستندات التي نساعد بها", seoText:"العقود، عقود الإيجار، فواتير الخدمات، رسائل البنوك، شروط التأمين وغير ذلك.", footer1:"شروحات مستندات مجانية مدعومة بالذكاء الاصطناعي", footerConsent:"إعدادات الإعلانات", footerClear:"مسح البيانات المحلية", consentText:"قد يعرض هذا الموقع إعلانات غير متطفلة للبقاء مجانيًا. هل تقبل ملفات تعريف الارتباط/البرمجيات الإعلانية؟", deny:"رفض", allow:"سماح", loading:"جارٍ العمل…", nothingSel:"لا تحديد: حدّد نصًا أولًا.", noText:"لا نص للمعالجة بعد.", saved:"تم الحفظ محليًا.", loaded:"تم تحميل آخر مستند.", cleared:"تم مسح البيانات المحلية.", htmlTitle:"DocuMate — افهم مستنداتك بسهولة", htmlDesc:"DocuMate يشرح العقود والفواتير والمستندات الرسمية بلغة مبسطة."},
       pt:{langName:"Português", tagline:"Entenda seus documentos facilmente", heroTitle:"Explique contratos, contas e documentos oficiais em linguagem simples", heroSub:"Gratuito, privado, multilíngue. Não é aconselhamento jurídico.", uploadLabel:"Enviar um documento (PDF/TXT/DOCX/PNG/JPG/WEBP)", pasteLabel:"…ou cole seu texto aqui", pasteHint:"Seu documento fica no seu dispositivo até você clicar em uma ação abaixo.", regionLabel:"Região / País (opcional, regras locais)", phDocText:"Cole o conteúdo do seu documento…", phRegion:"ex.: Brasil / São Paulo", phQuestion:"ex.: O que esta cláusula significa? / Explique como se eu tivesse cinco anos", btnExplainAll:"Explicar o documento inteiro", btnExplainSel:"Explicar apenas a seleção", btnSave:"Salvar localmente", btnLoad:"Carregar o último", btnCamera:"Use camera",chooseFile:"Escolher um arquivo",useCamera:"Usar câmera",dropHint:"Drop an image here, or press Ctrl/Cmd+V to paste a screenshot.", askLabel:"Faça uma pergunta específica sobre um trecho (opcional)", btnAskSel:"Perguntar sobre a seleção", btnAskAll:"Perguntar sobre todo o documento", hideSidebar:"Ocultar",showPrivacy:"Mostrar",hidePrivacy:"Ocultar", badgeNoStore:"Sem armazenamento", badgeTLS:"Criptografado", badgeMulti:"Multilíngue", resultTitle:"Explicação / Resposta", trustTitle:"Privacidade & Confiança", trust1:"Seu texto é enviado apenas ao provedor de IA para gerar a explicação. Não guardamos seus documentos. Transmissão via HTTPS.", trust2:"O DocuMate não cria contas nem salva seu conteúdo em nossos servidores.", trust3:"Dados enviados via API não são usados para treinar por padrão.", trust4:"Serviço informativo em linguagem simples; não é aconselhamento jurídico.", trust5:"Importante: a IA pode errar; verifique pontos-chave.", ppTitle:"Política de Privacidade (resumo)", pp1:"Sem armazenamento no servidor; processamento em memória e descarte.", pp2:"Apenas HTTPS; sem analytics por padrão; anúncios só com consentimento.", pp3:"“Salvar localmente” mantém o texto apenas no seu navegador.", pp4:"Não compartilhe dados muito sensíveis.", pp5:"Informativo, não é aconselhamento jurídico.", seoTitle:"Documentos com que ajudamos", seoText:"Contratos, alugueis, contas de serviços, cartas bancárias, termos de seguro e mais.", footer1:"Explicações gratuitas de documentos com IA", footerConsent:"Consentimento de anúncios", footerClear:"Limpar dados locais", consentText:"Este site pode mostrar anúncios discretos para se manter gratuito. Aceita cookies/scripts de publicidade?", deny:"Negar", allow:"Permitir", loading:"Processando…", nothingSel:"Nenhuma seleção: selecione texto primeiro.", noText:"Sem texto para processar.", saved:"Salvo localmente.", loaded:"Último documento carregado.", cleared:"Dados locais limpos.", htmlTitle:"DocuMate — Entenda seus documentos facilmente", htmlDesc:"DocuMate explica contratos, contas e documentos oficiais em linguagem simples."},
       ru:{langName:"Русский", tagline:"Понимайте документы легко", heroTitle:"Поясняем договоры, счета и официальные письма простым языком", heroSub:"Бесплатно, приватно, многоязычно. Не юридическая консультация.", uploadLabel:"Загрузите документ (PDF/TXT/DOCX/PNG/JPG/WEBP)", pasteLabel:"…или вставьте текст сюда", pasteHint:"Ваш документ остаётся на устройстве, пока вы не выберете действие ниже.", regionLabel:"Регион / Страна (необязательно, для местных правил)", phDocText:"Вставьте содержимое документа…", phRegion:"напр., Россия / Москва", phQuestion:"напр., Что означает этот пункт? / Объясните, как будто мне пять лет", btnExplainAll:"Объяснить весь документ", btnExplainSel:"Объяснить только выделенное", btnSave:"Сохранить локально", btnLoad:"Загрузить последнее", btnCamera:"Use camera",chooseFile:"Выбрать файл",useCamera:"Использовать камеру",dropHint:"Drop an image here, or press Ctrl/Cmd+V to paste a screenshot.", askLabel:"Задать вопрос по фрагменту (необязательно)", btnAskSel:"Спросить о выделенном", btnAskAll:"Спросить о всём документе", hideSidebar:"Скрыть",showPrivacy:"Показать",hidePrivacy:"Скрыть", badgeNoStore:"Без хранения", badgeTLS:"Шифрование", badgeMulti:"Многоязычно", resultTitle:"Пояснение / Ответ", trustTitle:"Конфиденциальность и доверие", trust1:"Ваш текст отправляется только провайдеру ИИ для генерации пояснений. Мы не храним документы. Передача по HTTPS.", trust2:"DocuMate не создаёт аккаунты и не хранит ваш контент на серверах.", trust3:"Данные, отправленные через API, по умолчанию не используются для обучения.", trust4:"Сервис предоставляет информацию простым языком, это не юрконсультация.", trust5:"Важно: ИИ может ошибаться; проверяйте ключевые детали.", ppTitle:"Политика конфиденциальности (кратко)", pp1:"Нет серверного хранения; обработка в памяти и удаление.", pp2:"Только HTTPS; без аналитики по умолчанию; реклама только с согласия.", pp3:"«Сохранить локально» хранит текст только в вашем браузере.", pp4:"Не отправляйте особо чувствительные данные.", pp5:"Информация, не юридическая консультация.", seoTitle:"С какими документами помогаем", seoText:"Договоры, аренда, коммунальные счета, письма банка, условия страховки и др.", footer1:"Бесплатные пояснения документов на ИИ", footerConsent:"Настройки рекламы", footerClear:"Очистить локальные данные", consentText:"Сайт может показывать ненавязчивую рекламу. Принять рекламные cookies/скрипты?", deny:"Отклонить", allow:"Разрешить", loading:"Идёт обработка…", nothingSel:"Нет выделения: выделите текст.", noText:"Нет текста для обработки.", saved:"Сохранено локально.", loaded:"Последний документ загружен.", cleared:"Локальные данные очищены.", htmlTitle:"DocuMate — Понимайте документы легко", htmlDesc:"DocuMate объясняет договоры, счета и официальные письма простым языком."},
-      bn:{langName:"বাংলা", tagline:"সহজে আপনার নথি বুঝুন", heroTitle:"চুক্তি, বিল ও সরকারি নথি সাধারণ ভাষায় ব্যাখ্যা করুন", heroSub:"ফ্রি, ব্যক্তিগত, বহু-ভাষিক। আইনি পরামর্শ নয়।", uploadLabel:"ডকুমেন্ট আপলোড করুন (PDF/TXT/DOCX/PNG/JPG/WEBP)", pasteLabel:"…অথবা এখানে টেক্সট পেস্ট করুন", pasteHint:"নীচের বোতাম ক্লিক না করা পর্যন্ত আপনার নথি আপনার ডিভাইসেই থাকে।", regionLabel:"অঞ্চল / দেশ (ঐচ্ছিক, স্থানীয় নিয়ম)", phDocText:"আপনার নথির বিষয়বস্তু পেস্ট করুন…", phRegion:"যেমন: বাংলাদেশ / ঢাকা", phQuestion:"যেমন: এই ধারার অর্থ কী? / আমাকে পাঁচ বছরের শিশুর মতো বুঝিয়ে বলুন", btnExplainAll:"পুরো ডকুমেন্ট ব্যাখ্যা করুন", btnExplainSel:"শুধু নির্বাচিত অংশ ব্যাখ্যা করুন", btnSave:"লোকালি সেভ", btnLoad:"শেষটি লোড করুন", btnCamera:"Use camera",chooseFile:"ফাইল বাছাই করুন",useCamera:"ক্যামেরা ব্যবহার করুন",dropHint:"Drop an image here, or press Ctrl/Cmd+V to paste a screenshot.", askLabel:"কোনো অংশ নিয়ে নির্দিষ্ট প্রশ্ন (ঐচ্ছিক)", btnAskSel:"নির্বাচিত অংশ নিয়ে প্রশ্ন", btnAskAll:"পুরো ডকুমেন্ট নিয়ে প্রশ্ন", hideSidebar:"লুকান",showPrivacy:"দেখান",hidePrivacy:"লুকান", badgeNoStore:"সংরক্ষণ নয়", badgeTLS:"এনক্রিপ্টেড", badgeMulti:"বহুভাষিক", resultTitle:"ব্যাখ্যা / উত্তর", trustTitle:"গোপনীয়তা ও বিশ্বাস", trust1:"আপনার টেক্সট কেবল ব্যাখ্যার জন্য আমাদের AI প্রোভাইডারের কাছে পাঠানো হয়। আমরা নথি রাখি না। HTTPS দ্বারা পরিবহন।", trust2:"DocuMate অ্যাকাউন্ট তৈরি করে না এবং সার্ভারে আপনার কন্টেন্ট সংরক্ষণ করে না।", trust3:"API দিয়ে পাঠানো ডেটা ডিফল্টে মডেল ট্রেনিংয়ে ব্যবহৃত হয় না।", trust4:"এটি সাধারণ ভাষায় ব্যাখ্যা; আইনি পরামর্শ নয়।", trust5:"গুরুত্বপূর্ণ: AI ভুল করতে পারে; গুরুত্বপূর্ণ বিষয় যাচাই করুন।", ppTitle:"গোপনীয়তা নীতি (সংক্ষিপ্ত)", pp1:"সার্ভারে সংরক্ষণ নয়; মেমোরিতে প্রক্রিয়া করে বাদ দেওয়া হয়।", pp2:"শুধু HTTPS; ডিফল্টে কোনো অ্যানালিটিক্স নয়; বিজ্ঞাপন কেবল সম্মতিতে।", pp3:"“লোকালি সেভ” কেবল আপনার ব্রাউজারে টেক্সট রাখে।", pp4:"অত্যন্ত সংবেদনশীল ডেটা পাঠাবেন না।", pp5:"তথ্যগত, আইনি পরামর্শ নয়।", seoTitle:"যে নথিতে আমরা সাহায্য করি", seoText:"চুক্তি, ভাড়ার চুক্তি, ইউটিলিটি বিল, ব্যাংকের চিঠি, বীমা শর্তাদি ইত্যাদি।", footer1:"AI-চালিত ফ্রি ডকুমেন্ট ব্যাখ্যা", footerConsent:"বিজ্ঞাপনের সম্মতি", footerClear:"লোকাল ডেটা মুছুন", consentText:"বিনামূল্যে রাখতে এই সাইটে সাদামাটা বিজ্ঞাপন দেখানো হতে পারে। আপনি কি বিজ্ঞাপনের কুকি/স্ক্রিপ্ট গ্রহণ করবেন?", deny:"না", allow:"হ্যাঁ", loading:"চলছে…", nothingSel:"কোনো নির্বাচন নেই: আগে টেক্সট নির্বাচন করুন।", noText:"প্রসেস করার মতো টেক্সট নেই।", saved:"লোকালি সেভ করা হয়েছে।", loaded:"শেষ ডকুমেন্ট লোড হয়েছে।", cleared:"লোকাল ডেটা মুছে ফেলা হয়েছে।", htmlTitle:"DocuMate — সহজে আপনার নথি বুঝুন", htmlDesc:"DocuMate সাধারণ ভাষায় চুক্তি, বিল ও সরকারি নথি ব্যাখ্যা করে।"}
+      bn:{langName:"বাংলা", tagline:"সহজে আপনার নথি বুঝুন", heroTitle:"চুক্তি, বিল ও সরকারি নথি সাধারণ ভাষায় ব্যাখ্যা করুন", heroSub:"ফ্রি, ব্যক্তিগত, বহু-ভাষিক। আইনি পরামর্শ নয়।", uploadLabel:"ডকুমেন্ট আপলোড করুন (PDF/TXT/DOCX/PNG/JPG/WEBP)", pasteLabel:"…অথবা এখানে টেক্সট পেস্ট করুন", pasteHint:"নীচের বোতাম ক্লিক না করা পর্যন্ত আপনার নথি আপনার ডিভাইসেই থাকে।", regionLabel:"অঞ্চল / দেশ (ঐচ্ছিক, স্থানীয় নিয়ম)", phDocText:"আপনার নথির বিষয়বস্তু পেস্ট করুন…", phRegion:"যেমন: বাংলাদেশ / ঢাকা", phQuestion:"যেমন: এই ধারার অর্থ কী? / আমাকে পাঁচ বছরের শিশুর মতো বুঝিয়ে বলুন", btnExplainAll:"পুরো ডকুমেন্ট ব্যাখ্যা করুন", btnExplainSel:"শুধু নির্বাচিত অংশ ব্যাখ্যা করুন", btnSave:"লোকালি সেভ", btnLoad:"শেষটি লোড করুন", btnCamera:"Use camera",chooseFile:"ফাইল বাছাই করুন",useCamera:"ক্যামেরা ব্যবহার করুন",dropHint:"Drop an image here, or press Ctrl/Cmd+V to paste a screenshot.", askLabel:"কোনো অংশ নিয়ে নির্দিষ্ট প্রশ্ন (ঐচ্ছিক)", btnAskSel:"নির্বাচিত অংশ নিয়ে প্রশ্ন", btnAskAll:"পুরো ডকুমেন্ট নিয়ে প্রশ্ন", hideSidebar:"লুকান",showPrivacy:"দেখান",hidePrivacy:"লুকান", badgeNoStore:"সংরক্ষণ নয়", badgeTLS:"এনক্রিপ্টেড", badgeMulti:"বহুভাষিক", resultTitle:"ব্যাখ্যা / উত্তর", trustTitle:"গোপনীয়তা ও বিশ্বাস", trust1:"আপনার টেক্সট কেবল ব্যাখ্যার জন্য আমাদের AI প্রোভাইডারের কাছে পাঠানো হয়। আমরা নথি রাখি না। HTTPS দ্বারা পরিবহন।", trust2:"DocuMate অ্যাকাউন্ট তৈরি করে না এবং সার্ভারে আপনার কন্টেন্ট সংরক্ষণ করে না।", trust3:"API দিয়ে পাঠানো ডেটা ডিফল্টে মডেল ট্রেনিংয়ে ব্যবহৃত হয় না।", trust4:"এটি সাধারণ ভাষায় ব্যাখ্যা; আইনি পরামর্শ নয়।", trust5:"গুরুত্বপূর্ণ: AI ভুল করতে পারে; গুরুত্বপূর্ণ বিষয় যাচাই করুন।", ppTitle:"গোপনীয়তা নীতি (সংক্ষিপ্ত)", pp1:"সার্ভারে সংরক্ষণ নয়; মেমোরিতে প্রক্রিয়া করে বাদ দেওয়া হয়।", pp2:"শুধু HTTPS; ডিফল্টে কোনো অ্যানালিটিক্স নয়; বিজ্ঞাপন কেবল সম্মতিতে।", pp3:"“লোকালি সেভ” কেবল আপনার ব্রাউজারে টেক্সট রাখে।", pp4:"অত্যন্ত সংবেদনশীল ডেটা পাঠাবেন না।", pp5:"তথ্যগত, আইনি পরামর্শ নয়।", seoTitle:"যে নথিতে আমরা সাহায্য করি", seoText:"চুক্তি, ভাড়ার চুক্তি, ইউটিলিটি বিল, ব্যাংকের চিঠি, বীমা শর্তাদি ইত্যাদি।", footer1:"AI-চালিত ফ্রি ডকুমেন্ট ব্যাখ্যা", footerConsent:"বিজ্ঞাপনের সম্মতি", footerClear:"লোকাল ডেটা মুছুন", consentText:"বিনামূল্যে রাখতে এই সাইটে সাদামাটা বিজ্ঞাপন দেখানো হতে পারে। আপনি কি বিজ্ঞাপনের কুকি/স্ক্রিপ্ট গ্রহণ করবেন?", deny:"না", allow:"হ্যাঁ", loading:"চলছে…", nothingSel:"কোনো নির্বাচন নেই: আগে টেক্সট নির্বাচন করুন।", noText:"প্রসেস করার মতো টেক্সট নেই।", saved:"লোকালি সেভ করা হয়েছে।", loaded:"শেষ ডকুমেন্ট লোড হয়েছে।", cleared:"লোকাল ডেটা মুছে ফেলা হয়েছে।", htmlTitle:"DocuMate — সহজে আপনার নথি বুঝুন", htmlDesc:"DocuMate সাধারণ ভাষায় চুক্তি, বিল ও সরকারি নথি ব্যাখ্যা করে."}
     };
     // ---- FAQ JSON-LD: single instance per page ----
     function faqEntitiesFor(lang){
@@ -566,7 +560,10 @@ main.no-privacy {
       setText('allowAds', T.allow);
 
       var base = 'https://documate.work';
-      var path = LANG_PATH[lang] || '/';
+      // CORRECTION : S'assurer que LANG_PATH[lang] ne finit pas par un slash
+      var path = (LANG_PATH[lang] || '/');
+      if(path !== '/' && path.endsWith('/')) path = path.slice(0,-1);
+      
       setAttr('canonical-link','href', base + path);
       setAttr('og-url','content', base + path);
       setAttr('og-title','content', T.htmlTitle);
@@ -601,7 +598,12 @@ main.no-privacy {
     langSel && langSel.addEventListener('change', e => {
       const lg = e.target.value; applyI18n(lg);
       // Redirect to language path so the URL reflects it (good for SEO and sharing)
-      if (LANG_PATH[lg]) location.href = LANG_PATH[lg];
+      if (LANG_PATH[lg]) {
+          // CORRECTION: redirection vers version sans slash
+          let p = LANG_PATH[lg];
+          if(p !== '/' && p.endsWith('/')) p = p.slice(0,-1);
+          location.href = p;
+      }
     });
 
     // ----------------- Elements -----------------
