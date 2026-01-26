@@ -31,7 +31,7 @@
       
       // CORRECTION : Génération des URLs SANS slash final (sauf racine)
       if (!key) {
-        canonicalAbs = ORIGIN + (LANG==='fr'?'/fr':'/');
+        canonicalAbs = ORIGIN + (LANG==='fr'?'/fr':''); // Root / or /fr (no slash at end of /fr)
       } else {
         canonicalAbs = (LANG==='fr')
           ? ORIGIN + '/fr/expliquer/' + (key==='bill'?'facture':'contrat')
